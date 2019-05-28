@@ -1,0 +1,49 @@
+html,
+body,
+#root {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+.form-data {
+    width: 20%;
+    margin-left: 40%;
+    margin-right: 40%;
+    margin-top: 2%;
+}
+
+.modal-header {
+    border-bottom: 2px solid #BF2E1B;
+}
+
+.modal-link {
+    cursor: pointer;
+    color: #BF2E1B;
+}
+
+.modal-link:hover {
+    text-decoration: none;
+    color: gray;
+}
+
+.modal-btn {
+    float: right;
+}
+
+.modal-btn:hover,
+.modal-btn:focus {
+    background-color: #BF2E1B;
+    background-image: none;
+    color: white;
+}
+
+.modal-inputs {
+    overflow: auto;
+}
+
+.invalid-input {
+    color: darkred;
+    font-weight: bold;
+    margin: 0px;
+}

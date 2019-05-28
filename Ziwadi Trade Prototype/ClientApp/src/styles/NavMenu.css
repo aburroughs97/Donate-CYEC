@@ -1,0 +1,37 @@
+﻿.navbar .currency-dropdown
+{
+    float: left;
+}
+
+.navbar .nav-links {
+    float: right;
+}
+
+.navbar li .glyphicon {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+/* Highlighting rules for nav menu items */
+.navbar .nav-links .hover a:hover {
+    background-image: none;
+    background-color: #BF2E1B;
+    color: white;
+}
+
+.navbar .nav-links .no-hover {
+    cursor: text;
+}
+
+.navbar .navbar-brand
+{
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.brand-logo
+{
+    margin: 0;
+    padding: 0;
+}
+
