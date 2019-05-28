@@ -52,7 +52,7 @@ namespace ZT.Services
             var userResult = _accountAccessor.FindUserByEmail(request.Email);
             if (!userResult.IsSuccess)
             {
-                return new Result<User>(false, "Email not found.");
+                return new Result<User>(false, "The email/password combination you entered is incorrect.");
             }
             var password = _accountAccessor.GetUserPassword(userResult.Payload.UserID).Payload;
             var hashedPassword = _encryptionService.CreatePasswordHash(request.Password, password.PasswordSalt);
@@ -63,7 +63,7 @@ namespace ZT.Services
             }
             else
             {
-                return new Result<User>(false, "Incorrect password.");
+                return new Result<User>(false, "The email/password combination you entered is incorrect.");
             }
         }
     }

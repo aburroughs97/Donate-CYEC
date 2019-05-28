@@ -27,6 +27,16 @@ body,
     color: gray;
 }
 
+.modal-link-inv {
+    color: gray;
+    cursor: pointer;
+}
+
+.modal-link-inv:hover {
+    color: #BF2E1B;
+    text-decoration: none;
+}
+
 .modal-btn {
     float: right;
 }

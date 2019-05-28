@@ -19,8 +19,7 @@ export class NavMenu extends Component {
 
   render() {
     return (
-      <Navbar expand="sm" fixedTop fluid >
-
+      <Navbar collapseOnSelect expand="lg" fixedTop fluid>
           <Nav className = 'currency-dropdown' onSelect={k => this.handleSelect(k)}>
             <NavDropdown title={this.state.currencyTitle} id='currency'>
               <MenuItem eventKey="USD">USD</MenuItem>
@@ -28,38 +27,42 @@ export class NavMenu extends Component {
             </NavDropdown>
           </Nav>
 
-          <Nav className = 'nav-links'>
-            {!this.props.isLoggedIn &&
-              <NavItem className = 'hover' onClick={this.props.showLogin}>
-                  Log In/Create Account
-              </NavItem>
-            }
-            <LinkContainer to={'/'} exact>
-              <NavItem  title='Home' className = 'hover'>
-                <Glyphicon glyph='home'/> 
-              </NavItem>
-            </LinkContainer>
-            <LinkContainer to={'/account'} exact>
-              <NavItem  title='Manage Account' className = 'hover'>
-                <Glyphicon glyph='user'/> 
-              </NavItem>
-            </LinkContainer>
-            <LinkContainer to={'/reports'}>
-              <NavItem title='Reports' className = 'hover'>
-                <Glyphicon glyph='list-alt' />
-              </NavItem>
-            </LinkContainer>
-            <LinkContainer to={'/cart'}>
-              <NavItem  title='Shopping Cart' className = 'hover'>
-                <Glyphicon glyph='shopping-cart'/>
-              </NavItem>
-            </LinkContainer>
-          </Nav>
+          <Navbar.Toggle aria-controls="responsive-navbar-nav"/>
+            <Navbar.Collapse className="navbar-collapse">
+            <Nav className = 'nav-links'>
+              <LinkContainer to={'/'} exact>
+                <NavItem  title='Home' className = 'hover'>
+                  <Glyphicon glyph='home'/>
+                </NavItem>
+              </LinkContainer>
+              <LinkContainer to={'/account'} exact>
+                <NavItem  title='Manage Account' className = 'hover'>
+                  <Glyphicon glyph='user'/> 
+                </NavItem>
+              </LinkContainer>
+              <LinkContainer to={'/reports'}>
+                <NavItem title='Reports' className = 'hover'>
+                  <Glyphicon glyph='list-alt' />
+                </NavItem>
+              </LinkContainer>
+              <LinkContainer to={'/cart'}>
+                <NavItem  title='Shopping Cart' className = 'hover'>
+                  <Glyphicon glyph='shopping-cart'/>
+                </NavItem>
+              </LinkContainer>
+            </Nav>
+            </Navbar.Collapse>
+
+          {!this.props.isLoggedIn &&            
+             <Navbar.Text className="log-in">
+                <span className="modal-link-inv" onClick={this.props.showLogin}>Log In/Create Account</span>
+            </Navbar.Text>
+          }
 
           {this.props.isLoggedIn &&            
-             <Navbar.Text className="nav-links">
+             <Navbar.Text className="log-in">
                 {`Hello, ${this.props.account.firstName} `}
-                (<a className="modal-link" onClick={this.props.logOut}>Log out</a>)
+                (<span className="modal-link" onClick={this.props.logOut}>Log out</span>)
             </Navbar.Text>
           }
       </Navbar>

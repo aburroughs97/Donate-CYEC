@@ -186,7 +186,7 @@ submitForm() {
               </Button>
           </div>
           <hr />
-          <p>Already have an account? <a className="modal-link" onClick={this.props.showLogin}>Log In</a></p>
+          <p>Already have an account? <span className="modal-link" onClick={this.props.showLogin}>Log In</span></p>
       </Form>
       );
     }

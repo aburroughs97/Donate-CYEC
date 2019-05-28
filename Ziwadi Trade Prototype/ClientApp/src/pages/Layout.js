@@ -38,7 +38,7 @@ export class Layout extends Component {
           store={toast} 
           lightBackground={true} 
           position={"top_center"}
-          fadeOutTimer={2000}
+          fadeOutTimer={2500}
         />
         {this.props.children}
       </div>

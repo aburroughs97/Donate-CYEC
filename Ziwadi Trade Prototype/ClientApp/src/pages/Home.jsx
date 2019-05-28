@@ -21,14 +21,12 @@ export class Home extends Component {
             className="logo"
           />
 
-          <div className="search-container">
-            <Button className="search-btn"><Glyphicon glyph='search'/></Button>
             <FormControl className="search"
               placeholder="Search..."
               aria-label="Search"
               aria-describedby="search"
             />
-          </div>
+            <Button className="search-btn"><Glyphicon glyph='search'/></Button>
         </div>
 
         <div className="content">

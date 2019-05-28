@@ -7,6 +7,10 @@
     float: right;
 }
 
+.navbar .log-in {
+    float: right;
+}
+
 .navbar li .glyphicon {
     margin-left: 10px;
     margin-right: 10px;
@@ -14,6 +18,12 @@
 
 /* Highlighting rules for nav menu items */
 .navbar .nav-links .hover a:hover {
+    background-image: none;
+    background-color: #BF2E1B;
+    color: white;
+}
+
+.navbar .log-in .hover a:hover {
     background-image: none;
     background-color: #BF2E1B;
     color: white;
@@ -34,4 +44,57 @@
     margin: 0;
     padding: 0;
 }
+
+.show-on-mobile {
+    display: none;
+}
+
+.navbar-collapse {
+    width: auto;
+    float: right;
+}
+
+@media screen and (max-width: 760px) {
+    .navbar .nav-links {
+        float: none;
+    }
+
+    .navbar .log-in {
+        position: fixed;
+        right: 15%;
+    }
+    
+    .navbar .nav-links a{
+        margin-left: 5%;
+        margin-right: 5%;
+    }
+
+    .navbar-collapse {
+        float: left;
+        width: 80%;
+        margin-top: 10%;
+    }
+  }
+
+  @media screen and (max-width: 600px) {
+    .navbar .nav-links {
+        float: none;
+    }
+
+    .navbar .log-in {
+        position: fixed;
+        right: 20%;
+    }
+    
+    .navbar .nav-links a{
+        margin-left: 5%;
+        margin-right: 5%;
+    }
+
+    .navbar-collapse {
+        float: left;
+        width: 80%;
+        margin-top: 12%;
+    }
+  }
 

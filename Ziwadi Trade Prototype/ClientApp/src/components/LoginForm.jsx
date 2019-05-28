@@ -108,7 +108,7 @@ submitForm() {
               </Button>
           </div>
           <hr />
-          <p>Don't have an account? <a className="modal-link" onClick={this.props.showRegister}>Create an Account</a></p>
+          <p>Don't have an account? <span className="modal-link" onClick={this.props.showRegister}>Create an Account</span></p>
       </Form>
       );
     }
