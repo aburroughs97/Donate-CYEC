@@ -48,21 +48,34 @@
     padding: 10px;
 }
 
-@media screen and (max-width: 600px) {
-    .column {
-      width: 100%;
-    }
-  }
-
-  @media screen and (max-width: 760px) {
+@media screen and (max-width: 760px) {
     .column {
       width: 100%;
     }
     .header .search {
         float: right;
         width: 20%;
-        margin-left: 40%;
-        margin-top: 2%;
-        margin-bottom: 2%;
+        margin-left: 30%;
+    }
+
+    .header .logo {
+        max-width: 30%;
+        margin-top: 5%;
+        margin-bottom: 5%;
+        margin-left: 5%;
+        height: auto;
+        float: left;
+    }
+    
+  }
+
+@media screen and (max-width: 600px) {
+    .column {
+      width: 100%;
+    }
+    .header .search {
+        float: right;
+        width: 20%;
+        margin-left: 30%;
     }
   }

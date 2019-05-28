@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import { Route } from 'react-router';
 import { Layout } from './pages/Layout';
 import { Home } from './pages/Home.jsx';
-import { FetchData } from './pages/FetchData';
+import { Account } from './pages/Account.jsx';
+import { Reports } from './pages/Reports.jsx';
+import { ShoppingCart } from './pages/ShoppingCart';
 import { apiPost } from './Api';
 import { toast } from 'react-smart-toaster';
 
@@ -96,8 +98,9 @@ export default class App extends Component {
     return (
       <Layout isLoggedIn={this.state.isLoggedIn} account={this.state.account} handleLogin={this.handleLogin} handleRegister={this.handleRegister} logOut={this.logOut}>
         <Route exact path='/' component={Home} />
-        <Route path='/account' component={FetchData} />
-        <Route path='/cart' component={FetchData} />
+        <Route path='/account' component={Account} />
+        <Route path='/reports' component={Reports} />
+        <Route path='/cart' component={ShoppingCart} />
       </Layout>
     );
   }

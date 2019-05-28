@@ -2,6 +2,7 @@
 import PropTypes from 'prop-types';
 import { Glyphicon, Nav, Navbar, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
+import { isMobile } from 'react-device-detect';
 import '../styles/NavMenu.css';
 
 export class NavMenu extends Component {
@@ -32,22 +33,22 @@ export class NavMenu extends Component {
             <Nav className = 'nav-links'>
               <LinkContainer to={'/'} exact>
                 <NavItem  title='Home' className = 'hover'>
-                  <Glyphicon glyph='home'/>
+                  <Glyphicon glyph='home'/> {isMobile ? "Home" : ""}
                 </NavItem>
               </LinkContainer>
               <LinkContainer to={'/account'} exact>
                 <NavItem  title='Manage Account' className = 'hover'>
-                  <Glyphicon glyph='user'/> 
+                  <Glyphicon glyph='user'/> {isMobile ? "Manage Account" : ""}
                 </NavItem>
               </LinkContainer>
               <LinkContainer to={'/reports'}>
-                <NavItem title='Reports' className = 'hover'>
-                  <Glyphicon glyph='list-alt' />
+                <NavItem title='View Reports' className = 'hover'>
+                  <Glyphicon glyph='list-alt' /> {isMobile ? "View Reports" : ""}
                 </NavItem>
               </LinkContainer>
               <LinkContainer to={'/cart'}>
                 <NavItem  title='Shopping Cart' className = 'hover'>
-                  <Glyphicon glyph='shopping-cart'/>
+                  <Glyphicon glyph='shopping-cart'/> {isMobile ? "Shopping Cart" : ""}
                 </NavItem>
               </LinkContainer>
             </Nav>
