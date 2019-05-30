@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 
-export class ShoppingCart extends Component {
+export class Donate extends Component {
   
   render() {
     return (
       <div>
-        <h2>Shopping Cart</h2>
+        <h2>Donate</h2>
       </div>
     );}
 }

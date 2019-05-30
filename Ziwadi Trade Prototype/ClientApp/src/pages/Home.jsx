@@ -1,48 +1,43 @@
 import React, { Component } from 'react';
-import {Glyphicon, FormControl, Button} from 'react-bootstrap'
+import {Button} from 'react-bootstrap'
+import { withRouter } from 'react-router';
 import {LinePlaceholder} from '../components/LinePlaceholder';
-import logo from '../media/CYEC-horizontal.jpg';
 import '../styles/Home.css';
 
-export class Home extends Component {
-  displayName = Home.name
+export class HomeNoRouter extends Component {
+  displayName = HomeNoRouter.name
 
-  dummy(){
+  constructor(props) {
+    super(props);
+    
+    this.donateNowClick = this.donateNowClick.bind(this);
+}
 
+  donateNowClick(){
+    this.props.history.push("/donate");
   }
 
   render() {
     return (
       <div>
-        <div className="header">
-          <img
-            alt="CYEC-Logo"
-            src={logo}
-            className="logo"
-          />
-
-            <FormControl className="search"
-              placeholder="Search..."
-              aria-label="Search"
-              aria-describedby="search"
-            />
-            <Button className="search-btn"><Glyphicon glyph='search'/></Button>
-        </div>
-
         <div className="content">
-          <div className="column">
+          <div className="col-33">
+            <h2>Who We Are:</h2>
+            <LinePlaceholder />
           </div>
-          <div className="column">
-              <LinePlaceholder />
-              <br />
-              <LinePlaceholder />
-              <br />
-              <LinePlaceholder />
+          <div className="col-33">
+            <h2>What We Do:</h2>
+            <LinePlaceholder />
           </div>
-          <div className="column">
+          <div className="col-33 last-col">
+            <h2>Why We Need You:</h2>
+            <LinePlaceholder />
           </div>
+          <Button className="donate-now-btn" onClick={this.donateNowClick}>Donate Now</Button>
         </div>
       </div> 
     );
   }
 }
+
+export const Home = withRouter(HomeNoRouter);

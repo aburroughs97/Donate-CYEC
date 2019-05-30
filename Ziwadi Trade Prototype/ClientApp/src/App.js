@@ -4,9 +4,10 @@ import { Layout } from './pages/Layout';
 import { Home } from './pages/Home.jsx';
 import { Account } from './pages/Account.jsx';
 import { Reports } from './pages/Reports.jsx';
-import { ShoppingCart } from './pages/ShoppingCart';
+import { Donate } from './pages/Donate';
 import { apiPost } from './Api';
 import { toast } from 'react-smart-toaster';
+
 
 const sessionUserKey = "loggedinUser";
 
@@ -14,7 +15,7 @@ export default class App extends Component {
   displayName = App.name
   constructor(props) {
     super(props);
-    this.state = {isLoggedIn: false, account: {userID: 0, firstName: "", lastName: ""}};
+    this.state = {isLoggedIn: false, account: {userID: 0, firstName: "", isAdmin: false}};
 
     this.handleLogin = this.handleLogin.bind(this);
     this.handleRegister = this.handleRegister.bind(this);
@@ -64,7 +65,7 @@ export default class App extends Component {
               lastName: user.lastName
             }
           });
-          sessionStorage.setItem(sessionUserKey, JSON.stringify({ userID: user.userID, firstName: user.firstName, lastName: user.lastName }));
+          sessionStorage.setItem(sessionUserKey, JSON.stringify({ userID: user.userID, firstName: user.firstName, isAdmin: false }));
         }
         resolve(response);
       });
@@ -86,7 +87,7 @@ export default class App extends Component {
               lastName: user.lastName
             }
           });
-          sessionStorage.setItem(sessionUserKey, JSON.stringify({ userID: user.userID, firstName: user.firstName, lastName: user.lastName }));
+          sessionStorage.setItem(sessionUserKey, JSON.stringify({ userID: user.userID, firstName: user.firstName, isAdmin: false }));
         }
         resolve(response);
       });
@@ -98,9 +99,9 @@ export default class App extends Component {
     return (
       <Layout isLoggedIn={this.state.isLoggedIn} account={this.state.account} handleLogin={this.handleLogin} handleRegister={this.handleRegister} logOut={this.logOut}>
         <Route exact path='/' component={Home} />
-        <Route path='/account' component={Account} />
+        <Route path='/donate' component={Donate} />
         <Route path='/reports' component={Reports} />
-        <Route path='/cart' component={ShoppingCart} />
+        <Route path='/account' component={Account} />
       </Layout>
     );
   }

@@ -17,10 +17,10 @@ export class LinePlaceholder extends Component {
                 <div className="content-placeholder-text">
                   <span className="content-placeholder-background"></span>
                 </div>
-                <div className="content-placeholder-text-med">
+                <div className="content-placeholder-text">
                   <span className="content-placeholder-background"></span>
                 </div>
-                <div className="content-placeholder-text-sm">
+                <div className="content-placeholder-text">
                   <span className="content-placeholder-background"></span>
                 </div>
             </div>

@@ -41,16 +41,45 @@
     color: white;
 }
 
-.column {
+.content {
+    text-align: center;
+}
+
+.col-33 {
     float: left;
     width: 33.33%;
     height: 75%;
     padding: 10px;
+    text-align: center;
+    margin-top: 1%;
+    border-right: 1px solid lightgray;
+}
+
+.last-col {
+    border-right: none;
+}
+
+.donate-now-btn {
+    width: 20%;
+    font-size: 18px;
+    color: #BF2E1B;
+    background-image: none;
+    background-color: white;
+    margin-top: 2%;
+    margin-bottom: 2%;
+}
+
+.donate-now-btn:hover {
+    background-color: #BF2E1B;
+    background-image: none;
+    color: white;
 }
 
 @media screen and (max-width: 760px) {
-    .column {
+    .col-33 {
       width: 100%;
+      border-right: none;
+      border-bottom: 1px solid lightgray;
     }
     .header .search {
         float: right;
@@ -70,12 +99,17 @@
   }
 
 @media screen and (max-width: 600px) {
-    .column {
+    .col-33 {
       width: 100%;
+      border-right: none;
+      border-bottom: 1px solid lightgray;
     }
     .header .search {
         float: right;
         width: 20%;
         margin-left: 30%;
+    }
+    .donate-now-btn {
+        width: 30%;
     }
   }

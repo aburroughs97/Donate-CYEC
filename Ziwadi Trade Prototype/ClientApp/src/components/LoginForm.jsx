@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Form, Button, FormControl, ControlLabel, FormGroup } from 'react-bootstrap';
+import { Form, Button, FormControl, ControlLabel, FormGroup, Checkbox } from 'react-bootstrap';
 import * as yup from 'yup';
 import { toast } from 'react-smart-toaster';
 
@@ -98,6 +98,9 @@ submitForm() {
                     onChange={e => this.handleChange( e.target.value, "password")}
                     required
                 />
+            </FormGroup>
+            <FormGroup controlId="formBasicChecbox">
+              <Checkbox >Remember me</Checkbox>
             </FormGroup>
 
             <Button className="modal-btn" 
