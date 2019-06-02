@@ -59,6 +59,7 @@ class App extends Component {
               firstName: user.firstName,
             }
           });
+          sessionStorage.setItem(sessionUserKey, JSON.stringify({ userID: user.userID, firstName: user.firstName, isAdmin: false }));
           cookies.set(cookieUserKey, {userID: userSession.userID, accessToken: userSession.accessToken}, { expires: new Date(userSession.expiresOn) })
         }
         this.setState({

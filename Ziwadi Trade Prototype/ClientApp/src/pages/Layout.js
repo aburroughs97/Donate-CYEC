@@ -38,7 +38,7 @@ export class Layout extends Component {
     return (
       <div>
         {this.state.showAlert && <Alert bsStyle="warning" onDismiss={this.hideAlert}>
-          This website is currently under development. Please report any issues/suggestions to alexburroughs1@gmail.com.
+          This website is currently under development. Please report any issues/suggestions to Alex Burroughs.
         </Alert>}
         <NavMenu isLoggedIn={this.props.isLoggedIn} isLoading={this.props.loadingUser} account={this.props.account} showLogin={this.handleShowLogin} logOut={this.props.logOut}/>
         <Login showLogin={this.state.showLogin} handleHideLogin={this.handleHideLogin} handleLogin={this.props.handleLogin} handleRegister={this.props.handleRegister} />
