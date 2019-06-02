@@ -79,6 +79,11 @@
     color: white;
 }
 
+.cookieConsent button:hover {
+    background-color: lightgray !important;
+    color: white !important;
+}
+
 @media screen and (max-width: 760px) {
     .col-33 {
       width: 100%;
@@ -98,6 +103,11 @@
         margin-left: 5%;
         height: auto;
         float: left;
+    }
+
+    .cookieConsent {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
     }
     
   }

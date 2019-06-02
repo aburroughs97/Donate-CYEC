@@ -10,9 +10,8 @@ namespace ZT.Core.Models.Account
         public string AccessToken { get; set; }
     }
 
-    public class ValidateAccessTokenResponse
+    public class UserAndSession
     {
-        public bool IsSuccess { get; set; }
         public User User { get; set; }
         public UserSession UserSession { get; set; }
     }

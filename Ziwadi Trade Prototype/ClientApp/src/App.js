@@ -9,7 +9,8 @@ import { apiPost } from './Api';
 import { toast } from 'react-smart-toaster';
 import Cookies from 'universal-cookie';
 
-const sessionUserKey = "UserAccessToken";
+const cookieUserKey = "UserAccessToken";
+const sessionUserKey = "LoggedInUser";
 const cookies = new Cookies();
 
 class App extends Component {
@@ -29,23 +30,36 @@ class App extends Component {
   }
 
   componentDidMount() {
-    let session = cookies.get(sessionUserKey);
+    let loggedInUser = JSON.parse(sessionStorage.getItem(sessionUserKey));
+    if(loggedInUser) {
+      this.setState({
+        isLoggedIn: true,
+        account: {
+          userID: loggedInUser.userID,
+          firstName: loggedInUser.firstName,
+          isAdmin: false
+        },
+        loadingUser: false
+      });
+      return;
+    }
+
+    let session = cookies.get(cookieUserKey);
     if(session) {
       apiPost('api/Account/ValidateAccessToken', { userID: session.userID, accessToken: session.accessToken })
       .then((response) => {
         if(response.isSuccess) {
-          let user = response.user;
-          let userSession = response.userSession;
+          let user = response.payload.user;
+          let userSession = response.payload.userSession;
   
           this.setState({
             isLoggedIn: true,
             account: {
               userID: user.userID,
               firstName: user.firstName,
-              lastName: user.lastName
             }
           });
-          cookies.set(sessionUserKey, {userID: userSession.userID, accessToken: userSession.accessToken}, { expires: new Date(userSession.expiresOn) })
+          cookies.set(cookieUserKey, {userID: userSession.userID, accessToken: userSession.accessToken}, { expires: new Date(userSession.expiresOn) })
         }
         this.setState({
           loadingUser: false
@@ -62,17 +76,18 @@ class App extends Component {
   logOut(){
     this.setState({
       isLoggedIn: false, 
-      account: {userID: 0, 
-        firstName: "", 
-        lastName: "", 
-        notifications: [1,2,3], 
-        shoppingCart: []}
-      });
-      
-      //Invalidate user session server-side
-      apiPost('api/Account/RemoveAccessToken', cookies.get(sessionUserKey))
-      cookies.remove(sessionUserKey);
-      toast.success("Logged out successfully.")
+      account: {
+        userID: 0, 
+        firstName: "",
+        isAdmin: false
+      }
+    });
+    
+    //Invalidate user session server-side
+    apiPost('api/Account/RemoveAccessToken', cookies.get(cookieUserKey))
+    sessionStorage.removeItem(sessionUserKey);     
+    cookies.remove(cookieUserKey);
+    toast.success("Logged out successfully.")
   }
 
   async handleLogin(data, rememberMe) {
@@ -89,12 +104,13 @@ class App extends Component {
               lastName: user.lastName
             }
           });
+          sessionStorage.setItem(sessionUserKey, JSON.stringify({ userID: user.userID, firstName: user.firstName, isAdmin: false }));
           if(rememberMe){
             apiPost('api/Account/CreateAccessToken', user.userID)
             .then((response) => {
               let userSession = response.payload;
 
-              cookies.set(sessionUserKey, {userID: userSession.userID, accessToken: userSession.accessToken}, { expires: new Date(userSession.expiresOn) })
+              cookies.set(cookieUserKey, {userID: userSession.userID, accessToken: userSession.accessToken}, { expires: new Date(userSession.expiresOn) })
             });
           }
         }

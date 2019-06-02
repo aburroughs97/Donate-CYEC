@@ -12,7 +12,7 @@ namespace ZT.Services
         Result<User> CreateAccount(RegisterRequest request);
         Result<User> LogIn(LogInRequest request);
         Result<UserSession> CreateAccessToken(int userID);
-        ValidateAccessTokenResponse ValidateAccessToken(ValidateAccessTokenRequest request);
+        Result<UserAndSession> ValidateAccessToken(ValidateAccessTokenRequest request);
         void RemoveAccessToken(ValidateAccessTokenRequest request);
 
     }
@@ -81,7 +81,7 @@ namespace ZT.Services
             return _accountAccessor.CreateAccessToken(userID, accessToken, expiresOn);
         }
 
-        public ValidateAccessTokenResponse ValidateAccessToken(ValidateAccessTokenRequest request)
+        public Result<UserAndSession> ValidateAccessToken(ValidateAccessTokenRequest request)
         {
             var newToken = _encryptionService.CreateHash(Encoding.UTF8.GetBytes(DateTime.Now.ToString() + request.UserID), "SHA512");
 
@@ -91,15 +91,14 @@ namespace ZT.Services
                 //Create a new token with the same expiry date
                 var user = _accountAccessor.FindUser(request.UserID);
 
-                var response = new ValidateAccessTokenResponse
+                var userAndSession = new UserAndSession
                 {
-                    IsSuccess = true,
                     User = user.Payload,
                     UserSession = result.Payload,
                 };
-                return response;
+                return new Result<UserAndSession>(userAndSession);
             }
-            else return new ValidateAccessTokenResponse { IsSuccess = false };
+            else return new Result<UserAndSession>(false);
         }
 
         public void RemoveAccessToken(ValidateAccessTokenRequest request)
