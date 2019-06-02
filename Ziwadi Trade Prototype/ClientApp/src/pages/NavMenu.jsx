@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Button, FormControl, Glyphicon, Nav, Navbar, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import { isMobile } from 'react-device-detect';
+import { PropagateLoader } from 'react-spinners';
 import '../styles/NavMenu.css';
 import logo from '../media/CYEC-horizontal.jpg';
 
@@ -57,13 +58,21 @@ export class NavMenu extends Component {
               </Nav>
               </Navbar.Collapse>
 
-            {!this.props.isLoggedIn &&            
+            {this.props.isLoading && <div className="spinner">
+              <PropagateLoader
+                color={"lightgray"}
+                size={10}
+              />
+            </div>
+            }
+
+            {!this.props.isLoading && !this.props.isLoggedIn &&            
               <Navbar.Text className="log-in">
                   <span className="modal-link-inv" onClick={this.props.showLogin}>Log In/Create Account</span>
               </Navbar.Text>
             }
 
-            {this.props.isLoggedIn &&            
+            {!this.props.isLoading && this.props.isLoggedIn &&            
               <Navbar.Text className="log-in">
                   {`Hello, ${this.props.account.firstName} `}
                   (<span className="modal-link" onClick={this.props.logOut}>Log out</span>)
@@ -91,6 +100,7 @@ export class NavMenu extends Component {
 
 NavMenu.propTypes = {
   isLoggedIn: PropTypes.bool,
+  isLoading: PropTypes.bool,
   account: PropTypes.shape({
     firstName: PropTypes.string,
     notifications: PropTypes.array,

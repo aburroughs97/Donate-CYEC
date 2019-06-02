@@ -32,6 +32,10 @@
     float: right;
     margin: 0px;
     max-width:20%;
+    transform: translateX(-101%);
+    border: none;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
 }
 
 .header .search-btn:hover,

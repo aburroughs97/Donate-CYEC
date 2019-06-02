@@ -15,6 +15,7 @@ namespace ZT.Data
 
         public virtual DbSet<User> User { get; set; }
         public virtual DbSet<UserPassword> UserPassword { get; set; }
+        public virtual DbSet<UserSession> UserSession { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -42,7 +43,7 @@ namespace ZT.Data
 
             modelBuilder.Entity<UserPassword>(entity =>
             {
-                entity.HasIndex(e => e.UserId)
+                entity.HasIndex(e => e.UserID)
                     .HasName("UserID");
 
                 entity.Property(e => e.UserPasswordID)
@@ -57,9 +58,24 @@ namespace ZT.Data
 
                 entity.Property(e => e.PasswordSalt).HasColumnType("char(5)");
 
-                entity.Property(e => e.UserId)
+                entity.Property(e => e.UserID)
                     .HasColumnName("UserID")
                     .HasColumnType("int(11)");
+            });
+
+            modelBuilder.Entity<UserSession>(entity =>
+            {
+               entity.Property(e => e.UserSessionID)
+                    .HasColumnName("UserSessionID")
+                    .HasColumnType("int(11)");
+
+                entity.Property(e => e.UserID)
+                    .HasColumnName("UserID")
+                    .HasColumnType("int(11)");
+
+                entity.Property(e => e.AccessToken).HasColumnType("varchar(255)");
+
+                entity.Property(e => e.ExpiresOn).HasColumnType("datetime");
             });
         }
     }

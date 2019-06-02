@@ -25,10 +25,12 @@ export class LoginForm extends Component {
         credentials: {email: "", password: "" },
         hasChanged: {email: false, password: false},
         valid: {email: false, password: false},
+        rememberMeChecked: true
     };
 
     this.getValidationState = this.getValidationState.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.handleRememberMe = this.handleRememberMe.bind(this);
     this.submitForm = this.submitForm.bind(this);
 }
 
@@ -55,8 +57,14 @@ handleChange(text, sender) {
     }
 }
 
+handleRememberMe(value) {
+  this.setState({
+    rememberMeChecked: value.target.checked
+  });
+}
+
 submitForm() {
-  this.props.handleLogin(this.state.form)
+  this.props.handleLogin(this.state.form, this.state.rememberMeChecked)
   .then((result) => {
     if(result.isSuccess) {
       this.props.handleHideLogin();
@@ -100,7 +108,7 @@ submitForm() {
                 />
             </FormGroup>
             <FormGroup controlId="formBasicChecbox">
-              <Checkbox >Remember me</Checkbox>
+              <Checkbox checked={this.state.rememberMeChecked} onChange={this.handleRememberMe}>Remember me</Checkbox>
             </FormGroup>
 
             <Button className="modal-btn" 

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Login } from './Login';
 import { NavMenu } from './NavMenu.jsx';
 import {SmartToaster, toast } from 'react-smart-toaster';
+import CookieConsent from 'react-cookie-consent';
 
 export class Layout extends Component {
   displayName = Layout.name
@@ -32,7 +33,7 @@ export class Layout extends Component {
   render() {
     return (
       <div>
-        <NavMenu isLoggedIn={this.props.isLoggedIn} account={this.props.account} showLogin={this.handleShowLogin} logOut={this.props.logOut}/>
+        <NavMenu isLoggedIn={this.props.isLoggedIn} isLoading={this.props.loadingUser} account={this.props.account} showLogin={this.handleShowLogin} logOut={this.props.logOut}/>
         <Login showLogin={this.state.showLogin} handleHideLogin={this.handleHideLogin} handleLogin={this.props.handleLogin} handleRegister={this.props.handleRegister} />
         <SmartToaster 
           store={toast} 
@@ -40,6 +41,7 @@ export class Layout extends Component {
           position={"top_center"}
           fadeOutTimer={2500}
         />
+        <CookieConsent>This website uses cookies to enhance the user experience</CookieConsent>
         {this.props.children}
       </div>
     );
@@ -48,6 +50,7 @@ export class Layout extends Component {
 
 Layout.propTypes = {
   isLoggedIn: PropTypes.bool,
+  loadingUser: PropTypes.bool,
   account: PropTypes.shape({
     username: PropTypes.string,
     notifications: PropTypes.array,

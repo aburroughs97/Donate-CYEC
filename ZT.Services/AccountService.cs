@@ -11,6 +11,10 @@ namespace ZT.Services
     {
         Result<User> CreateAccount(RegisterRequest request);
         Result<User> LogIn(LogInRequest request);
+        Result<UserSession> CreateAccessToken(int userID);
+        ValidateAccessTokenResponse ValidateAccessToken(ValidateAccessTokenRequest request);
+        void RemoveAccessToken(ValidateAccessTokenRequest request);
+
     }
     public class AccountService : IAccountService
     {
@@ -59,12 +63,48 @@ namespace ZT.Services
 
             if(hashedPassword == password.Password)
             {
+
                 return userResult;
             }
             else
             {
                 return new Result<User>(false, "The email/password combination you entered is incorrect.");
             }
+        }
+
+        public Result<UserSession> CreateAccessToken(int userID)
+        {
+            if (_accountAccessor.FindUser(userID) == null) return new Result<UserSession>(false, "Invalid UserID received.");
+
+            var accessToken = _encryptionService.CreateHash(Encoding.UTF8.GetBytes(DateTime.Now.ToString() + userID), "SHA512");
+            var expiresOn = DateTime.Now.AddDays(14);
+            return _accountAccessor.CreateAccessToken(userID, accessToken, expiresOn);
+        }
+
+        public ValidateAccessTokenResponse ValidateAccessToken(ValidateAccessTokenRequest request)
+        {
+            var newToken = _encryptionService.CreateHash(Encoding.UTF8.GetBytes(DateTime.Now.ToString() + request.UserID), "SHA512");
+
+            var result = _accountAccessor.ValidateAccessToken(request.UserID, request.AccessToken, newToken);
+            if (result.IsSuccess)
+            {
+                //Create a new token with the same expiry date
+                var user = _accountAccessor.FindUser(request.UserID);
+
+                var response = new ValidateAccessTokenResponse
+                {
+                    IsSuccess = true,
+                    User = user.Payload,
+                    UserSession = result.Payload,
+                };
+                return response;
+            }
+            else return new ValidateAccessTokenResponse { IsSuccess = false };
+        }
+
+        public void RemoveAccessToken(ValidateAccessTokenRequest request)
+        {
+            _accountAccessor.RemoveAccessToken(request.UserID, request.AccessToken);
         }
     }
 }

@@ -35,5 +35,26 @@ namespace ZT.Controllers
             var result = _accountService.LogIn(request);
             return Json(result);
         }
+
+        [HttpPost("CreateAccessToken")]
+        public IActionResult CreateAccessToken([FromBody] int userID)
+        {
+            var result = _accountService.CreateAccessToken(userID);
+            return Json(result);
+        }
+
+        [HttpPost("ValidateAccessToken")]
+        public IActionResult ValidateAccessToken([FromBody] ValidateAccessTokenRequest request)
+        {
+            var result = _accountService.ValidateAccessToken(request);
+            return Json(result);
+        }
+
+        [HttpPost("RemoveAccessToken")]
+        public IActionResult RemoveAccessToken([FromBody] ValidateAccessTokenRequest request)
+        {
+            _accountService.RemoveAccessToken(request);
+            return View();
+        }
     }
 }

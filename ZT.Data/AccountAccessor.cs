@@ -12,9 +12,14 @@ namespace ZT.Data
     {
         //Result<User> LogIn(string email, string passwordHash);
         Result LogOut(int UserID);
+        Result<User> FindUser(int userID);
         Result<User> FindUserByEmail(string email);
         Result<User> CreateAccount(string email, string passwordHash, string passwordSalt, string firstName, string lastName);
         Result<UserPassword> GetUserPassword(int userID);
+        Result<UserSession> CreateAccessToken(int userID, string accessToken, DateTime expiresOn);
+        Result<UserSession> ValidateAccessToken(int userID, string accessToken, string newToken);
+        void RemoveAccessToken(int userID, string accessToken);
+
     }
     public class AccountAccessor : IAccountAccessor
     {
@@ -26,7 +31,6 @@ namespace ZT.Data
         
         public Result<User> CreateAccount(string email, string passwordHash, string passwordSalt, string firstName, string lastName)
         {
-
             try
             {
                 var user = new User
@@ -41,7 +45,7 @@ namespace ZT.Data
 
                 var userPassword = new UserPassword
                 {
-                    UserId = user.UserID,
+                    UserID = user.UserID,
                     Password = passwordHash,
                     PasswordSalt = passwordSalt,
                     CreatedOnUtc = DateTime.UtcNow
@@ -58,6 +62,12 @@ namespace ZT.Data
 
         }
 
+        public Result<User> FindUser(int userID)
+        {
+            var user = (from x in _dBContext.User where x.UserID == userID select x).FirstOrDefault();
+            return new Result<User>(user);
+        }
+
         public Result<User> FindUserByEmail(string email)
         {
             var user = (from x in _dBContext.User
@@ -66,20 +76,10 @@ namespace ZT.Data
             return new Result<User>(user);
         }
 
-        //public Result<User> LogIn(string email, string passwordHash)
-        //{
-        //    var user = (from u in _dBContext.User
-        //                join p in _dBContext.UserPassword
-        //                on u.UserId equals p.UserId
-        //                where u.Email == email && p.Password == passwordHash
-        //                select u).FirstOrDefault();
-        //    return new Result<User>(user);
-        //}
-
         public Result<UserPassword> GetUserPassword(int userID)
         {
             var userPassword = (from x in _dBContext.UserPassword
-                        where x.UserId == userID
+                        where x.UserID == userID
                         select x).FirstOrDefault();
             return new Result<UserPassword>(userPassword);
 
@@ -88,6 +88,52 @@ namespace ZT.Data
         public Result LogOut(int UserID)
         {
             throw new NotImplementedException();
+        }
+
+        public Result<UserSession> CreateAccessToken(int userID, string accessToken, DateTime expiresOn)
+        {
+            var userSession = new UserSession
+            {
+                UserID = userID,
+                AccessToken = accessToken,
+                ExpiresOn = expiresOn,
+            };
+            _dBContext.UserSession.Add(userSession);
+            _dBContext.SaveChanges();
+
+            return new Result<UserSession>(userSession);
+        }
+
+        public Result<UserSession> ValidateAccessToken(int userID, string accessToken, string newToken)
+        {
+            var session = (from x in _dBContext.UserSession
+                           where x.UserID == userID && x.AccessToken == accessToken
+                           select x).FirstOrDefault();
+            if(session == null)
+            {
+                return new Result<UserSession>(false, "Invalid token received.");
+            }
+            else if (DateTime.Now > session.ExpiresOn)
+            {
+                _dBContext.UserSession.Remove(session);
+                _dBContext.SaveChanges();
+                return new Result<UserSession>(false, "Token was expired.");
+            }
+            else
+            {
+                session.AccessToken = newToken;
+                _dBContext.SaveChanges();
+                return new Result<UserSession>(session);
+            }
+        }
+
+        public void RemoveAccessToken(int userID, string accessToken)
+        {
+            var session = (from x in _dBContext.UserSession
+                           where x.UserID == userID && x.AccessToken == accessToken
+                           select x).FirstOrDefault();
+            _dBContext.UserSession.Remove(session);
+            _dBContext.SaveChanges();
         }
     }
 }

@@ -7,15 +7,21 @@ import { Reports } from './pages/Reports.jsx';
 import { Donate } from './pages/Donate';
 import { apiPost } from './Api';
 import { toast } from 'react-smart-toaster';
+import Cookies from 'universal-cookie';
 
+const sessionUserKey = "UserAccessToken";
+const cookies = new Cookies();
 
-const sessionUserKey = "loggedinUser";
-
-export default class App extends Component {
+class App extends Component {
   displayName = App.name
+
   constructor(props) {
     super(props);
-    this.state = {isLoggedIn: false, account: {userID: 0, firstName: "", isAdmin: false}};
+    this.state = {
+      isLoggedIn: false, 
+      account: {userID: 0, firstName: "", isAdmin: false},
+      loadingUser: true
+    };
 
     this.handleLogin = this.handleLogin.bind(this);
     this.handleRegister = this.handleRegister.bind(this);
@@ -23,17 +29,33 @@ export default class App extends Component {
   }
 
   componentDidMount() {
-    let userStr = sessionStorage.getItem(sessionUserKey);
-    if(userStr) {
-      let user = JSON.parse(userStr);
-      this.setState({
-        isLoggedIn: true,
-        account: {
-          userID: user.userID,
-          firstName: user.firstName,
-          lastName: user.lastName
+    let session = cookies.get(sessionUserKey);
+    if(session) {
+      apiPost('api/Account/ValidateAccessToken', { userID: session.userID, accessToken: session.accessToken })
+      .then((response) => {
+        if(response.isSuccess) {
+          let user = response.user;
+          let userSession = response.userSession;
+  
+          this.setState({
+            isLoggedIn: true,
+            account: {
+              userID: user.userID,
+              firstName: user.firstName,
+              lastName: user.lastName
+            }
+          });
+          cookies.set(sessionUserKey, {userID: userSession.userID, accessToken: userSession.accessToken}, { expires: new Date(userSession.expiresOn) })
         }
-      })
+        this.setState({
+          loadingUser: false
+        });
+      });
+    }
+    else {
+      this.setState({
+        loadingUser: false
+      });
     }
   }
 
@@ -46,12 +68,14 @@ export default class App extends Component {
         notifications: [1,2,3], 
         shoppingCart: []}
       });
-    sessionStorage.removeItem(sessionUserKey);
-    toast.success("Logged out successfully.")
+      
+      //Invalidate user session server-side
+      apiPost('api/Account/RemoveAccessToken', cookies.get(sessionUserKey))
+      cookies.remove(sessionUserKey);
+      toast.success("Logged out successfully.")
   }
 
-  async handleLogin(data) {
-    //Validate login credentials and get reports/shopping cart for a user
+  async handleLogin(data, rememberMe) {
     return new Promise((resolve) => {
       apiPost('api/Account/LogIn', data)
       .then((response) => {
@@ -65,7 +89,14 @@ export default class App extends Component {
               lastName: user.lastName
             }
           });
-          sessionStorage.setItem(sessionUserKey, JSON.stringify({ userID: user.userID, firstName: user.firstName, isAdmin: false }));
+          if(rememberMe){
+            apiPost('api/Account/CreateAccessToken', user.userID)
+            .then((response) => {
+              let userSession = response.payload;
+
+              cookies.set(sessionUserKey, {userID: userSession.userID, accessToken: userSession.accessToken}, { expires: new Date(userSession.expiresOn) })
+            });
+          }
         }
         resolve(response);
       });
@@ -97,7 +128,7 @@ export default class App extends Component {
 
   render() {
     return (
-      <Layout isLoggedIn={this.state.isLoggedIn} account={this.state.account} handleLogin={this.handleLogin} handleRegister={this.handleRegister} logOut={this.logOut}>
+      <Layout isLoggedIn={this.state.isLoggedIn} loadingUser={this.state.loadingUser} account={this.state.account} handleLogin={this.handleLogin} handleRegister={this.handleRegister} logOut={this.logOut}>
         <Route exact path='/' component={Home} />
         <Route path='/donate' component={Donate} />
         <Route path='/reports' component={Reports} />
@@ -106,3 +137,5 @@ export default class App extends Component {
     );
   }
 }
+
+export default App;

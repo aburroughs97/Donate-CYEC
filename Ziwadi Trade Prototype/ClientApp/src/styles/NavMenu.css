@@ -54,6 +54,12 @@
     float: right;
 }
 
+.navbar .spinner {
+    float: right;
+    margin-right: 4%;
+    margin-top: 1%;
+}
+
 @media screen and (max-width: 760px) {
     .navbar .nav-links {
         float: none;
@@ -62,6 +68,12 @@
     .navbar .log-in {
         position: fixed;
         right: 15%;
+    }
+
+    .navbar .spinner {
+        top: 2%;
+        position: fixed;
+        right: 20%;    
     }
     
     .navbar .nav-links a{
@@ -84,6 +96,12 @@
     .navbar .log-in {
         position: fixed;
         right: 20%;
+    }
+
+    .navbar .spinner {
+        top: 2%;
+        position: fixed;
+        right: 30%;    
     }
     
     .navbar .nav-links a{
