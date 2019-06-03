@@ -18,7 +18,7 @@ const validForm = {
   password: "123456789"
 }
 
-export class LoginForm extends Component {
+export default class LoginForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -119,7 +119,8 @@ submitForm() {
               </Button>
           </div>
           <hr />
-          <p>Don't have an account? <span className="modal-link" onClick={this.props.showRegister}>Create an Account</span></p>
+          <p>Don't have an account? <span className="modal-link" onClick={this.props.showRegister}>Create an Account</span> <span className="modal-link forgot-password" onClick={this.props.handleForgotPassword}>Forgot your password?</span></p>
+          
       </Form>
       );
     }
@@ -128,5 +129,6 @@ submitForm() {
 LoginForm.propTypes = {
   handleLogin: PropTypes.func,
   showRegister: PropTypes.func,
-  handleHideLogin: PropTypes.func
+  handleHideLogin: PropTypes.func,
+  handleForgotPassword: PropTypes.func,
 }

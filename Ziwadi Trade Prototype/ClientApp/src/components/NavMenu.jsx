@@ -55,6 +55,11 @@ export class NavMenu extends Component {
                     <Glyphicon glyph='user'/> {isMobile ? "Manage Account" : ""}
                   </NavItem>
                 </LinkContainer>
+                {this.props.account.isAdmin && <LinkContainer to={'/admin'} exact>
+                  <NavItem  title='Admin' className = 'hover'>
+                    <Glyphicon glyph='cog'/> {isMobile ? "Admin" : ""}
+                  </NavItem>
+                </LinkContainer>}
               </Nav>
               </Navbar.Collapse>
 
@@ -102,9 +107,9 @@ NavMenu.propTypes = {
   isLoggedIn: PropTypes.bool,
   isLoading: PropTypes.bool,
   account: PropTypes.shape({
-    firstName: PropTypes.string,
-    notifications: PropTypes.array,
-    shoppingCart: PropTypes.array
+    userID: PropTypes.number, 
+    firstName: PropTypes.string, 
+    isAdmin: PropTypes.bool
   }),
   showLogin: PropTypes.func,
   logOut: PropTypes.func

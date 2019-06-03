@@ -1,4 +1,4 @@
-export async function apiPost(url, data) {
+export default async function apiPost(url, data) {
       const response = await fetch(url, {
         method: 'POST',
         headers: {

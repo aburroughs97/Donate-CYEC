@@ -11,6 +11,7 @@ namespace ZT.Services
         {
             services.AddTransient<IEncryptionService, EncryptionService>();
             services.AddTransient<IAccountService, AccountService>();
+            services.AddTransient<IEmailService, EmailService>();
             return services;
         }
     }

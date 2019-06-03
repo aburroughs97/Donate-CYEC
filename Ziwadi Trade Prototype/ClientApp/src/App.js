@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router';
 import { Layout } from './pages/Layout';
-import { Home } from './pages/Home.jsx';
-import { Account } from './pages/Account.jsx';
-import { Reports } from './pages/Reports.jsx';
-import { Donate } from './pages/Donate';
-import { apiPost } from './Api';
+import { Home, Donate, Account, Reports, Admin} from './pages/Pages';
+import * as _accountCalls from './API/AccountCalls';
 import { toast } from 'react-smart-toaster';
 import Cookies from 'universal-cookie';
 
@@ -37,7 +34,7 @@ class App extends Component {
         account: {
           userID: loggedInUser.userID,
           firstName: loggedInUser.firstName,
-          isAdmin: false
+          isAdmin: loggedInUser.isAdmin
         },
         loadingUser: false
       });
@@ -46,7 +43,7 @@ class App extends Component {
 
     let session = cookies.get(cookieUserKey);
     if(session) {
-      apiPost('api/Account/ValidateAccessToken', { userID: session.userID, accessToken: session.accessToken })
+      _accountCalls.ValidateAccessToken(session.userID, session.accessToken)
       .then((response) => {
         if(response.isSuccess) {
           let user = response.payload.user;
@@ -57,9 +54,10 @@ class App extends Component {
             account: {
               userID: user.userID,
               firstName: user.firstName,
+              isAdmin: user.isAdmin
             }
           });
-          sessionStorage.setItem(sessionUserKey, JSON.stringify({ userID: user.userID, firstName: user.firstName, isAdmin: false }));
+          sessionStorage.setItem(sessionUserKey, JSON.stringify({ userID: user.userID, firstName: user.firstName, isAdmin: user.isAdmin }));
           cookies.set(cookieUserKey, {userID: userSession.userID, accessToken: userSession.accessToken}, { expires: new Date(userSession.expiresOn) })
         }
         this.setState({
@@ -85,7 +83,7 @@ class App extends Component {
     });
     
     //Invalidate user session server-side
-    apiPost('api/Account/RemoveAccessToken', cookies.get(cookieUserKey))
+    _accountCalls.RemoveAccessToken(cookies.get(cookieUserKey));
     sessionStorage.removeItem(sessionUserKey);     
     cookies.remove(cookieUserKey);
     toast.success("Logged out successfully.")
@@ -93,7 +91,7 @@ class App extends Component {
 
   async handleLogin(data, rememberMe) {
     return new Promise((resolve) => {
-      apiPost('api/Account/LogIn', data)
+      _accountCalls.LogIn(data)
       .then((response) => {
         if(response.isSuccess) {
           let user = response.payload;
@@ -102,12 +100,12 @@ class App extends Component {
             account: {
               userID: user.userID,
               firstName: user.firstName,
-              lastName: user.lastName
+              isAdmin: user.isAdmin
             }
           });
-          sessionStorage.setItem(sessionUserKey, JSON.stringify({ userID: user.userID, firstName: user.firstName, isAdmin: false }));
+          sessionStorage.setItem(sessionUserKey, JSON.stringify({ userID: user.userID, firstName: user.firstName, isAdmin: user.isAdmin }));
           if(rememberMe){
-            apiPost('api/Account/CreateAccessToken', user.userID)
+            _accountCalls.CreateAccessToken(user.userID)
             .then((response) => {
               let userSession = response.payload;
 
@@ -123,7 +121,7 @@ class App extends Component {
 
   async handleRegister(data) {
     return new Promise((resolve) => {
-      apiPost('api/Account/CreateAccount', data)
+      _accountCalls.CreateAccount(data)
       .then((response) => {
         if(response.isSuccess) {
           let user = response.payload;
@@ -135,7 +133,7 @@ class App extends Component {
               lastName: user.lastName
             }
           });
-          sessionStorage.setItem(sessionUserKey, JSON.stringify({ userID: user.userID, firstName: user.firstName, isAdmin: false }));
+          sessionStorage.setItem(sessionUserKey, JSON.stringify({ userID: user.userID, firstName: user.firstName, isAdmin: user.isAdmin }));
         }
         resolve(response);
       });
@@ -150,6 +148,7 @@ class App extends Component {
         <Route path='/donate' component={Donate} />
         <Route path='/reports' component={Reports} />
         <Route path='/account' component={Account} />
+        <Route path='/admin' component={Admin} />
       </Layout>
     );
   }

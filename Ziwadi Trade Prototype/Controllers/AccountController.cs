@@ -54,7 +54,14 @@ namespace ZT.Controllers
         public IActionResult RemoveAccessToken([FromBody] ValidateAccessTokenRequest request)
         {
             _accountService.RemoveAccessToken(request);
-            return View();
+            return Json(true);
+        }
+
+        [HttpPost("SendForgotPasswordEmail")]
+        public IActionResult SendForgotPasswordEmail([FromBody] string email)
+        {
+            var result = _accountService.SendForgotPasswordEmail(email);
+            return Json(result);
         }
     }
 }

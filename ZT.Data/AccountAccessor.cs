@@ -19,7 +19,7 @@ namespace ZT.Data
         Result<UserSession> CreateAccessToken(int userID, string accessToken, DateTime expiresOn);
         Result<UserSession> ValidateAccessToken(int userID, string accessToken, string newToken);
         void RemoveAccessToken(int userID, string accessToken);
-
+        void CreateUserPasswordReset(int userID, string resetCode);
     }
     public class AccountAccessor : IAccountAccessor
     {
@@ -38,7 +38,7 @@ namespace ZT.Data
                     Email = email,
                     FirstName = firstName,
                     LastName = lastName,
-                    CustomerGuid = Guid.NewGuid()
+                    IsAdmin = false
                 };
                 user = _dBContext.User.Add(user).Entity;
                 _dBContext.SaveChanges();
@@ -133,6 +133,18 @@ namespace ZT.Data
                            where x.UserID == userID && x.AccessToken == accessToken
                            select x).FirstOrDefault();
             _dBContext.UserSession.Remove(session);
+            _dBContext.SaveChanges();
+        }
+
+        public void CreateUserPasswordReset(int userID, string resetCode)
+        {
+            var reset = new UserPasswordReset
+            {
+                UserID = userID,
+                ResetCode = resetCode,
+                CreatedOn = DateTime.Now
+            };
+            _dBContext.UserPasswordReset.Add(reset);
             _dBContext.SaveChanges();
         }
     }

@@ -14,17 +14,21 @@ namespace ZT.Services
         Result<UserSession> CreateAccessToken(int userID);
         Result<UserAndSession> ValidateAccessToken(ValidateAccessTokenRequest request);
         void RemoveAccessToken(ValidateAccessTokenRequest request);
-
+        Result SendForgotPasswordEmail(string email);
     }
     public class AccountService : IAccountService
     {
         private readonly IEncryptionService _encryptionService;
         private readonly IAccountAccessor _accountAccessor;
+        private readonly IEmailService _emailService;
+
         public AccountService(IEncryptionService encryptionService,
-                                IAccountAccessor accountAccessor)
+                                IAccountAccessor accountAccessor,
+                                IEmailService emailService)
         {
             _encryptionService = encryptionService;
             _accountAccessor = accountAccessor;
+            _emailService = emailService;
         }
 
         public Result<User> CreateAccount(RegisterRequest request)
@@ -104,6 +108,26 @@ namespace ZT.Services
         public void RemoveAccessToken(ValidateAccessTokenRequest request)
         {
             _accountAccessor.RemoveAccessToken(request.UserID, request.AccessToken);
+        }
+
+        public Result SendForgotPasswordEmail(string email)
+        {
+            var user = _accountAccessor.FindUserByEmail(email);
+            if (!user.IsSuccess) return new Result(false, "Email address not registered.");
+
+            var guid = Guid.NewGuid();
+            var hashedGuid = _encryptionService.CreateHash(Encoding.UTF8.GetBytes(guid.ToString() + user.Payload.UserID), "SHA512");
+
+            //_accountAccessor.CreateUserPasswordReset(user.Payload.UserID, hashedGuid);
+            try
+            {
+                _emailService.SendPasswordResetEmail(email, guid.ToString());
+                return new Result(true);
+            }
+            catch (Exception e)
+            {
+                return new Result(false, e.Message);
+            }
         }
     }
 }

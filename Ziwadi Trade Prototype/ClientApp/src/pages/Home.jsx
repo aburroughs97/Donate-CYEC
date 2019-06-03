@@ -4,8 +4,8 @@ import { withRouter } from 'react-router';
 import {LinePlaceholder} from '../components/LinePlaceholder';
 import '../styles/Home.css';
 
-export class HomeNoRouter extends Component {
-  displayName = HomeNoRouter.name
+export class Home extends Component {
+  displayName = Home.name
 
   constructor(props) {
     super(props);
@@ -40,4 +40,4 @@ export class HomeNoRouter extends Component {
   }
 }
 
-export const Home = withRouter(HomeNoRouter);
+export default withRouter(Home);

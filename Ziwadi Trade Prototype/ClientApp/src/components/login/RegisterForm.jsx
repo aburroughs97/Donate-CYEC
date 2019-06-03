@@ -29,7 +29,7 @@ const validForm = {
   password: "123456789",
 }
 
-class RegisterFormNoRouter extends Component {
+class RegisterForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -192,10 +192,10 @@ submitForm() {
     }
 }
 
-RegisterFormNoRouter.propTypes = {
+RegisterForm.propTypes = {
   handleRegister: PropTypes.func,
   showLogin: PropTypes.func,
   handleHideLogin: PropTypes.func
 }
 
-export const RegisterForm = withRouter(RegisterFormNoRouter);
+export default withRouter(RegisterForm);
