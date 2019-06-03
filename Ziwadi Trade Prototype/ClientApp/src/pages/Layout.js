@@ -46,7 +46,7 @@ export class Layout extends Component {
           store={toast} 
           lightBackground={true} 
           position={"top_center"}
-          fadeOutTimer={2500}
+          fadeOutTimer={4000}
         />
         <CookieConsent 
           style={{ background: "#BF2E1B", paddingLeft: "30%", paddingRight: "30%"}}

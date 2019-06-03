@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using ZT.Core;
@@ -15,17 +16,22 @@ namespace ZT.Services
         Result<UserAndSession> ValidateAccessToken(ValidateAccessTokenRequest request);
         void RemoveAccessToken(ValidateAccessTokenRequest request);
         Result SendForgotPasswordEmail(string email);
+        Result ValidateForgotPasswordToken(ValidateForgotPasswordTokenRequest request);
+        Result ChangePassword(ChangePasswordRequest request);
     }
     public class AccountService : IAccountService
     {
+        private readonly IConfiguration _configuration;
         private readonly IEncryptionService _encryptionService;
         private readonly IAccountAccessor _accountAccessor;
         private readonly IEmailService _emailService;
 
-        public AccountService(IEncryptionService encryptionService,
+        public AccountService(IConfiguration configuration,
+                                IEncryptionService encryptionService,
                                 IAccountAccessor accountAccessor,
                                 IEmailService emailService)
         {
+            _configuration = configuration;
             _encryptionService = encryptionService;
             _accountAccessor = accountAccessor;
             _emailService = emailService;
@@ -34,17 +40,17 @@ namespace ZT.Services
         public Result<User> CreateAccount(RegisterRequest request)
         {
             //Validate  request
-            if(string.IsNullOrEmpty(request.FirstName) || string.IsNullOrEmpty(request.LastName) || string.IsNullOrEmpty(request.Email) || string.IsNullOrEmpty(request.Password))
+            if (string.IsNullOrEmpty(request.FirstName) || string.IsNullOrEmpty(request.LastName) || string.IsNullOrEmpty(request.Email) || string.IsNullOrEmpty(request.Password))
             {
                 return new Result<User>(false, "Bad request received.");
             }
             //Check for unique email
-            if(_accountAccessor.FindUserByEmail(request.Email).Payload != null)
+            if (_accountAccessor.FindUserByEmail(request.Email).Payload != null)
             {
                 return new Result<User>(false, "Email address is already in use.");
             }
 
-            var saltKey = _encryptionService.CreateSaltKey(5);
+            var saltKey = _encryptionService.CreateSaltKey(Convert.ToInt32(_configuration["PasswordSaltLength"]));
             var hashedPassword = _encryptionService.CreatePasswordHash(request.Password, saltKey);
 
             return _accountAccessor.CreateAccount(request.Email, hashedPassword, saltKey, request.FirstName, request.LastName);
@@ -52,7 +58,7 @@ namespace ZT.Services
 
         public Result<User> LogIn(LogInRequest request)
         {
-            if(string.IsNullOrEmpty(request.Email) || string.IsNullOrEmpty(request.Password))
+            if (string.IsNullOrEmpty(request.Email) || string.IsNullOrEmpty(request.Password))
             {
                 return new Result<User>(false, "Bad request received.");
             }
@@ -65,7 +71,7 @@ namespace ZT.Services
             var password = _accountAccessor.GetUserPassword(userResult.Payload.UserID).Payload;
             var hashedPassword = _encryptionService.CreatePasswordHash(request.Password, password.PasswordSalt);
 
-            if(hashedPassword == password.Password)
+            if (hashedPassword == password.Password)
             {
 
                 return userResult;
@@ -80,14 +86,14 @@ namespace ZT.Services
         {
             if (_accountAccessor.FindUser(userID) == null) return new Result<UserSession>(false, "Invalid UserID received.");
 
-            var accessToken = _encryptionService.CreateHash(Encoding.UTF8.GetBytes(DateTime.Now.ToString() + userID), "SHA512");
+            var accessToken = _encryptionService.CreateHash(Encoding.UTF8.GetBytes(DateTime.Now.ToString() + userID), _configuration["HashCode"]);
             var expiresOn = DateTime.Now.AddDays(14);
             return _accountAccessor.CreateAccessToken(userID, accessToken, expiresOn);
         }
 
         public Result<UserAndSession> ValidateAccessToken(ValidateAccessTokenRequest request)
         {
-            var newToken = _encryptionService.CreateHash(Encoding.UTF8.GetBytes(DateTime.Now.ToString() + request.UserID), "SHA512");
+            var newToken = _encryptionService.CreateHash(Encoding.UTF8.GetBytes(DateTime.Now.ToString() + request.UserID), _configuration["HashCode"]);
 
             var result = _accountAccessor.ValidateAccessToken(request.UserID, request.AccessToken, newToken);
             if (result.IsSuccess)
@@ -116,9 +122,9 @@ namespace ZT.Services
             if (!user.IsSuccess) return new Result(false, "Email address not registered.");
 
             var guid = Guid.NewGuid();
-            var hashedGuid = _encryptionService.CreateHash(Encoding.UTF8.GetBytes(guid.ToString() + user.Payload.UserID), "SHA512");
+            var hashedGuid = _encryptionService.CreateHash(Encoding.UTF8.GetBytes(guid.ToString() + user.Payload.UserID), _configuration["HashCode"]);
 
-            //_accountAccessor.CreateUserPasswordReset(user.Payload.UserID, hashedGuid);
+            _accountAccessor.CreateUserPasswordReset(user.Payload.UserID, hashedGuid);
             try
             {
                 _emailService.SendPasswordResetEmail(email, guid.ToString());
@@ -128,6 +134,28 @@ namespace ZT.Services
             {
                 return new Result(false, e.Message);
             }
+        }
+
+        public Result ValidateForgotPasswordToken(ValidateForgotPasswordTokenRequest request)
+        {
+            var user = _accountAccessor.FindUserByEmail(request.Email);
+            if (!user.IsSuccess) return new Result(false, "Invalid request received.");
+
+            var hashedToken = _encryptionService.CreateHash(Encoding.UTF8.GetBytes(request.Token + user.Payload.UserID), _configuration["HashCode"]);
+
+            return _accountAccessor.ValidateUserPasswordReset(user.Payload.UserID, hashedToken);
+        }
+
+        public Result ChangePassword(ChangePasswordRequest request)
+        {
+            var user = _accountAccessor.FindUserByEmail(request.Email);
+            if (!user.IsSuccess) return new Result(false, "Invalid request received.");
+
+            var saltKey = _encryptionService.CreateSaltKey(Convert.ToInt32(_configuration["PasswordSaltLength"]));
+            var hashedPassword = _encryptionService.CreatePasswordHash(request.NewPassword, saltKey);
+
+            _accountAccessor.ChangePassword(user.Payload.UserID, hashedPassword, saltKey);
+            return new Result(true);
         }
     }
 }

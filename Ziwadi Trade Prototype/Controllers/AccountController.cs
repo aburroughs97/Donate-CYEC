@@ -63,5 +63,19 @@ namespace ZT.Controllers
             var result = _accountService.SendForgotPasswordEmail(email);
             return Json(result);
         }
+
+        [HttpPost("ValidateForgotPasswordToken")]
+        public IActionResult ValidateForgotPasswordToken([FromBody] ValidateForgotPasswordTokenRequest request)
+        {
+            var result = _accountService.ValidateForgotPasswordToken(request);
+            return Json(result);
+        }
+
+        [HttpPost("ChangePassword")]
+        public IActionResult ChangePassword([FromBody] ChangePasswordRequest request)
+        {
+            var result = _accountService.ChangePassword(request);
+            return Json(result);
+        }
     }
 }

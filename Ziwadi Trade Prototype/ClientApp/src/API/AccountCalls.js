@@ -29,3 +29,7 @@ export function SendForgotPasswordEmail(email) {
 export function ValidateForgotPasswordToken(email, token) {
   return apiPost(url + "ValidateForgotPasswordToken", {email, token})
 }
+
+export function ChangePassword(email, newPassword) {
+  return apiPost(url + "ChangePassword", {email, newPassword})
+}

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
@@ -14,6 +15,13 @@ namespace ZT.Services
 
     public class EncryptionService : IEncryptionService
     {
+        public IConfiguration _configuration;
+
+        public EncryptionService(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+
         public virtual string CreateSaltKey(int size)
         {
             //generate a cryptographic random number
@@ -36,7 +44,7 @@ namespace ZT.Services
         /// <returns>Password hash</returns>
         public virtual string CreatePasswordHash(string password, string saltkey)
         {
-            return CreateHash(Encoding.UTF8.GetBytes(string.Concat(password, saltkey)), "SHA512");
+            return CreateHash(Encoding.UTF8.GetBytes(string.Concat(password, saltkey)), _configuration["HashCode"]);
         }
 
         /// <summary>

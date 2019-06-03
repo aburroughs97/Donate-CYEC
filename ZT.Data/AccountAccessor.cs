@@ -20,6 +20,8 @@ namespace ZT.Data
         Result<UserSession> ValidateAccessToken(int userID, string accessToken, string newToken);
         void RemoveAccessToken(int userID, string accessToken);
         void CreateUserPasswordReset(int userID, string resetCode);
+        Result ValidateUserPasswordReset(int userID, string code);
+        void ChangePassword(int userID, string newPasswordHash, string newPasswordSalt);
     }
     public class AccountAccessor : IAccountAccessor
     {
@@ -138,13 +140,59 @@ namespace ZT.Data
 
         public void CreateUserPasswordReset(int userID, string resetCode)
         {
-            var reset = new UserPasswordReset
+            var oldReset = (from x in _dBContext.UserPasswordReset
+                            where x.UserID == userID
+                            select x).FirstOrDefault();
+            if(oldReset != null)
             {
-                UserID = userID,
-                ResetCode = resetCode,
-                CreatedOn = DateTime.Now
-            };
-            _dBContext.UserPasswordReset.Add(reset);
+                oldReset.ResetCode = resetCode;
+                oldReset.CreatedOn = DateTime.Now;
+            }
+            else
+            {
+                var reset = new UserPasswordReset
+                {
+                    UserID = userID,
+                    ResetCode = resetCode,
+                    CreatedOn = DateTime.Now
+                };
+                _dBContext.UserPasswordReset.Add(reset);
+            }
+
+            _dBContext.SaveChanges();
+        }
+
+        public Result ValidateUserPasswordReset(int userID, string code)
+        {
+            var reset = (from x in _dBContext.UserPasswordReset
+                       where x.UserID == userID
+                       select x).FirstOrDefault();
+            if (reset.ResetCode != code)
+            {
+                return new Result(false, "Entered code is incorrect.");
+            }
+            else if (DateTime.Now > reset.CreatedOn.AddDays(1))
+            {
+                return new Result(false, "Entered code is expired. Please request a new code if you wish to reset your password.");
+            }
+            else
+            {
+                _dBContext.UserPasswordReset.Remove(reset);
+                _dBContext.SaveChanges();
+                return new Result(true);
+            }
+        }
+
+        public void ChangePassword(int userID, string newPasswordHash, string newPasswordSalt)
+        {
+            var userPassword = (from x in _dBContext.UserPassword
+                                where x.UserID == userID
+                                select x).First();
+
+            userPassword.Password = newPasswordHash;
+            userPassword.PasswordSalt = newPasswordSalt;
+            userPassword.CreatedOnUtc = DateTime.UtcNow;
+
             _dBContext.SaveChanges();
         }
     }
