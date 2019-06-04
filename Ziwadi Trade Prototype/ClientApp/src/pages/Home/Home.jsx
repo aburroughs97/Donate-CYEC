@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import {Button} from 'react-bootstrap'
 import { withRouter } from 'react-router';
-import {LinePlaceholder} from '../components/LinePlaceholder';
-import '../styles/Home.css';
+import {LinePlaceholder} from '../../components/LinePlaceholder';
+import '../../styles/Home.css';
 
 export class Home extends Component {
   displayName = Home.name

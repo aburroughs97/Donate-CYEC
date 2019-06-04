@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Button, FormControl, ControlLabel, FormGroup } from 'react-bootstrap';
 import * as yup from 'yup';
 import { toast } from 'react-smart-toaster';
-import * as _accountCalls from '../../API/AccountCalls';
+import * as _loginCalls from '../../API/LoginCalls';
 
 
 const emailSchema = yup.string().email();
@@ -63,7 +63,7 @@ export default class ForgotPassword extends Component {
 
   handleConfirmChange(event) {
     let password = event.target.value;
-    if(password == this.state.password.password) {
+    if(password === this.state.password.password) {
       this.setState({ confirm: {password, changed: true, valid: true }});
     }
     else {
@@ -77,7 +77,7 @@ export default class ForgotPassword extends Component {
   }
 
   sendForgotPasswordEmail() {
-    _accountCalls.SendForgotPasswordEmail(this.state.email.email)
+    _loginCalls.SendForgotPasswordEmail(this.state.email.email)
     .then((response) => {
       if(response.isSuccess){
         toast.success("Email containing a reset code was sent to" + this.state.email.email + ".");
@@ -90,7 +90,7 @@ export default class ForgotPassword extends Component {
   }
 
   validateCodeAndContinue() {
-    _accountCalls.ValidateForgotPasswordToken(this.state.email.email, this.state.token.token)
+    _loginCalls.ValidateForgotPasswordToken(this.state.email.email, this.state.token.token)
     .then((response) => {
       if(response.isSuccess){
         this.setState({ currentStep: "change" });
@@ -102,7 +102,7 @@ export default class ForgotPassword extends Component {
   }
 
   changePassword() {
-    _accountCalls.ChangePassword(this.state.email.email, this.state.password.password)
+    _loginCalls.ChangePassword(this.state.email.email, this.state.password.password)
     .then((response) => {
         if(response.isSuccess){
           toast.success("Password changed successfully.");
@@ -117,7 +117,7 @@ export default class ForgotPassword extends Component {
   render() {
     return (
       <div>
-        {this.state.currentStep == "email" && <div className="modal-inputs">
+        {this.state.currentStep === "email" && <div className="modal-inputs">
           <FormGroup
             controlId="email"
             validationState={this.validate("email")}
@@ -140,7 +140,7 @@ export default class ForgotPassword extends Component {
             Send Email
           </Button>
         </div>}
-        {this.state.currentStep == "code" && <div className="modal-inputs">
+        {this.state.currentStep === "code" && <div className="modal-inputs">
           <FormGroup
             controlId="token"
             validationState={this.validate("token")}
@@ -163,7 +163,7 @@ export default class ForgotPassword extends Component {
             Continue
           </Button>
         </div>}
-        {this.state.currentStep == "change" && <div className="modal-inputs">
+        {this.state.currentStep === "change" && <div className="modal-inputs">
           <FormGroup
                 controlId="password"
                 validationState={this.validate("password")}

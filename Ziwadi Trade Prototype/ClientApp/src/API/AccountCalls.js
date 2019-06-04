@@ -1,35 +1,15 @@
-import apiPost from './Api';
+import { apiGet } from './Api';
 
 const url = "api/Account/";
 
-export function LogIn(data) {
-  return apiPost(url + "LogIn", data)
-};
-
-export function CreateAccount(data) {
-  return apiPost(url + "CreateAccount", data)
+export function GetUser(userID) {
+  return apiGet(url + `GetUser?userID=${userID}`);
 }
 
-export function ValidateAccessToken(userID, accessToken) {
-  return apiPost(url + "ValidateAccessToken", {userID, accessToken})
-};
-
-export function RemoveAccessToken(userAccessToken) {
-  return apiPost(url + "RemoveAccessToken", userAccessToken)
-};
-
-export function CreateAccessToken(userID) {
-  return apiPost(url + "CreateAccessToken", userID)
-};
-
-export function SendForgotPasswordEmail(email) {
-  return apiPost(url + "SendForgotPasswordEmail", email)
+export function UpdateUser(userID, firstName, lastName) {
+  return apiGet(url + `UpdateUser?userID=${userID}&firstName=${firstName}&lastName=${lastName}`)
 }
 
-export function ValidateForgotPasswordToken(email, token) {
-  return apiPost(url + "ValidateForgotPasswordToken", {email, token})
-}
-
-export function ChangePassword(email, newPassword) {
-  return apiPost(url + "ChangePassword", {email, newPassword})
+export function ChangePassword(userID, currentPassword, newPassword) {
+  return apiGet(url + `ChangePassword?userID=${userID}&currentPassword=${currentPassword}&newPassword=${newPassword}`)
 }

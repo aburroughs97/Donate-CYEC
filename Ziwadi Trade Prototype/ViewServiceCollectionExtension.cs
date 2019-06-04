@@ -10,7 +10,7 @@ namespace ZT.Data
     {
         public static IServiceCollection AddView(this IServiceCollection services)
         {
-            services.AddTransient<IAccountController, AccountController>();
+            services.AddTransient<ILoginController, LoginController>();
             return services;
         }
     }

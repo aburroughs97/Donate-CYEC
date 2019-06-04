@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Route } from 'react-router';
-import { Layout } from './pages/Layout';
+import { Route, withRouter } from 'react-router';
+import { Layout } from './pages/Layout/Layout';
 import { Home, Donate, Account, Reports, Admin} from './pages/Pages';
-import * as _accountCalls from './API/AccountCalls';
+import * as _loginCalls from './API/LoginCalls';
 import { toast } from 'react-smart-toaster';
 import Cookies from 'universal-cookie';
 
@@ -24,6 +24,8 @@ class App extends Component {
     this.handleLogin = this.handleLogin.bind(this);
     this.handleRegister = this.handleRegister.bind(this);
     this.logOut = this.logOut.bind(this);
+    this.passwordChanged = this.passwordChanged.bind(this);
+    this.updateFirstName = this.updateFirstName.bind(this);
   }
 
   componentDidMount() {
@@ -43,7 +45,7 @@ class App extends Component {
 
     let session = cookies.get(cookieUserKey);
     if(session) {
-      _accountCalls.ValidateAccessToken(session.userID, session.accessToken)
+      _loginCalls.ValidateAccessToken(session.userID, session.accessToken)
       .then((response) => {
         if(response.isSuccess) {
           let user = response.payload.user;
@@ -83,15 +85,31 @@ class App extends Component {
     });
     
     //Invalidate user session server-side
-    _accountCalls.RemoveAccessToken(cookies.get(cookieUserKey));
+    _loginCalls.RemoveAccessToken(cookies.get(cookieUserKey));
     sessionStorage.removeItem(sessionUserKey);     
     cookies.remove(cookieUserKey);
-    toast.success("Logged out successfully.")
+    toast.success("Logged out successfully.");
+    this.props.history.push("/");
+  }
+
+  passwordChanged() {
+    this.setState({
+      isLoggedIn: false, 
+      account: {
+        userID: 0, 
+        firstName: "",
+        isAdmin: false
+      }
+    });
+    
+    sessionStorage.removeItem(sessionUserKey);     
+    cookies.remove(cookieUserKey);
+    this.props.history.push("/");
   }
 
   async handleLogin(data, rememberMe) {
     return new Promise((resolve) => {
-      _accountCalls.LogIn(data)
+      _loginCalls.LogIn(data)
       .then((response) => {
         if(response.isSuccess) {
           let user = response.payload;
@@ -105,7 +123,7 @@ class App extends Component {
           });
           sessionStorage.setItem(sessionUserKey, JSON.stringify({ userID: user.userID, firstName: user.firstName, isAdmin: user.isAdmin }));
           if(rememberMe){
-            _accountCalls.CreateAccessToken(user.userID)
+            _loginCalls.CreateAccessToken(user.userID)
             .then((response) => {
               let userSession = response.payload;
 
@@ -121,7 +139,7 @@ class App extends Component {
 
   async handleRegister(data) {
     return new Promise((resolve) => {
-      _accountCalls.CreateAccount(data)
+      _loginCalls.CreateAccount(data)
       .then((response) => {
         if(response.isSuccess) {
           let user = response.payload;
@@ -130,7 +148,7 @@ class App extends Component {
             account: {
               userID: user.userID,
               firstName: user.firstName,
-              lastName: user.lastName
+              isAdmin: user.isAdmin
             }
           });
           sessionStorage.setItem(sessionUserKey, JSON.stringify({ userID: user.userID, firstName: user.firstName, isAdmin: user.isAdmin }));
@@ -140,6 +158,15 @@ class App extends Component {
     });
   }
 
+  updateFirstName(firstName){
+    if(this.state.account.firstName !== firstName) {
+      this.setState((state) => ({
+        account: {...state.account, firstName}
+      }));
+      sessionStorage.setItem(sessionUserKey, JSON.stringify({ userID: this.state.account.userID, firstName: firstName, isAdmin: this.state.account.isAdmin }));
+    }
+  }
+
 
   render() {
     return (
@@ -147,11 +174,11 @@ class App extends Component {
         <Route exact path='/' component={Home} />
         <Route path='/donate' component={Donate} />
         <Route path='/reports' component={Reports} />
-        <Route path='/account' component={Account} />
+        <Route path='/account' render={(props) => <Account {...props} userID={this.state.account.userID} updateFirstName={this.updateFirstName} logOut={this.passwordChanged}/>} />
         <Route path='/admin' component={Admin} />
       </Layout>
     );
   }
 }
 
-export default App;
+export default withRouter(App);

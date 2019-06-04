@@ -10,8 +10,6 @@ namespace ZT.Data
 {
     public interface IAccountAccessor
     {
-        //Result<User> LogIn(string email, string passwordHash);
-        Result LogOut(int UserID);
         Result<User> FindUser(int userID);
         Result<User> FindUserByEmail(string email);
         Result<User> CreateAccount(string email, string passwordHash, string passwordSalt, string firstName, string lastName);
@@ -22,6 +20,7 @@ namespace ZT.Data
         void CreateUserPasswordReset(int userID, string resetCode);
         Result ValidateUserPasswordReset(int userID, string code);
         void ChangePassword(int userID, string newPasswordHash, string newPasswordSalt);
+        Result<User> UpdateUser(int userID, string firstName, string lastName);
     }
     public class AccountAccessor : IAccountAccessor
     {
@@ -87,11 +86,6 @@ namespace ZT.Data
 
         }
 
-        public Result LogOut(int UserID)
-        {
-            throw new NotImplementedException();
-        }
-
         public Result<UserSession> CreateAccessToken(int userID, string accessToken, DateTime expiresOn)
         {
             var userSession = new UserSession
@@ -134,8 +128,11 @@ namespace ZT.Data
             var session = (from x in _dBContext.UserSession
                            where x.UserID == userID && x.AccessToken == accessToken
                            select x).FirstOrDefault();
-            _dBContext.UserSession.Remove(session);
-            _dBContext.SaveChanges();
+            if(session != null)
+            {
+                _dBContext.UserSession.Remove(session);
+                _dBContext.SaveChanges();
+            }
         }
 
         public void CreateUserPasswordReset(int userID, string resetCode)
@@ -193,7 +190,25 @@ namespace ZT.Data
             userPassword.PasswordSalt = newPasswordSalt;
             userPassword.CreatedOnUtc = DateTime.UtcNow;
 
+            //Remove any open sessions when password is changed
+            var openSessions = (from x in _dBContext.UserSession
+                                where x.UserID == userID
+                                select x);
+            _dBContext.UserSession.RemoveRange(openSessions);
             _dBContext.SaveChanges();
+        }
+
+        public Result<User> UpdateUser(int userID, string firstName, string lastName)
+        {
+            var user = (from x in _dBContext.User
+                        where x.UserID == userID
+                        select x).FirstOrDefault();
+            if (user == null) return new Result<User>(false, "User not found.");
+
+            user.FirstName = firstName;
+            user.LastName = lastName;
+            _dBContext.SaveChanges();
+            return new Result<User>(user);
         }
     }
 }

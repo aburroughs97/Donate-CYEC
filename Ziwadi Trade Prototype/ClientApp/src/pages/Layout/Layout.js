@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Login } from '../components/login/Login';
-import { NavMenu } from '../components/NavMenu.jsx';
+import { Login } from '../../components/login/Login';
+import { NavMenu } from './NavMenu.jsx';
 import { Alert } from 'react-bootstrap';
 import {SmartToaster, toast } from 'react-smart-toaster';
 import CookieConsent from 'react-cookie-consent';
@@ -36,7 +36,7 @@ export class Layout extends Component {
 
   render() {
     return (
-      <div>
+      <div className="body">
         {/* {this.state.showAlert && <Alert bsStyle="warning" onDismiss={this.hideAlert}>
           This website is currently under development. Please report any issues/suggestions to Alex Burroughs.
         </Alert>} */}
@@ -54,7 +54,9 @@ export class Layout extends Component {
         >
           This website uses cookies to enhance the user experience
         </CookieConsent>
-        {this.props.children}
+        <div className="layout-content">
+          {this.props.children}
+        </div>
       </div>
     );
   }

@@ -4,8 +4,8 @@ import { Button, FormControl, Glyphicon, Nav, Navbar, NavItem, NavDropdown, Menu
 import { LinkContainer } from 'react-router-bootstrap';
 import { isMobile } from 'react-device-detect';
 import { PropagateLoader } from 'react-spinners';
-import '../styles/NavMenu.css';
-import logo from '../media/CYEC-horizontal.jpg';
+import '../../styles/NavMenu.css';
+import logo from '../../media/CYEC-horizontal.jpg';
 
 
 export class NavMenu extends Component {

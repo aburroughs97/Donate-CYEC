@@ -1,20 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using ZT.Core.Models.Account;
 using ZT.Services;
 
 namespace ZT.Controllers
 {
-    public interface IAccountController
-    {
-        IActionResult CreateAccount([FromBody] RegisterRequest request);
-    }
-
     [Route("api/Account")]
-    public class AccountController : Controller, IAccountController
+    public class AccountController : Controller
     {
         private readonly IAccountService _accountService;
         public AccountController(IAccountService accountService)
@@ -22,59 +13,24 @@ namespace ZT.Controllers
             _accountService = accountService;
         }
 
-        [HttpPost("CreateAccount")]
-        public IActionResult CreateAccount([FromBody] RegisterRequest request)
+        [HttpGet("GetUser")]
+        public IActionResult GetUser(int userID)
         {
-            var result = _accountService.CreateAccount(request);
+            var result = _accountService.GetUser(userID);
             return Json(result);
         }
 
-        [HttpPost("LogIn")]
-        public IActionResult LogIn([FromBody] LogInRequest request)
+        [HttpGet("UpdateUser")]
+        public IActionResult UpdateUser(int userID, string firstName, string lastName)
         {
-            var result = _accountService.LogIn(request);
+            var result = _accountService.UpdateUser(userID, firstName, lastName);
             return Json(result);
         }
 
-        [HttpPost("CreateAccessToken")]
-        public IActionResult CreateAccessToken([FromBody] int userID)
+        [HttpGet("ChangePassword")]
+        public IActionResult ChangePassword(int userID, string currentPassword, string newPassword)
         {
-            var result = _accountService.CreateAccessToken(userID);
-            return Json(result);
-        }
-
-        [HttpPost("ValidateAccessToken")]
-        public IActionResult ValidateAccessToken([FromBody] ValidateAccessTokenRequest request)
-        {
-            var result = _accountService.ValidateAccessToken(request);
-            return Json(result);
-        }
-
-        [HttpPost("RemoveAccessToken")]
-        public IActionResult RemoveAccessToken([FromBody] ValidateAccessTokenRequest request)
-        {
-            _accountService.RemoveAccessToken(request);
-            return Json(true);
-        }
-
-        [HttpPost("SendForgotPasswordEmail")]
-        public IActionResult SendForgotPasswordEmail([FromBody] string email)
-        {
-            var result = _accountService.SendForgotPasswordEmail(email);
-            return Json(result);
-        }
-
-        [HttpPost("ValidateForgotPasswordToken")]
-        public IActionResult ValidateForgotPasswordToken([FromBody] ValidateForgotPasswordTokenRequest request)
-        {
-            var result = _accountService.ValidateForgotPasswordToken(request);
-            return Json(result);
-        }
-
-        [HttpPost("ChangePassword")]
-        public IActionResult ChangePassword([FromBody] ChangePasswordRequest request)
-        {
-            var result = _accountService.ChangePassword(request);
+            var result = _accountService.ChangePassword(userID, currentPassword, newPassword);
             return Json(result);
         }
     }

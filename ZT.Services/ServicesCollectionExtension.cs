@@ -10,6 +10,7 @@ namespace ZT.Services
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
             services.AddTransient<IEncryptionService, EncryptionService>();
+            services.AddTransient<ILoginService, LoginService>();
             services.AddTransient<IAccountService, AccountService>();
             services.AddTransient<IEmailService, EmailService>();
             return services;
