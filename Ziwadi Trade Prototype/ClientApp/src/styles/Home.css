@@ -28,18 +28,8 @@
     border-color: #BF2E1B;
 }
 
-.header .search-btn {
-    float: right;
-    margin: 0px;
-    max-width:20%;
-    transform: translateX(-101%);
-    border: none;
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-}
-
-.header .search-btn:hover,
-.header .search-btn:focus {
+.search-btn:hover,
+.search-btn:focus {
     background-color: #BF2E1B;
     background-image: none;
     color: white;
@@ -92,8 +82,9 @@
     }
     .header .search {
         float: right;
-        width: 20%;
-        margin-left: 30%;
+        width: 30%;
+        margin-left: 20%;
+        margin-top: 1%;
     }
 
     .header .logo {
@@ -120,8 +111,9 @@
     }
     .header .search {
         float: right;
-        width: 20%;
-        margin-left: 30%;
+        width: 40%;
+        margin-left: 10%;
+        margin-top: 2%;
     }
     .donate-now-btn {
         width: 30%;

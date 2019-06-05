@@ -5,6 +5,7 @@ import { toast } from 'react-smart-toaster';
 import * as yup from 'yup';
 import * as _accountCalls from '../../API/AccountCalls';
 
+
 const passwordSchema = yup.string().min(8);
 
 export class Sidebar extends Component {

@@ -3,10 +3,11 @@ import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
 import ReactTable from 'react-table'
 import { Sidebar } from '../../components/account/Sidebar';
+import { isMobile } from 'react-device-detect';
 import '../../styles/Account.css';
 import 'react-table/react-table.css'
 
-const subColumns = [
+const nonMobileColumns = [
   {
     Header: "ID #",
     accessor: "id",
@@ -40,10 +41,30 @@ const subColumns = [
     maxWidth: 200,
     Cell: <Button className="table-btn">View Donation</Button>
   }];
+
+const mobileColumns = [
+  {
+    Header: "ID #",
+    accessor: "id",
+    minWidth: 40,
+    maxWidth: 100
+  },
+  {
+    Header: "Name",
+    accessor: "name"
+  },
+  {
+    Header: "",
+    sortable: false,
+    filterable: false,
+    minWidth: 120,
+    maxWidth: 200,
+    Cell: <Button className="table-btn">View Donation</Button>
+  }];
 const columns = [
   {
     Header: <h2>Recent Donations</h2>,
-    columns: subColumns
+    columns: isMobile? mobileColumns : nonMobileColumns
   }]
 
 const data = [

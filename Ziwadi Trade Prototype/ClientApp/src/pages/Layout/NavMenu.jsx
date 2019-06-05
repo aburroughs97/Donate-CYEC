@@ -1,6 +1,6 @@
 ﻿import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Button, FormControl, Glyphicon, Nav, Navbar, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
+import { Button, FormControl, Glyphicon, Nav, Navbar, NavItem, NavDropdown, MenuItem, InputGroup, FormGroup } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import { isMobile } from 'react-device-detect';
 import { PropagateLoader } from 'react-spinners';
@@ -91,12 +91,14 @@ export class NavMenu extends Component {
           className="logo"
         />
 
-          <FormControl className="search"
-            placeholder="Search..."
-            aria-label="Search"
-            aria-describedby="search"
-          />
-          <Button className="search-btn"><Glyphicon glyph='search'/></Button>
+          <FormGroup className="search">
+            <InputGroup>
+              <FormControl type="text" placeholder="Search..."/>
+              <InputGroup.Button>
+                <Button className="search-btn"><Glyphicon glyph='search'/></Button> */}
+              </InputGroup.Button>
+            </InputGroup>
+          </FormGroup>
       </div>
     </div>
     );

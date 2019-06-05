@@ -90,3 +90,40 @@ body {
 .invisible {
   color: white;
 }
+
+@media screen and (max-width: 760px) {
+  .layout-content {
+    display: block;
+  }
+
+  .account-content {
+    padding: 0px;
+    flex-grow: 0;
+  }
+  .change-account {
+    width: 100%;
+    border: 2px solid #01573E;
+    border-radius: 4px;
+    padding-bottom: 5%;
+  }
+  .donation-table {
+    width: 100%;
+  }
+
+  .sidebar-input {
+    width: 80%;
+    margin-left: 10%;
+    float: left;
+  }
+
+  .sidebar-btn {
+    float: left;
+    width: 50%;
+    margin-left: 25%;
+  }
+
+  .sidebar {
+    padding-right: 5%;
+  }
+  
+}
