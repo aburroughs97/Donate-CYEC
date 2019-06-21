@@ -10,6 +10,8 @@ namespace ZT.Data
         public static IServiceCollection AddData(this IServiceCollection services)
         {
             services.AddTransient<IAccountAccessor, AccountAccessor>();
+            services.AddTransient<IDonateAccessor, DonateAccessor>();
+            services.AddTransient<ILanguageAndCurrencyAccessor, LanguageAndCurrencyAccessor>();
             return services;
         }
     }

@@ -22,15 +22,15 @@ export class Home extends Component {
       <div>
         <div className="content">
           <div className="col-33">
-            <h2>Who We Are:</h2>
+            <h2>Column 1:</h2>
             <LinePlaceholder />
           </div>
           <div className="col-33">
-            <h2>What We Do:</h2>
+            <h2>Column 2:</h2>
             <LinePlaceholder />
           </div>
           <div className="col-33 last-col">
-            <h2>Why We Need You:</h2>
+            <h2>Column 3:</h2>
             <LinePlaceholder />
           </div>
           <Button className="donate-now-btn" onClick={this.donateNowClick}>Donate Now</Button>

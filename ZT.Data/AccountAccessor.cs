@@ -12,7 +12,7 @@ namespace ZT.Data
     {
         Result<User> FindUser(int userID);
         Result<User> FindUserByEmail(string email);
-        Result<User> CreateAccount(string email, string passwordHash, string passwordSalt, string firstName, string lastName);
+        Result<User> CreateAccount(string email, string passwordHash, string passwordSalt, string firstName, string lastName, string languageCode, string currencyCode);
         Result<UserPassword> GetUserPassword(int userID);
         Result<UserSession> CreateAccessToken(int userID, string accessToken, DateTime expiresOn);
         Result<UserSession> ValidateAccessToken(int userID, string accessToken, string newToken);
@@ -21,25 +21,34 @@ namespace ZT.Data
         Result ValidateUserPasswordReset(int userID, string code);
         void ChangePassword(int userID, string newPasswordHash, string newPasswordSalt);
         Result<User> UpdateUser(int userID, string firstName, string lastName);
+        Result<List<User>> GetAllUsers();
+        Result MakeUserAdmin(int userID);
+        Result<LogInResponse> CreateLogInResponse(int userID, UserSession session = null);
+        Result UpdateLanguageAndCurrency(int userID, string languageName, string currencyCode);
     }
     public class AccountAccessor : IAccountAccessor
     {
-        DBContext _dBContext;
+        private readonly DBContext _dBContext;
         public AccountAccessor(DBContext dbContext)
         {
             _dBContext = dbContext;
         }
         
-        public Result<User> CreateAccount(string email, string passwordHash, string passwordSalt, string firstName, string lastName)
+        public Result<User> CreateAccount(string email, string passwordHash, string passwordSalt, string firstName, string lastName, string languageCode, string currencyCode)
         {
             try
             {
+                var languageID = (from x in _dBContext.Language where x.LanguageCode == languageCode select x.LanguageID).First();
+                var currencyID = (from x in _dBContext.Currency where x.Code == currencyCode select x.CurrencyID).First();
+
                 var user = new User
                 {
                     Email = email,
                     FirstName = firstName,
                     LastName = lastName,
-                    IsAdmin = false
+                    IsAdmin = false,
+                    LanguageID = languageID,
+                    CurrencyID = currencyID
                 };
                 user = _dBContext.User.Add(user).Entity;
                 _dBContext.SaveChanges();
@@ -210,5 +219,59 @@ namespace ZT.Data
             _dBContext.SaveChanges();
             return new Result<User>(user);
         }
+
+        public Result<List<User>> GetAllUsers()
+        {
+            return new Result<List<User>>(_dBContext.User.ToList());
+        }
+
+        public Result MakeUserAdmin(int userID)
+        {
+            var user = (from x in _dBContext.User
+                        where x.UserID == userID
+                        select x).FirstOrDefault();
+            if (user == null) return new Result(false);
+
+            user.IsAdmin = true;
+            _dBContext.SaveChanges();
+            return new Result(true);
+        }
+
+        public Result<LogInResponse> CreateLogInResponse(int userID, UserSession session = null)
+        {
+            var user = FindUser(userID).Payload;
+            var languageCode = (from x in _dBContext.Language where x.LanguageID == user.LanguageID select x.LanguageName).FirstOrDefault();
+            var currencyCode = (from x in _dBContext.Currency where x.CurrencyID == user.CurrencyID select x.Code).FirstOrDefault();
+            var response = new LogInResponse
+            {
+                User = user,
+                UserSession = session,
+                LanguageName = languageCode,
+                CurrencyCode = currencyCode,
+            };
+            return new Result<LogInResponse>(response);
+        }
+
+        public Result UpdateLanguageAndCurrency(int userID, string languageName, string currencyCode)
+        {
+            try
+            {
+                var languageID = (from x in _dBContext.Language where x.LanguageName == languageName select x.LanguageID).First();
+                var currencyID = (from x in _dBContext.Currency where x.Code == currencyCode select x.CurrencyID).First();
+
+                var user = FindUser(userID).Payload;
+                user.LanguageID = languageID;
+                user.CurrencyID = currencyID;
+
+                _dBContext.SaveChanges();
+                return new Result(true);
+            }
+            catch(Exception ex)
+            {
+                return new Result(false, ex.Message);
+            }
+        }
+
+
     }
 }

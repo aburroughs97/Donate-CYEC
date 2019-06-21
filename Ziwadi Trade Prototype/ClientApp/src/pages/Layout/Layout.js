@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Login } from '../../components/login/Login';
 import { NavMenu } from './NavMenu.jsx';
-import { Alert } from 'react-bootstrap';
 import {SmartToaster, toast } from 'react-smart-toaster';
 import CookieConsent from 'react-cookie-consent';
 
@@ -37,10 +36,7 @@ export class Layout extends Component {
   render() {
     return (
       <div className="body">
-        {/* {this.state.showAlert && <Alert bsStyle="warning" onDismiss={this.hideAlert}>
-          This website is currently under development. Please report any issues/suggestions to Alex Burroughs.
-        </Alert>} */}
-        <NavMenu isLoggedIn={this.props.isLoggedIn} isLoading={this.props.loadingUser} account={this.props.account} showLogin={this.handleShowLogin} logOut={this.props.logOut}/>
+        <NavMenu isLoggedIn={this.props.isLoggedIn} isLoading={this.props.loadingUser} account={this.props.account} showLogin={this.handleShowLogin} logOut={this.props.logOut} languageChanged={this.props.languageChanged}/>
         <Login showLogin={this.state.showLogin} handleHideLogin={this.handleHideLogin} handleLogin={this.props.handleLogin} handleRegister={this.props.handleRegister} />
         <SmartToaster 
           store={toast} 
@@ -72,5 +68,6 @@ Layout.propTypes = {
   }),
   handleLogin: PropTypes.func,
   handleRegister: PropTypes.func,
-  logOut: PropTypes.func
+  logOut: PropTypes.func,
+  languageChanged: PropTypes.func
 }

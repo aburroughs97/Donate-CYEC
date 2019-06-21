@@ -1,33 +1,3 @@
-.header {
-    width: 100%;
-    height: 25%;
-    float: top;
-    overflow: none;
-    display: flex;
-    align-items: center; 
-    margin: 0px;
-    border-bottom: 2px solid #BF2E1B;
-}
-
-.header .logo {
-    max-width: 20%;
-    margin-top: 1%;
-    margin-bottom: 1%;
-    margin-left: 5%;
-    height: auto;
-    float: left;
-}
-
-.header .search {
-    float: right;
-    width: 20%;
-    margin-left: 45%;
-}
-
-.header .search:focus {
-    border-color: #BF2E1B;
-}
-
 .search-btn:hover,
 .search-btn:focus {
     background-color: #BF2E1B;

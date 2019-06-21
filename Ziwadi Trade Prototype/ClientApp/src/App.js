@@ -3,6 +3,7 @@ import { Route, withRouter } from 'react-router';
 import { Layout } from './pages/Layout/Layout';
 import { Home, Donate, Account, Reports, Admin} from './pages/Pages';
 import * as _loginCalls from './API/LoginCalls';
+import * as _accountCalls from './API/AccountCalls';
 import { toast } from 'react-smart-toaster';
 import Cookies from 'universal-cookie';
 
@@ -17,8 +18,8 @@ class App extends Component {
     super(props);
     this.state = {
       isLoggedIn: false, 
-      account: {userID: 0, firstName: "", isAdmin: false},
-      loadingUser: true
+      account: {userID: 0, firstName: "", language: "English", currency: "USD", isAdmin: false},
+      loadingUser: true,
     };
 
     this.handleLogin = this.handleLogin.bind(this);
@@ -26,6 +27,8 @@ class App extends Component {
     this.logOut = this.logOut.bind(this);
     this.passwordChanged = this.passwordChanged.bind(this);
     this.updateFirstName = this.updateFirstName.bind(this);
+    this.languageChanged = this.languageChanged.bind(this);
+    this.loadTranslations = this.loadTranslations.bind(this);
   }
 
   componentDidMount() {
@@ -36,9 +39,11 @@ class App extends Component {
         account: {
           userID: loggedInUser.userID,
           firstName: loggedInUser.firstName,
+          language: loggedInUser.language,
+          currency: loggedInUser.currency,
           isAdmin: loggedInUser.isAdmin
         },
-        loadingUser: false
+        loadingUser: false,
       });
       return;
     }
@@ -51,15 +56,19 @@ class App extends Component {
           let user = response.payload.user;
           let userSession = response.payload.userSession;
   
+          let newAccount = {
+            userID: user.userID,
+            firstName: user.firstName,
+            language: response.payload.languageName,
+            currency: response.payload.currencyCode,
+            isAdmin: user.isAdmin
+          };
+
           this.setState({
             isLoggedIn: true,
-            account: {
-              userID: user.userID,
-              firstName: user.firstName,
-              isAdmin: user.isAdmin
-            }
+            account: newAccount
           });
-          sessionStorage.setItem(sessionUserKey, JSON.stringify({ userID: user.userID, firstName: user.firstName, isAdmin: user.isAdmin }));
+          sessionStorage.setItem(sessionUserKey, JSON.stringify(newAccount));
           cookies.set(cookieUserKey, {userID: userSession.userID, accessToken: userSession.accessToken}, { expires: new Date(userSession.expiresOn) })
         }
         this.setState({
@@ -72,6 +81,10 @@ class App extends Component {
         loadingUser: false
       });
     }
+  }
+
+  async loadTranslations() {
+
   }
 
   logOut(){
@@ -112,16 +125,21 @@ class App extends Component {
       _loginCalls.LogIn(data)
       .then((response) => {
         if(response.isSuccess) {
-          let user = response.payload;
+          let user = response.payload.user;
+
+          let newAccount = {
+            userID: user.userID,
+            firstName: user.firstName,
+            language: response.payload.languageName,
+            currency: response.payload.currencyCode,
+            isAdmin: user.isAdmin
+          };
+
           this.setState({
             isLoggedIn: true,
-            account: {
-              userID: user.userID,
-              firstName: user.firstName,
-              isAdmin: user.isAdmin
-            }
+            account: newAccount
           });
-          sessionStorage.setItem(sessionUserKey, JSON.stringify({ userID: user.userID, firstName: user.firstName, isAdmin: user.isAdmin }));
+          sessionStorage.setItem(sessionUserKey, JSON.stringify(newAccount));
           if(rememberMe){
             _loginCalls.CreateAccessToken(user.userID)
             .then((response) => {
@@ -148,6 +166,8 @@ class App extends Component {
             account: {
               userID: user.userID,
               firstName: user.firstName,
+              language: "English",
+              currency: "USD",
               isAdmin: user.isAdmin
             }
           });
@@ -167,12 +187,33 @@ class App extends Component {
     }
   }
 
+  languageChanged(language, currency) {
+    let account = this.state.account;
+    if(currency === null) {
+      account.language = language;
+    }
+    else {
+      account.currency = currency;
+    }
+    _accountCalls.UpdateLanguageAndCurrency(account.userID, account.language, account.currency)
+    .then((response) => {
+      if(response.isSuccess) {
+        this.setState({
+          account
+        });
+        sessionStorage.setItem(sessionUserKey, JSON.stringify(account));
+      }
+      else {
+        toast.error(response.message);
+      }
+    });
+  }
 
   render() {
     return (
-      <Layout isLoggedIn={this.state.isLoggedIn} loadingUser={this.state.loadingUser} account={this.state.account} handleLogin={this.handleLogin} handleRegister={this.handleRegister} logOut={this.logOut}>
+      <Layout isLoggedIn={this.state.isLoggedIn} loadingUser={this.state.loadingUser} account={this.state.account} handleLogin={this.handleLogin} handleRegister={this.handleRegister} logOut={this.logOut} languageChanged={this.languageChanged}>
         <Route exact path='/' component={Home} />
-        <Route path='/donate' component={Donate} />
+        <Route path='/donate' render={(props) => <Donate {...props} userID={this.state.account.userID} language={this.state.account.language} currency={this.state.account.currency}/>} />
         <Route path='/reports' component={Reports} />
         <Route path='/account' render={(props) => <Account {...props} userID={this.state.account.userID} updateFirstName={this.updateFirstName} logOut={this.passwordChanged}/>} />
         <Route path='/admin' component={Admin} />

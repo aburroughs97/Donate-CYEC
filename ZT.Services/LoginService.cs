@@ -11,9 +11,9 @@ namespace ZT.Services
     public interface ILoginService
     {
         Result<User> CreateAccount(RegisterRequest request);
-        Result<User> LogIn(LogInRequest request);
+        Result<LogInResponse> LogIn(LogInRequest request);
         Result<UserSession> CreateAccessToken(int userID);
-        Result<UserAndSession> ValidateAccessToken(ValidateAccessTokenRequest request);
+        Result<LogInResponse> ValidateAccessToken(ValidateAccessTokenRequest request);
         void RemoveAccessToken(ValidateAccessTokenRequest request);
         Result SendForgotPasswordEmail(string email);
         Result ValidateForgotPasswordToken(ValidateForgotPasswordTokenRequest request);
@@ -53,32 +53,32 @@ namespace ZT.Services
             var saltKey = _encryptionService.CreateSaltKey(Convert.ToInt32(_configuration["PasswordSaltLength"]));
             var hashedPassword = _encryptionService.CreatePasswordHash(request.Password, saltKey);
 
-            return _accountAccessor.CreateAccount(request.Email, hashedPassword, saltKey, request.FirstName, request.LastName);
+            //TODO: Add ENG/USD to appsettings as defaults
+            return _accountAccessor.CreateAccount(request.Email, hashedPassword, saltKey, request.FirstName, request.LastName, "ENG", "USD");
         }
 
-        public Result<User> LogIn(LogInRequest request)
+        public Result<LogInResponse> LogIn(LogInRequest request)
         {
             if (string.IsNullOrEmpty(request.Email) || string.IsNullOrEmpty(request.Password))
             {
-                return new Result<User>(false, "Bad request received.");
+                return new Result<LogInResponse>(false, "Bad request received.");
             }
 
             var userResult = _accountAccessor.FindUserByEmail(request.Email);
             if (!userResult.IsSuccess)
             {
-                return new Result<User>(false, "The email/password combination you entered is incorrect.");
+                return new Result<LogInResponse>(false, "The email/password combination you entered is incorrect.");
             }
             var password = _accountAccessor.GetUserPassword(userResult.Payload.UserID).Payload;
             var hashedPassword = _encryptionService.CreatePasswordHash(request.Password, password.PasswordSalt);
 
             if (hashedPassword == password.Password)
             {
-
-                return userResult;
+                return _accountAccessor.CreateLogInResponse(userResult.Payload.UserID);
             }
             else
             {
-                return new Result<User>(false, "The email/password combination you entered is incorrect.");
+                return new Result<LogInResponse>(false, "The email/password combination you entered is incorrect.");
             }
         }
 
@@ -91,7 +91,7 @@ namespace ZT.Services
             return _accountAccessor.CreateAccessToken(userID, accessToken, expiresOn);
         }
 
-        public Result<UserAndSession> ValidateAccessToken(ValidateAccessTokenRequest request)
+        public Result<LogInResponse> ValidateAccessToken(ValidateAccessTokenRequest request)
         {
             var newToken = _encryptionService.CreateHash(Encoding.UTF8.GetBytes(DateTime.Now.ToString() + request.UserID), _configuration["HashCode"]);
 
@@ -99,16 +99,11 @@ namespace ZT.Services
             if (result.IsSuccess)
             {
                 //Create a new token with the same expiry date
-                var user = _accountAccessor.FindUser(request.UserID);
+                var response = _accountAccessor.CreateLogInResponse(request.UserID, result.Payload).Payload;
 
-                var userAndSession = new UserAndSession
-                {
-                    User = user.Payload,
-                    UserSession = result.Payload,
-                };
-                return new Result<UserAndSession>(userAndSession);
+                return new Result<LogInResponse>(response);
             }
-            else return new Result<UserAndSession>(false);
+            else return new Result<LogInResponse>(false);
         }
 
         public void RemoveAccessToken(ValidateAccessTokenRequest request)

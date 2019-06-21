@@ -12,6 +12,9 @@ namespace ZT.Services
             services.AddTransient<IEncryptionService, EncryptionService>();
             services.AddTransient<ILoginService, LoginService>();
             services.AddTransient<IAccountService, AccountService>();
+            services.AddTransient<IAdminService, AdminService>();
+            services.AddTransient<IDonateService, DonateService>();
+            services.AddTransient<ILanguageAndCurrencyService, LanguageAndCurrencyService>();
             services.AddTransient<IEmailService, EmailService>();
             return services;
         }

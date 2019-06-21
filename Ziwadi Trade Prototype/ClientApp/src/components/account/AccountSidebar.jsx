@@ -8,7 +8,7 @@ import * as _accountCalls from '../../API/AccountCalls';
 
 const passwordSchema = yup.string().min(8);
 
-export class Sidebar extends Component {
+export class AccountSidebar extends Component {
   constructor(props) {
     super(props);
       this.state = {
@@ -212,7 +212,7 @@ export class Sidebar extends Component {
   );}
 }
 
-Sidebar.propTypes = {
+AccountSidebar.propTypes = {
   userID: PropTypes.number,
   updateFirstName: PropTypes.func,
   logOut: PropTypes.func

@@ -9,6 +9,8 @@ using ZT.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
+using Hangfire;
+using Hangfire.MySql.Core;
 
 namespace Ziwadi_Trade_Prototype
 {
@@ -29,11 +31,23 @@ namespace Ziwadi_Trade_Prototype
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddDbContext<DBContext>(options =>
-               options.UseMySql(Configuration.GetConnectionString("AWSDefault")));
+               options.UseMySql(Configuration.GetConnectionString("LocalHost")));
 
             services.AddServices();
             services.AddData();
             services.AddView();
+
+            services.AddHangfire(configuration => {
+                configuration.UseStorage(
+                    new MySqlStorage(
+                        Configuration.GetConnectionString("LocalHost"),
+                        new MySqlStorageOptions
+                        {
+                            TablePrefix = "Hangfire"
+                        }
+                    )
+                );
+            });
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -58,6 +72,12 @@ namespace Ziwadi_Trade_Prototype
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
+
+            app.UseHangfireDashboard();
+            app.UseHangfireServer();
+
+            RecurringJob.AddOrUpdate<ILanguageAndCurrencyService>(
+                x => x.UpdateCurrencyRates(), Cron.Daily);
 
             app.UseMvc(routes =>
             {

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
 import ReactTable from 'react-table'
-import { Sidebar } from '../../components/account/Sidebar';
+import { AccountSidebar } from '../../components/account/AccountSidebar';
 import { isMobile } from 'react-device-detect';
 import '../../styles/Account.css';
 import 'react-table/react-table.css'
@@ -88,7 +88,7 @@ export class Account extends Component {
   render() {
     return (
       <div className="account-content">
-        <Sidebar userID={this.props.userID} updateFirstName={this.props.updateFirstName} logOut={this.props.logOut}/>
+        <AccountSidebar userID={this.props.userID} updateFirstName={this.props.updateFirstName} logOut={this.props.logOut}/>
         <div className="donation-table">
           <ReactTable
             pageSizeOptions={[5, 10, 15, 20, 25, 50, 100]}

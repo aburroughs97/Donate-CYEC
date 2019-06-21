@@ -13,20 +13,31 @@ namespace ZT.Services
         Result<User> GetUser(int userID);
         Result<User> UpdateUser(int userID, string firstName, string lastName);
         Result ChangePassword(int userID, string currentPasword, string newPassword);
+        Result UpdateLanguageAndCurrency(int userID, string languageName, string currencyCode);
+        Result<List<string>> GetLanguages();
+        Result<List<string>> GetCurrencies();
+
     }
     public class AccountService : IAccountService
     {
         private readonly IAccountAccessor _accountAccessor;
+        private readonly ILanguageAndCurrencyAccessor _languageAccessor;
         private readonly IEncryptionService _encryptionService;
         private readonly IConfiguration _configuration;
 
+        private readonly ILanguageAndCurrencyService _foo;
+
         public AccountService(IAccountAccessor accountAccessor,
+                                ILanguageAndCurrencyAccessor languageAccessor,
                                 IEncryptionService encryptionService,
-                                IConfiguration configuration)
+                                IConfiguration configuration,
+                                ILanguageAndCurrencyService foo)
         {
             _accountAccessor = accountAccessor;
+            _languageAccessor = languageAccessor;
             _encryptionService = encryptionService;
             _configuration = configuration;
+            _foo = foo;
         }
 
         public Result<User> GetUser(int userID)
@@ -72,6 +83,22 @@ namespace ZT.Services
                 return new Result(false, "Current password was incorrect.");
             }
 
+        }
+
+        public Result UpdateLanguageAndCurrency(int userID, string languageName, string currencyCode)
+        {
+            var result = _accountAccessor.UpdateLanguageAndCurrency(userID, languageName, currencyCode);
+            return result;
+        }
+
+        public Result<List<string>> GetLanguages()
+        {
+            return _languageAccessor.GetLanguages();
+        }
+
+        public Result<List<string>> GetCurrencies()
+        {
+            return _languageAccessor.GetCurrencies();
         }
     }
 }

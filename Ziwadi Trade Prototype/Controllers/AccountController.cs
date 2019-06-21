@@ -33,5 +33,26 @@ namespace ZT.Controllers
             var result = _accountService.ChangePassword(userID, currentPassword, newPassword);
             return Json(result);
         }
+
+        [HttpGet("UpdateLanguageAndCurrency")]
+        public IActionResult UpdateLanguageAndCurrency(int userID, string languageName, string currencyCode)
+        {
+            var result = _accountService.UpdateLanguageAndCurrency(userID, languageName, currencyCode);
+            return Json(result);
+        }
+
+        [HttpGet("GetLanguages")]
+        public IActionResult GetLanguages()
+        {
+            var result = _accountService.GetLanguages();
+            return Json(result);
+        }
+
+        [HttpGet("GetCurrencies")]
+        public IActionResult GetCurrencies()
+        {
+            var result = _accountService.GetCurrencies();
+            return Json(result);
+        }
     }
 }

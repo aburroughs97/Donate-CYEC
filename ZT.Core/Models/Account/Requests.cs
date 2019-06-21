@@ -24,10 +24,12 @@ namespace ZT.Core.Models.Account
         public string AccessToken { get; set; }
     }
 
-    public class UserAndSession
+    public class LogInResponse
     {
         public User User { get; set; }
         public UserSession UserSession { get; set; }
+        public string LanguageName { get; set; }
+        public string CurrencyCode { get; set; }
     }
 
     public class ValidateForgotPasswordTokenRequest

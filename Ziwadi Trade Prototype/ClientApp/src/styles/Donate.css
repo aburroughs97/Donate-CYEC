@@ -1,0 +1,154 @@
+.header {
+  width: 100%;
+  height: 15%;
+  float: top;
+  overflow: none;
+  display: flex;
+  align-items: center; 
+  margin: 0px;
+  border-bottom: 2px solid #BF2E1B;
+}
+
+.donate-content {
+  height: 100%;
+  overflow: none;
+}
+
+.donate-items {
+  overflow: auto;
+  width: 85%;
+  float: left;
+  height: 85%;
+  padding: 1%; 
+}
+
+.donate-items-page {
+  height: 10%;
+}
+
+.donate-sidebar {
+  width: 15%;
+  height: 85%;
+  border-right: 2px solid #BF2E1B;
+  float: left;
+  text-align: center;
+}
+
+.header .logo {
+  max-width: 20%;
+  margin-top: 1%;
+  margin-bottom: 1%;
+  margin-left: 5%;
+  height: auto;
+  float: left;
+}
+
+.header .search {
+  float: right;
+  width: 50%;
+  margin-left: 45%;
+}
+
+.header .search .search-group {
+  width: 50%;
+}
+
+.header .search:focus {
+  border-color: #BF2E1B;
+}
+
+.item-preview {
+  width: 100%;
+  height: auto;
+  float: right;
+  padding: 1%;
+  border-bottom: 1px solid gray;
+}
+ 
+.col-15 {
+  height: 100%;
+  width: 15%;
+  float: left;
+  padding-right: 1%;
+}
+
+.col-85 {
+  height: 100%;
+  width: 85%;
+  float: left;
+}
+
+.item-preview .progress {
+  margin: 0px;
+  float: bottom;
+}
+
+.item-preview .need-warning {
+  color: darkgoldenrod;
+  margin-top: 1%;
+}
+
+.item-preview .need-danger {
+  color: darkred;
+  margin-top: 1%;
+}
+
+.item-preview .need-success {
+  color: darkgreen;
+  margin-top: 1%;
+}
+
+.item-preview .title {
+  font-weight: bold;
+}
+
+.item-preview .img {
+  width: 100%;
+}
+
+.item-preview hr {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.item-preview p {
+  margin: 0px;
+}
+
+.item-preview:hover {
+  background-color: lightgray;
+  cursor: pointer;
+}
+
+.donate-items .active a{
+  background-color: #BF2E1B !important;
+  border-left: 2px solid #BF2E1B !important;
+  border-right: 2px solid #BF2E1B !important;
+}
+
+.pagination-container {
+  text-align: center;
+  width: 100%;
+}
+
+
+@media screen and (max-width: 760px) {
+  .col-85 {
+    width: 100%;
+  }
+  
+  .col-15 {
+    width: 100%;
+  }
+
+  .donate-items {
+    width: 100%;
+  }
+
+  /* REMOVE THIS AT SOME POINT */
+  .donate-sidebar {
+    display: none;
+  }
+}
+
+

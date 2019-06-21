@@ -1,34 +1,68 @@
 ﻿import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Button, FormControl, Glyphicon, Nav, Navbar, NavItem, NavDropdown, MenuItem, InputGroup, FormGroup } from 'react-bootstrap';
+import { Glyphicon, Nav, Navbar, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import { isMobile } from 'react-device-detect';
 import { PropagateLoader } from 'react-spinners';
+import * as _accountCalls from '../../API/AccountCalls';
 import '../../styles/NavMenu.css';
-import logo from '../../media/CYEC-horizontal.jpg';
 
 
 export class NavMenu extends Component {
-  displayName = NavMenu.name
-
+  displayName = NavMenu.name;
   constructor(props) {
     super(props);
-    this.state = {currencyTitle: "USD"};
+    this.state = {
+      languages: [],
+      currencies: []
+    }
   }
 
-  handleSelect(eventKey)
+  handleSelect(eventKey, name)
   {
-    this.setState({currencyTitle: eventKey});
+    if(name === "language") {
+     this.props.languageChanged(eventKey, null);
+    }
+    else {
+      this.props.languageChanged(null, eventKey)
+    }
+  }
+
+  componentDidMount() {
+    _accountCalls.GetCurrencies()
+    .then((response) => {
+      if(response.isSuccess) {
+        this.setState({
+          currencies: response.payload
+        });
+      }
+    });
+
+    _accountCalls.GetLanguages()
+    .then((response) => {
+      if(response.isSuccess) {
+        this.setState({
+          languages: response.payload
+        });
+      }
+    })
   }
 
   render() {
     return (
-      <div>
         <Navbar collapseOnSelect expand="lg" fixedTop fluid>
-            <Nav className = 'currency-dropdown' onSelect={k => this.handleSelect(k)}>
-              <NavDropdown title={this.state.currencyTitle} id='currency'>
-                <MenuItem eventKey="USD">USD</MenuItem>
-                <MenuItem eventKey="KSH">KSH</MenuItem>
+            <Nav className = 'language-dropdown' onSelect={k => this.handleSelect(k, "language")}>
+              <NavDropdown title={this.props.account.language} id='currency'>
+                {this.state.languages.map(language => {
+                  return <MenuItem key={language} eventKey={language} disabled={this.props.account.language === language}>{language}</MenuItem>
+                })}
+              </NavDropdown>
+            </Nav>
+            <Nav className = 'currency-dropdown' onSelect={k => this.handleSelect(k, "currency")}>
+              <NavDropdown title={this.props.account.currency} id='currency'>
+              {this.state.currencies.map(currency => {
+                  return <MenuItem key={currency} eventKey={currency} disabled={this.props.account.currency === currency}>{currency}</MenuItem>
+                })}
               </NavDropdown>
             </Nav>
 
@@ -84,23 +118,6 @@ export class NavMenu extends Component {
               </Navbar.Text>
             }
         </Navbar>
-        <div className="header">
-        <img
-          alt="CYEC-Logo"
-          src={logo}
-          className="logo"
-        />
-
-          <FormGroup className="search">
-            <InputGroup>
-              <FormControl type="text" placeholder="Search..."/>
-              <InputGroup.Button>
-                <Button className="search-btn"><Glyphicon glyph='search'/></Button> */}
-              </InputGroup.Button>
-            </InputGroup>
-          </FormGroup>
-      </div>
-    </div>
     );
   }
 }
@@ -114,5 +131,6 @@ NavMenu.propTypes = {
     isAdmin: PropTypes.bool
   }),
   showLogin: PropTypes.func,
-  logOut: PropTypes.func
+  logOut: PropTypes.func,
+  languageChanged: PropTypes.func,
 }
