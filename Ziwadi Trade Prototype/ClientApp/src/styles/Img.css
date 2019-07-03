@@ -1,0 +1,31 @@
+.root {
+  max-width: calc(var(--maxWidth) * 1px);
+}
+
+.wrapper {
+  position: relative;
+  height: 0;
+  padding-top: calc(var(--height) / var(--width) * 100%);
+  background: #f6f7f8;
+  background: linear-gradient(to right, #fafafa 8%, #f4f4f4 38%, #fafafa 54%);
+  background-size: 1000px 640px;
+  animation: placeHolderShimmer 1.8s linear infinite forwards;
+}
+
+.img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  max-width: 100%;
+  height: auto;
+  vertical-align: middle;
+}
+
+@keyframes placeHolderShimmer {
+  0% {
+    background-position: -468px 0;
+  }
+  100% {
+    background-position: 468px 0;
+  }
+}

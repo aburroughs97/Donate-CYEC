@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using ZT.Core.Models.Account;
 using ZT.Core.Models.Currency;
 using ZT.Core.Models.Donate;
+using ZT.Core.Models.Inventory;
 using ZT.Core.Models.Language;
 
 namespace ZT.Data
@@ -23,8 +24,9 @@ namespace ZT.Data
         public virtual DbSet<Language> Language { get; set; }
         public virtual DbSet<Currency> Currency { get; set; }
         public virtual DbSet<DonateItem> DonateItem { get; set; }
+        public virtual DbSet<DonateItemTitle> DonateItemTitle { get; set; }
         public virtual DbSet<DonateItemDescription> DonateItemDescription {get; set;}
-        public virtual DbSet<DonateItemImage> DonateItemImage { get; set; }
+        public virtual DbSet<InventoryItem> InventoryItem { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -98,6 +100,12 @@ namespace ZT.Data
                 entity.Property(e => e.Code).HasColumnType("char(3)");
 
                 entity.Property(e => e.ConversionRateFromUSD).HasColumnType("decimal(10, 2)");
+
+                entity.Property(e => e.RoundDigits).HasColumnType("int(11)");
+
+                entity.Property(e => e.CurrencySymbol).HasColumnType("char(3)");
+
+                entity.Property(e => e.SymbolBefore).HasColumnType("bit");
             });
 
             modelBuilder.Entity<DonateItem>(entity =>
@@ -106,7 +114,6 @@ namespace ZT.Data
 
                 entity.Property(e => e.ItemType).HasColumnType("varchar(10)");
 
-                entity.Property(e => e.Title).HasColumnType("varchar(255)");
 
                 entity.Property(e => e.Price).HasColumnType("decimal");
 
@@ -115,6 +122,19 @@ namespace ZT.Data
                 entity.Property(e => e.IsDeleted).HasColumnType("bit");
 
                 entity.HasKey(e => e.ItemID);
+            });
+
+            modelBuilder.Entity<DonateItemTitle>(entity =>
+            {
+                entity.Property(e => e.ItemTitleID).HasColumnType("int(11)");
+
+                entity.Property(e => e.ItemID).HasColumnType("int(11)");
+
+                entity.Property(e => e.LanguageID).HasColumnType("int(11)");
+
+                entity.Property(e => e.Title).HasColumnType("varchar(255)");
+
+                entity.HasKey(e => e.ItemTitleID);
             });
 
             modelBuilder.Entity<DonateItemDescription>(entity =>
@@ -130,15 +150,23 @@ namespace ZT.Data
                 entity.HasKey(e => e.ItemDescriptionID);
             });
 
-            modelBuilder.Entity<DonateItemImage>(entity =>
+            modelBuilder.Entity<InventoryItem>(entity =>
             {
-                entity.Property(e => e.ItemImageID).HasColumnType("int(11)");
+                entity.Property(e => e.InventoryItemID).HasColumnType("int(11)");
 
                 entity.Property(e => e.ItemID).HasColumnType("int(11)");
 
-                entity.Property(e => e.ImageBase).HasColumnType("varchar(9999)");
+                entity.Property(e => e.ActualAmount).HasColumnType("decimal(10,2)");
 
-                entity.HasKey(e => e.ItemImageID);
+                entity.Property(e => e.GoalAmount).HasColumnType("int(11)");
+
+                entity.Property(e => e.AutoDecrement).HasColumnType("bit");
+
+                entity.Property(e => e.DecrementPerDay).HasColumnType("decimal(10,4)");
+
+                entity.Property(e => e.IsDeleted).HasColumnType("bit");
+
+                entity.HasKey(e => e.InventoryItemID);
             });
         }
     }

@@ -30,7 +30,7 @@ namespace ZT.Services
 
         public Result UpdateCurrencyRates()
         {
-            var currencies = _languageAndCurrencyAccessor.GetCurrencies().Payload.Where(x => x != "USD").ToList();
+            var currencies = _languageAndCurrencyAccessor.GetCurrencies().Payload.Where(x => x.Code != "USD").Select(x => x.Code).ToList();
             var updatedCurrencies = CheckCurrencyConversionRates(currencies);
             return _languageAndCurrencyAccessor.UpdateCurrencyRates(updatedCurrencies);
         }

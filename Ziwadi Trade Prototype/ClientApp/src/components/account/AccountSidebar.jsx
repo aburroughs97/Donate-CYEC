@@ -5,6 +5,52 @@ import { toast } from 'react-smart-toaster';
 import * as yup from 'yup';
 import * as _accountCalls from '../../API/AccountCalls';
 
+const translations = {
+  "manageaccount": {
+    "English": "Manage Account",
+    "Swahili": "S-Manage Account"
+  },
+  "editinformation": {
+    "English": "Edit Information",
+    "Swahili": "S-Edit Information"
+  },
+  "email": {
+    "English": "Email",
+    "Swahili": "S-Email"
+  },
+  "firstname": {
+    "English": "First Name",
+    "Swahili": "S-First Name"
+  },
+  "lastname": {
+    "English": "Last Name",
+    "Swahili": "S-Last Name"
+  },
+  "savechanges": {
+    "English": "Save Changes",
+    "Swahili": "S-Save Changes"
+  },
+  "changepassword": {
+    "English": "Change Password",
+    "Swahili": "S-Change Password"
+  },
+  "current": {
+    "English": "Current",
+    "Swahili": "S-Current"
+  },
+  "new": {
+    "English": "New",
+    "Swahili": "S-New"
+  },
+  "confirmnew": {
+    "English": "Confirm New",
+    "Swahili": "S-Confirm New"
+  },
+  "passwordmatch":{
+    "English": "Passwords must match",
+    "Swahili": "S-Passwords must match"
+  }
+}
 
 const passwordSchema = yup.string().min(8);
 
@@ -131,13 +177,13 @@ export class AccountSidebar extends Component {
     }
     return (
       <div className="change-account">
-      <h2 className="sidebar-header">Manage Account:</h2>
-      <h3>Edit Information:</h3>
+      <h2 className="sidebar-header">{translations["manageaccount"][this.props.language]}:</h2>
+      <h3>{translations["editinformation"][this.props.language]}:</h3>
       <hr />
       <Form horizontal className="sidebar">
         <FormGroup className="sidebar-form-group">
           <Col componentClass={ControlLabel} sm={4}>
-            Email:
+            {translations["email"][this.props.language]}:
           </Col>
           <Col>
             <FormControl 
@@ -150,7 +196,7 @@ export class AccountSidebar extends Component {
         </FormGroup>
         <FormGroup className="sidebar-form-group">
           <Col componentClass={ControlLabel} sm={4}>
-            First Name:
+            {translations["firstname"][this.props.language]}:
           </Col>
           <Col>
             <FormControl 
@@ -163,7 +209,7 @@ export class AccountSidebar extends Component {
         </FormGroup>
         <FormGroup className="sidebar-form-group">
           <Col componentClass={ControlLabel} sm={4}>
-            Last Name:
+            {translations["lastname"][this.props.language]}:
           </Col>
           <Col>
             <FormControl 
@@ -174,15 +220,15 @@ export class AccountSidebar extends Component {
             />
           </Col>
         </FormGroup>  
-        <Button className="sidebar-btn" onClick={this.updateUser}>Save Changes</Button>        
+        <Button className="sidebar-btn" onClick={this.updateUser}>{translations["savechanges"][this.props.language]}</Button>        
       </Form>
       <br />
-      <h3>Change Password:</h3>
+      <h3>{translations["changepassword"][this.props.language]}:</h3>
       <hr />
       <Form horizontal className="sidebar">
         <FormGroup className="sidebar-form-group">
           <Col componentClass={ControlLabel} sm={4}>
-            Current:
+            {translations["current"][this.props.language]}:
           </Col>
           <Col>
             <FormControl className="sidebar-input" type="password" onChange={(event) => this.handleChange(event.target.value, "current")}/>
@@ -190,7 +236,7 @@ export class AccountSidebar extends Component {
         </FormGroup>
         <FormGroup className="sidebar-form-group" validationState={this.validate("password")}>
           <Col componentClass={ControlLabel} sm={4}>
-            New:
+            {translations["new"][this.props.language]}:
           </Col>
           <Col>
             <FormControl className="sidebar-input" type="password" onChange={this.handlePasswordChange}/>
@@ -199,14 +245,14 @@ export class AccountSidebar extends Component {
         </FormGroup>
         <FormGroup className="sidebar-form-group" validationState={this.validate("confirm")}>
           <Col componentClass={ControlLabel} sm={4}>
-            Confirm New:
+            {translations["confirmnew"][this.props.language]}:
           </Col>
           <Col>
             <FormControl className="sidebar-input" type="password" onChange={this.handleConfirmChange}/>
-            {this.state.password.valid && this.state.confirm.changed && this.state.password.password !== this.state.confirm.password && <p className="invalid-input pull-right"><span className="invisible">hacky</span> Passwords must match</p>}
+            {this.state.password.valid && this.state.confirm.changed && this.state.password.password !== this.state.confirm.password && <p className="invalid-input pull-right"><span className="invisible">hacky</span> {translations["passwordmatch"][this.props.language]}</p>}
           </Col>
         </FormGroup>  
-        <Button className="sidebar-btn" disabled={this.state.current === "" || !this.state.password.valid || !this.state.confirm.valid} onClick={this.changePassword}>Change Password</Button>        
+        <Button className="sidebar-btn" disabled={this.state.current === "" || !this.state.password.valid || !this.state.confirm.valid} onClick={this.changePassword}>{translations["changepassword"][this.props.language]}</Button>        
       </Form>
     </div>
   );}
@@ -214,6 +260,7 @@ export class AccountSidebar extends Component {
 
 AccountSidebar.propTypes = {
   userID: PropTypes.number,
+  language: PropTypes.string,
   updateFirstName: PropTypes.func,
   logOut: PropTypes.func
 }

@@ -10,5 +10,8 @@ namespace ZT.Core.Models.Currency
         public string Name { get; set; }
         public string Code { get; set; }
         public decimal ConversionRateFromUSD { get; set; }
+        public int RoundDigits { get; set; }
+        public string CurrencySymbol { get; set; }
+        public bool SymbolBefore { get; set; }
     }
 }

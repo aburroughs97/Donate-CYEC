@@ -11,15 +11,30 @@ const cookieUserKey = "UserAccessToken";
 const sessionUserKey = "LoggedInUser";
 const cookies = new Cookies();
 
+const defaultState = {
+  isLoggedIn: false, 
+  account: {
+    userID: 0, 
+    firstName: "", 
+    language: "English", 
+    currency: {
+      code: "USD",
+      currencySymbol: "$",
+      symbolBefore: true
+    }, 
+    isAdmin: false
+  },
+  loadingUser: false,
+};
+
 class App extends Component {
   displayName = App.name
 
   constructor(props) {
     super(props);
     this.state = {
-      isLoggedIn: false, 
-      account: {userID: 0, firstName: "", language: "English", currency: "USD", isAdmin: false},
-      loadingUser: true,
+      ...defaultState,
+      loadingUser: true
     };
 
     this.handleLogin = this.handleLogin.bind(this);
@@ -89,12 +104,7 @@ class App extends Component {
 
   logOut(){
     this.setState({
-      isLoggedIn: false, 
-      account: {
-        userID: 0, 
-        firstName: "",
-        isAdmin: false
-      }
+      ...defaultState
     });
     
     //Invalidate user session server-side
@@ -107,12 +117,7 @@ class App extends Component {
 
   passwordChanged() {
     this.setState({
-      isLoggedIn: false, 
-      account: {
-        userID: 0, 
-        firstName: "",
-        isAdmin: false
-      }
+      ...defaultState
     });
     
     sessionStorage.removeItem(sessionUserKey);     
@@ -189,33 +194,42 @@ class App extends Component {
 
   languageChanged(language, currency) {
     let account = this.state.account;
+    let oldLang = account.language;
+    let oldCur = account.currency;
+
     if(currency === null) {
       account.language = language;
     }
     else {
       account.currency = currency;
     }
-    _accountCalls.UpdateLanguageAndCurrency(account.userID, account.language, account.currency)
-    .then((response) => {
-      if(response.isSuccess) {
-        this.setState({
-          account
-        });
-        sessionStorage.setItem(sessionUserKey, JSON.stringify(account));
-      }
-      else {
-        toast.error(response.message);
-      }
+    this.setState({
+      account
     });
+    sessionStorage.setItem(sessionUserKey, JSON.stringify(account));
+
+    if(this.state.isLoggedIn) {
+      _accountCalls.UpdateLanguageAndCurrency(account.userID, account.language, account.currency.code)
+      .then((response) => {
+        if(!response.isSuccess) {
+          toast.error("Error updating language settings. Please try again.");
+          account.language = oldLang;
+          account.currency = oldCur;
+          this.setState({
+            account
+          });
+        }
+      });
+    }
   }
 
   render() {
     return (
       <Layout isLoggedIn={this.state.isLoggedIn} loadingUser={this.state.loadingUser} account={this.state.account} handleLogin={this.handleLogin} handleRegister={this.handleRegister} logOut={this.logOut} languageChanged={this.languageChanged}>
-        <Route exact path='/' component={Home} />
+        <Route exact path='/' render={(props) => <Home {...props} language={this.state.account.language}/>}/>
         <Route path='/donate' render={(props) => <Donate {...props} userID={this.state.account.userID} language={this.state.account.language} currency={this.state.account.currency}/>} />
         <Route path='/reports' component={Reports} />
-        <Route path='/account' render={(props) => <Account {...props} userID={this.state.account.userID} updateFirstName={this.updateFirstName} logOut={this.passwordChanged}/>} />
+        <Route path='/account' render={(props) => <Account {...props} userID={this.state.account.userID} language={this.state.account.language} updateFirstName={this.updateFirstName} logOut={this.passwordChanged}/>} />
         <Route path='/admin' component={Admin} />
       </Layout>
     );

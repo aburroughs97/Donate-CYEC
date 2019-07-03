@@ -34,6 +34,20 @@
   text-align: center;
 }
 
+.donate-sidebar .filter-dropdown {
+  width: 100%;
+}
+
+.donate-sidebar .dropdown {
+  width: 60%;
+  margin-bottom: 5%;
+}
+
+.donate-sidebar .filter-label {
+  margin-bottom: 0;
+  font-weight: bold;
+}
+
 .header .logo {
   max-width: 20%;
   margin-top: 1%;
@@ -58,23 +72,23 @@
 }
 
 .item-preview {
-  width: 100%;
+  width: 50%;
   height: auto;
   float: right;
   padding: 1%;
-  border-bottom: 1px solid gray;
+  float: left;
 }
  
 .col-15 {
   height: 100%;
-  width: 15%;
+  width: 25%;
   float: left;
   padding-right: 1%;
 }
 
 .col-85 {
   height: 100%;
-  width: 85%;
+  width: 75%;
   float: left;
 }
 
@@ -95,6 +109,16 @@
 
 .item-preview .need-success {
   color: darkgreen;
+  margin-top: 1%;
+}
+
+.item-preview .need-info {
+  color: #5bc0de;
+  margin-top: 1%;
+}
+
+.item-preview .need-default {
+  color: #337ab7;
   margin-top: 1%;
 }
 
@@ -120,6 +144,25 @@
   cursor: pointer;
 }
 
+.item-preview .fund-price {
+  overflow: auto;
+  display: inline-block;
+  width: 100%;
+}
+
+.item-preview .fund-price .progress {
+  margin-left: 5%;
+  width: 50%;
+  float: left;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+
+.item-view .modal-header b {
+  float: left;
+}
+
 .donate-items .active a{
   background-color: #BF2E1B !important;
   border-left: 2px solid #BF2E1B !important;
@@ -131,6 +174,103 @@
   width: 100%;
 }
 
+.item-view img {
+  float: left;
+  padding-right: 1%;
+}
+
+.item-view .title {
+  font-weight: bold;
+}
+
+.item-view h2 {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.item-view hr {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.item-view .item-info {
+  width: 100%;
+  float: left;
+}
+
+.item-view .need-data {
+  width: 100%;
+  float: left;
+  margin-top: 2%;
+  margin-bottom: 2%;
+}
+
+.item-view .progress {
+  width: 60%;
+  float: right;
+  margin: 0px;
+}
+
+.item-view .need-warning {
+  color: darkgoldenrod;
+  margin-top: 1%;
+  width: 40%;
+  margin: 0px;
+  float: left;
+}
+
+.item-view .need-danger {
+  color: darkred;
+  margin-top: 1%;
+  width: 40%;
+  margin: 0px;
+  float: left;
+}
+
+.item-view .need-success {
+  color: darkgreen;
+  margin-top: 1%;
+  width: 40%;
+  margin: 0px;
+  float: left;
+}
+
+.item-view .need-info {
+  color: #5bc0de;
+  margin-top: 1%;
+  width: 40%;
+  margin: 0px;
+  float: left;
+}
+
+.item-view .need-default {
+  color: #337ab7;
+  margin-top: 1%;
+  width: 40%;
+  margin: 0px;
+  float: left;
+}
+
+.item-view .equation-top {
+  width: 100%;
+  text-align: right;
+}
+
+.item-view .equation-bottom {
+  width: 100%;
+  text-align: right;
+  border-bottom: 1px solid black;
+}
+
+.item-view .equation-result {
+  width: 100%;
+  text-align: right;
+}
+
+.item-view .num-items {
+  width: 10%;
+  text-align: right;
+}
 
 @media screen and (max-width: 760px) {
   .col-85 {

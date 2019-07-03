@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using ZT.Core.Models.Currency;
 
 namespace ZT.Core.Models.Account
 {
@@ -29,7 +30,7 @@ namespace ZT.Core.Models.Account
         public User User { get; set; }
         public UserSession UserSession { get; set; }
         public string LanguageName { get; set; }
-        public string CurrencyCode { get; set; }
+        public Currency.Currency CurrencyCode { get; set; }
     }
 
     public class ValidateForgotPasswordTokenRequest

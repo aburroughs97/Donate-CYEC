@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ZT.Core.Models.Donate;
 using ZT.Services;
+using System.Net;
 
 namespace ZT.Controllers
 {
@@ -25,12 +26,7 @@ namespace ZT.Controllers
             return Json(result);
         }
 
-        [HttpGet("GetImages")]
-        public IActionResult GetImages()
-        {
-            var result = _donateService.GetAllImages();
-            return Json(result);
-        }
+
 
         [HttpPost("AddItem")]
         public IActionResult AddItem()

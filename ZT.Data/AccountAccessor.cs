@@ -241,7 +241,7 @@ namespace ZT.Data
         {
             var user = FindUser(userID).Payload;
             var languageCode = (from x in _dBContext.Language where x.LanguageID == user.LanguageID select x.LanguageName).FirstOrDefault();
-            var currencyCode = (from x in _dBContext.Currency where x.CurrencyID == user.CurrencyID select x.Code).FirstOrDefault();
+            var currencyCode = (from x in _dBContext.Currency where x.CurrencyID == user.CurrencyID select x).FirstOrDefault();
             var response = new LogInResponse
             {
                 User = user,

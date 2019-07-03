@@ -1,8 +1,16 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import {Button} from 'react-bootstrap'
 import { withRouter } from 'react-router';
 import {LinePlaceholder} from '../../components/LinePlaceholder';
 import '../../styles/Home.css';
+
+const translations = {
+  "donate": {
+    "English": "Donate Now",
+    "Swahili": "Patia Sasa"
+  }
+}
 
 export class Home extends Component {
   displayName = Home.name
@@ -33,7 +41,7 @@ export class Home extends Component {
             <h2>Column 3:</h2>
             <LinePlaceholder />
           </div>
-          <Button className="donate-now-btn" onClick={this.donateNowClick}>Donate Now</Button>
+          <Button className="donate-now-btn" onClick={this.donateNowClick}>{translations["donate"][this.props.language]}</Button>
         </div>
       </div> 
     );
@@ -41,3 +49,7 @@ export class Home extends Component {
 }
 
 export default withRouter(Home);
+
+Home.propTypes = {
+  language: PropTypes.string
+}

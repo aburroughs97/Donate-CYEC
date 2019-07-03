@@ -3,6 +3,13 @@ import PropTypes from 'prop-types';
 import { AutoSuggestInput } from '../components/AutoSuggest';
 import logo from '../media/CYEC-horizontal.jpg';
 
+const translations = {
+  "search": {
+    "English": "Search...",
+    "Swahili": "Tafuta..."
+  }
+}
+
 export default class Header extends Component {
   constructor(props) {
     super(props);
@@ -25,12 +32,10 @@ export default class Header extends Component {
           className="logo"
         />
 
-         {/*  */}
-
         <div className="search">
           <AutoSuggestInput 
             suggestions={this.props.searchSuggestions}
-            placeholder="Search..."
+            placeholder={translations["search"][this.props.language]}
             search={this.searchClicked}
           /> 
         </div>
@@ -40,7 +45,8 @@ export default class Header extends Component {
 
 Header.propTypes = {
   onSearch: PropTypes.func,
-  searchSuggestions: PropTypes.array
+  searchSuggestions: PropTypes.array,
+  language: PropTypes.string
 }
 
 

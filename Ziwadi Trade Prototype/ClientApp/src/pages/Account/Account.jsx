@@ -7,6 +7,8 @@ import { isMobile } from 'react-device-detect';
 import '../../styles/Account.css';
 import 'react-table/react-table.css'
 
+//TODO: Figure out how to translate columns
+
 const nonMobileColumns = [
   {
     Header: "ID #",
@@ -83,12 +85,16 @@ const data = [
     name: "TEST ITEM #2"
   }];
 
+// const translations = {
+
+// }
+
 export class Account extends Component {
   
   render() {
     return (
       <div className="account-content">
-        <AccountSidebar userID={this.props.userID} updateFirstName={this.props.updateFirstName} logOut={this.props.logOut}/>
+        <AccountSidebar userID={this.props.userID} updateFirstName={this.props.updateFirstName} logOut={this.props.logOut} language={this.props.language}/>
         <div className="donation-table">
           <ReactTable
             pageSizeOptions={[5, 10, 15, 20, 25, 50, 100]}
@@ -103,6 +109,7 @@ export class Account extends Component {
 
 Account.propTypes = {
   userID: PropTypes.number,
+  language: PropTypes.string,
   updateFirstName: PropTypes.func,
   logOut: PropTypes.func,
 }

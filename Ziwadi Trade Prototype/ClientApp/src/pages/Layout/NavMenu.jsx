@@ -7,6 +7,40 @@ import { PropagateLoader } from 'react-spinners';
 import * as _accountCalls from '../../API/AccountCalls';
 import '../../styles/NavMenu.css';
 
+const translations= {
+  "hello": {
+    "English": "Hello, ",
+    "Swahili": "Jambo, "
+  },
+  "home": {
+    "English": "Home",
+    "Swahili": "Nyumba"
+  },
+  "donate": {
+    "English": "Donate Now",
+    "Swahili": "Patia Sasa"
+  },
+  "reports": {
+    "English": "View Reports",
+    "Swahili": "Tazama Ripoti"
+  },
+  "account": {
+    "English": "Manage Account",
+    "Swahili": "Thibiti Akaunti"
+  },
+  "admin": {
+    "English": "Admin",
+    "Swahili": "Msimamizi"
+  },
+  "login": {
+    "English": "Log In/Create Account",
+    "Swahili": "Ingia/Tengeneze Akaunti"
+  },
+  "logout": {
+    "English": "Log out",
+    "Swahili": "Loka nje"
+  }
+}
 
 export class NavMenu extends Component {
   displayName = NavMenu.name;
@@ -59,9 +93,9 @@ export class NavMenu extends Component {
               </NavDropdown>
             </Nav>
             <Nav className = 'currency-dropdown' onSelect={k => this.handleSelect(k, "currency")}>
-              <NavDropdown title={this.props.account.currency} id='currency'>
+              <NavDropdown title={this.props.account.currency.code} id='currency'>
               {this.state.currencies.map(currency => {
-                  return <MenuItem key={currency} eventKey={currency} disabled={this.props.account.currency === currency}>{currency}</MenuItem>
+                  return <MenuItem key={currency.code} eventKey={currency} disabled={this.props.account.currency.code === currency.code}>{currency.code}</MenuItem>
                 })}
               </NavDropdown>
             </Nav>
@@ -70,28 +104,28 @@ export class NavMenu extends Component {
               <Navbar.Collapse className="navbar-collapse">
               <Nav className = 'nav-links'>
                 <LinkContainer to={'/'} exact>
-                  <NavItem  title='Home' className = 'hover'>
-                    <Glyphicon glyph='home'/> {isMobile ? "Home" : ""}
+                  <NavItem  title={translations["home"][this.props.account.language]} className = 'hover'>
+                    <Glyphicon glyph='home'/> {isMobile ? translations["home"][this.props.account.language] : ""}
                   </NavItem>
                 </LinkContainer>
                 <LinkContainer to={'/donate'} exact>
-                  <NavItem  title='Donate Now' className = 'hover'>
-                    <Glyphicon glyph='usd'/> {isMobile ? "Donate Now" : ""}
+                  <NavItem  title={translations["donate"][this.props.account.language]} className = 'hover'>
+                    <Glyphicon glyph='usd'/> {isMobile ? translations["donate"][this.props.account.language] : ""}
                   </NavItem>
                 </LinkContainer>
                 <LinkContainer to={'/reports'}>
-                  <NavItem title='View Reports' className = 'hover'>
-                    <Glyphicon glyph='list-alt' /> {isMobile ? "View Reports" : ""}
+                  <NavItem title={translations["reports"][this.props.account.language]} className = 'hover'>
+                    <Glyphicon glyph='list-alt' /> {isMobile ? translations["reports"][this.props.account.language] : ""}
                   </NavItem>
                 </LinkContainer>
                 <LinkContainer to={'/account'} exact>
-                  <NavItem  title='Manage Account' className = 'hover'>
-                    <Glyphicon glyph='user'/> {isMobile ? "Manage Account" : ""}
+                  <NavItem  title={translations["account"][this.props.account.language]} className = 'hover'>
+                    <Glyphicon glyph='user'/> {isMobile ? translations["account"][this.props.account.language] : ""}
                   </NavItem>
                 </LinkContainer>
                 {this.props.account.isAdmin && <LinkContainer to={'/admin'} exact>
-                  <NavItem  title='Admin' className = 'hover'>
-                    <Glyphicon glyph='cog'/> {isMobile ? "Admin" : ""}
+                  <NavItem  title={translations["admin"][this.props.account.language]} className = 'hover'>
+                    <Glyphicon glyph='cog'/> {isMobile ? translations["admin"][this.props.account.language] : ""}
                   </NavItem>
                 </LinkContainer>}
               </Nav>
@@ -107,14 +141,14 @@ export class NavMenu extends Component {
 
             {!this.props.isLoading && !this.props.isLoggedIn &&            
               <Navbar.Text className="log-in">
-                  <span className="modal-link-inv" onClick={this.props.showLogin}>Log In/Create Account</span>
+                  <span className="modal-link-inv" onClick={this.props.showLogin}>{translations["login"][this.props.account.language]}</span>
               </Navbar.Text>
             }
 
             {!this.props.isLoading && this.props.isLoggedIn &&            
               <Navbar.Text className="log-in">
-                  {`Hello, ${this.props.account.firstName} `}
-                  (<span className="modal-link" onClick={this.props.logOut}>Log out</span>)
+                  { translations["hello"][this.props.account.language] + this.props.account.firstName + " "}
+                  (<span className="modal-link" onClick={this.props.logOut}>{translations["logout"][this.props.account.language]}</span>)
               </Navbar.Text>
             }
         </Navbar>

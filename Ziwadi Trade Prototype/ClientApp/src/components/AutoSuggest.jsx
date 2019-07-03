@@ -19,7 +19,7 @@ const renderSuggestion = suggestion => (
   </div>
 );
  
-export class AutoSuggestInput extends React.Component {
+export class AutoSuggestInput extends Component {
   constructor() {
     super();
 
@@ -67,7 +67,7 @@ export class AutoSuggestInput extends React.Component {
   };
   
   onKeyPress(event) {
-    if((event.which == 13 || event.keyCode == 13) ){
+    if((event.which === 13 || event.keyCode === 13) && this.state.value === ""){
       this.triggerSearch();
     }
   }

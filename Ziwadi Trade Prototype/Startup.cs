@@ -1,16 +1,15 @@
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
-using Microsoft.Extensions.Configuration;
-using ZT.Data;
-using ZT.Services;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Http;
 using Hangfire;
 using Hangfire.MySql.Core;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using ZT.Data;
+using ZT.Services;
 
 namespace Ziwadi_Trade_Prototype
 {
@@ -31,7 +30,7 @@ namespace Ziwadi_Trade_Prototype
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddDbContext<DBContext>(options =>
-               options.UseMySql(Configuration.GetConnectionString("LocalHost")));
+               options.UseMySql(Configuration.GetConnectionString("AWSDefault")));
 
             services.AddServices();
             services.AddData();
@@ -40,7 +39,7 @@ namespace Ziwadi_Trade_Prototype
             services.AddHangfire(configuration => {
                 configuration.UseStorage(
                     new MySqlStorage(
-                        Configuration.GetConnectionString("LocalHost"),
+                        Configuration.GetConnectionString("AWSDefault"),
                         new MySqlStorageOptions
                         {
                             TablePrefix = "Hangfire"
@@ -78,6 +77,8 @@ namespace Ziwadi_Trade_Prototype
 
             RecurringJob.AddOrUpdate<ILanguageAndCurrencyService>(
                 x => x.UpdateCurrencyRates(), Cron.Daily);
+            RecurringJob.AddOrUpdate<IInventoryManager>(
+                x => x.DecrementInventory(), Cron.Daily);
 
             app.UseMvc(routes =>
             {

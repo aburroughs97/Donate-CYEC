@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using ZT.Core;
 using ZT.Core.Models.Account;
+using ZT.Core.Models.Currency;
 using ZT.Data;
 
 namespace ZT.Services
@@ -15,8 +16,7 @@ namespace ZT.Services
         Result ChangePassword(int userID, string currentPasword, string newPassword);
         Result UpdateLanguageAndCurrency(int userID, string languageName, string currencyCode);
         Result<List<string>> GetLanguages();
-        Result<List<string>> GetCurrencies();
-
+        Result<List<Currency>> GetCurrencies();
     }
     public class AccountService : IAccountService
     {
@@ -96,7 +96,7 @@ namespace ZT.Services
             return _languageAccessor.GetLanguages();
         }
 
-        public Result<List<string>> GetCurrencies()
+        public Result<List<Currency>> GetCurrencies()
         {
             return _languageAccessor.GetCurrencies();
         }

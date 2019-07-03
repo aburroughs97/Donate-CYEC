@@ -12,6 +12,7 @@ namespace ZT.Data
             services.AddTransient<IAccountAccessor, AccountAccessor>();
             services.AddTransient<IDonateAccessor, DonateAccessor>();
             services.AddTransient<ILanguageAndCurrencyAccessor, LanguageAndCurrencyAccessor>();
+            services.AddTransient<IInventoryAccessor, InventoryAccessor>();
             return services;
         }
     }
