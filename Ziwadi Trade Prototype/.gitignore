@@ -234,3 +234,7 @@ _Pvt_Extensions
 .fake/
 
 appsettings.json
+
+*.jpg
+*.JPG
+*.JPEG
