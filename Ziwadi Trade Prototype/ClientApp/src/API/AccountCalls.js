@@ -25,3 +25,7 @@ export function GetLanguages() {
 export function GetCurrencies() {
   return apiGet(url + "GetCurrencies");
 }
+
+export function GetRecentDonations(userID, language, currency) {
+  return apiGet(url + `GetRecentDonations?userID=${userID}&languageName=${language}&currencyCode=${currency}`)
+}

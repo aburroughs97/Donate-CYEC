@@ -8,53 +8,57 @@ import * as _accountCalls from '../../API/AccountCalls';
 const translations = {
   "manageaccount": {
     "English": "Manage Account",
-    "Swahili": "S-Manage Account"
+    "Swahili": "Thibiti Akaunti"
   },
   "editinformation": {
     "English": "Edit Information",
-    "Swahili": "S-Edit Information"
+    "Swahili": "Badirisha Maelezo"
   },
   "email": {
     "English": "Email",
-    "Swahili": "S-Email"
+    "Swahili": "Barua Umeme"
   },
   "firstname": {
     "English": "First Name",
-    "Swahili": "S-First Name"
+    "Swahili": "Jina la Kwanza"
   },
   "lastname": {
     "English": "Last Name",
-    "Swahili": "S-Last Name"
+    "Swahili": "Jina la Pili"
   },
   "savechanges": {
     "English": "Save Changes",
-    "Swahili": "S-Save Changes"
+    "Swahili": "Hifadhi Marekebisho"
   },
   "changepassword": {
     "English": "Change Password",
-    "Swahili": "S-Change Password"
+    "Swahili": "Badirisha Neno-Siri"
   },
   "current": {
     "English": "Current",
-    "Swahili": "S-Current"
+    "Swahili": "Zamani"
   },
   "new": {
     "English": "New",
-    "Swahili": "S-New"
+    "Swahili": "Mpya"
   },
   "confirmnew": {
     "English": "Confirm New",
-    "Swahili": "S-Confirm New"
+    "Swahili": "Thibitisha"
   },
   "passwordmatch":{
     "English": "Passwords must match",
-    "Swahili": "S-Passwords must match"
+    "Swahili": "Fananisha Neno-Siri"
+  },
+  "containscharacters": {
+    "English": "Password must contain at least 8 characters.",
+    "Swahili": "Password must contain at least 8 characters."
   }
 }
 
 const passwordSchema = yup.string().min(8);
 
-export class AccountSidebar extends Component {
+export default class AccountSidebar extends Component {
   constructor(props) {
     super(props);
       this.state = {
@@ -240,7 +244,7 @@ export class AccountSidebar extends Component {
           </Col>
           <Col>
             <FormControl className="sidebar-input" type="password" onChange={this.handlePasswordChange}/>
-            {this.state.password.changed && !this.state.password.valid &&  <p className="invalid-input pull-right">Password must contain at least 8 characters.</p>}
+            {this.state.password.changed && !this.state.password.valid &&  <p className="invalid-input pull-right">{translations["containscharacters"][this.props.language]}</p>}
           </Col>
         </FormGroup>
         <FormGroup className="sidebar-form-group" validationState={this.validate("confirm")}>

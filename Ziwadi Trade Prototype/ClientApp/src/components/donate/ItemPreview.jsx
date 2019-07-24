@@ -3,9 +3,6 @@ import PropTypes from 'prop-types';
 import { ProgressBar } from 'react-bootstrap';
 import Img from '../Img';
 
-const itemImages = require.context('../../media/Item Images', true);
-
-
 const translations = {
   "need": {
     "English": "Need",
@@ -32,6 +29,8 @@ const translations = {
     "Swahili": "MUHIMU"
   },
 }
+
+const imageAPI = "/api/Donate/GetImage?itemID="
 
 export default class ItemPreview extends Component {
   
@@ -88,17 +87,17 @@ export default class ItemPreview extends Component {
     return (
       <div className="item-preview" onClick={() => this.props.itemClicked(this.props.item)}>
         <div className="col-15">
-          <Img src={itemImages("./" + this.props.item.imagePath)} height={145} width={145} alt={this.props.item.title}/>
+          <Img src={imageAPI + this.props.item.itemID} height={145} width={145} alt={this.props.item.title}/>
           <p className={"need-" + needColor}><b>{needLabel}</b></p>
           {needColor !== "default" && <ProgressBar bsStyle={needColor} now={need * 100}/>}
           {needColor === "default" && <ProgressBar now={need * 100}/>}
         </div>
         <div className = "col-85">
-          <h4 className="title"> {this.props.item.title} </h4>
+          <h4 className={!this.props.languageChanged ? "title" : "title-hidden"}> {this.props.item.title} </h4>
           <hr />
-          <h4 className="price">{this.formatPrice(this.props.item.price)}</h4>
+          <h4 className={!this.props.currencyChanged ? "price" : "price-hidden"}>{this.formatPrice(this.props.item.price)}</h4>
           <hr />
-          <p className="description"> {this.trimDescription()}</p>
+          <p className={!this.props.languageChanged ? "description" : "description-hidden"}> {this.trimDescription()}</p>
         </div>
       </div>
     );}
@@ -121,5 +120,7 @@ ItemPreview.propTypes = {
     roundDigits: PropTypes.number
   }),
   language: PropTypes.string,
-  itemClicked: PropTypes.func
+  itemClicked: PropTypes.func,
+  languageChanged: PropTypes.bool,
+  currencyChanged: PropTypes.bool
 }

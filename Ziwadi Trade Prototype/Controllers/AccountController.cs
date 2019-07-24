@@ -8,9 +8,12 @@ namespace ZT.Controllers
     public class AccountController : Controller
     {
         private readonly IAccountService _accountService;
-        public AccountController(IAccountService accountService)
+        private readonly IDonateService _donateService;
+        public AccountController(IAccountService accountService,
+                                    IDonateService donateService)
         {
             _accountService = accountService;
+            _donateService = donateService;
         }
 
         [HttpGet("GetUser")]
@@ -52,6 +55,13 @@ namespace ZT.Controllers
         public IActionResult GetCurrencies()
         {
             var result = _accountService.GetCurrencies();
+            return Json(result);
+        }
+
+        [HttpGet("GetRecentDonations")]
+        public IActionResult GetRecentDonations(int userID, string languageName, string currencyCode)
+        {
+            var result = _donateService.GetRecentDonations(userID, languageName, currencyCode);
             return Json(result);
         }
     }

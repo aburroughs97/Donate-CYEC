@@ -22,6 +22,11 @@
   padding: 1%; 
 }
 
+.donate-items .empty-items {
+  width: 100%;
+  text-align: center;
+}
+
 .donate-items-page {
   height: 10%;
 }
@@ -70,14 +75,6 @@
 .header .search:focus {
   border-color: #BF2E1B;
 }
-
-.item-preview {
-  width: 50%;
-  height: auto;
-  float: right;
-  padding: 1%;
-  float: left;
-}
  
 .col-15 {
   height: 100%;
@@ -92,9 +89,18 @@
   float: left;
 }
 
+.item-preview {
+  width: 50%;
+  height: 220px;
+  float: right;
+  padding: 1%;
+  float: left;
+}
+
 .item-preview .progress {
   margin: 0px;
   float: bottom;
+  height: 20px;
 }
 
 .item-preview .need-warning {
@@ -130,6 +136,11 @@
   width: 100%;
 }
 
+.item-preview img {
+  border: 2px solid lightgray;
+  background-color: lightgray;
+}
+
 .item-preview hr {
   margin-top: 5px;
   margin-bottom: 5px;
@@ -139,8 +150,12 @@
   margin: 0px;
 }
 
+.item-preview {
+  border-radius: 5px;
+}
+
 .item-preview:hover {
-  background-color: lightgray;
+  background-color: lightgray;;
   cursor: pointer;
 }
 
@@ -158,6 +173,17 @@
   margin-bottom: 10px;
 }
 
+.item-preview .title-hidden {
+  opacity: 0;
+}
+
+.item-preview .price-hidden {
+  opacity: 0;
+}
+
+.item-preview .description-hidden {
+  opacity: 0;
+}
 
 .item-view .modal-header b {
   float: left;
@@ -176,7 +202,9 @@
 
 .item-view img {
   float: left;
-  padding-right: 1%;
+  margin-right: 1%;
+  border: 2px solid lightgray;
+  background-color: lightgray;
 }
 
 .item-view .title {
@@ -262,14 +290,126 @@
   border-bottom: 1px solid black;
 }
 
-.item-view .equation-result {
-  width: 100%;
-  text-align: right;
+.item-view .btn {
+  width: 25%;
+  color: #BF2E1B;
+  background-image: none;
+  background-color: white;
+}
+
+.item-view .btn:hover {
+  background-color: #BF2E1B;
+  background-image: none;
+  color: transparent;
+  text-decoration: none;
+}
+
+.item-view .add-to {
+  margin-left: 5%;
+}
+
+.item-view .donate-now {
+  margin-left: 45%;
 }
 
 .item-view .num-items {
   width: 10%;
   text-align: right;
+}
+
+.donate-tutorial {
+  width: 65%;
+}
+
+.donate-tutorial .logo {
+  width: 25%;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.donate-tutorial .modal-body {
+  border: 5px solid #BF2E1B;
+  border-radius: 5px;
+}
+
+.donate-tutorial .carousel-inner {
+  height: 500px;
+}
+
+.donate-tutorial .carousel-inner .item {
+  height: 100%;
+} 
+
+.donate-tutorial .content-container {
+  text-align: center;
+  width: 100%;
+  height: 100%;
+  padding: 5%;
+  padding-top: 2%;
+}
+
+.donate-tutorial hr {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.donate-tutorial .btn-container {
+  width: 100%;
+  height: 100px;
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  text-align: center;
+}
+
+.donate-tutorial .next-btn {
+  font-size: 100px;
+  color: lightgray;
+  cursor: pointer;
+  float: right;
+  margin-right: 2%;
+}
+
+.donate-tutorial .prev-btn {
+  font-size: 100px;
+  color: lightgray;
+  cursor: pointer;
+  float: left;
+  margin-left: 2%;
+}
+
+.donate-tutorial .next-btn:hover {
+  color: #BF2E1B;
+}
+
+.donate-tutorial .prev-btn:hover {
+  color: #BF2E1B;
+}
+
+.donate-tutorial .title {
+  font-size: 45px;
+}
+
+.donate-tutorial .list {
+  text-align: left;
+  font-size: 25px;
+}
+
+.donate-tutorial .list li {
+  margin-bottom: 10px;
+}
+
+.donate-tutorial .skip-btn {
+  width: auto;
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.donate-tutorial .sublist li{
+  margin-bottom: 0px;
 }
 
 @media screen and (max-width: 760px) {

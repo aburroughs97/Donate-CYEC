@@ -90,7 +90,6 @@ submitForm() {
         passwordConfirm: "",
       });
 
-      this.props.history.push("/account");
       this.props.handleHideLogin();
       toast.success("Account created successfully.")
     }

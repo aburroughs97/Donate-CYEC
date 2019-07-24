@@ -16,7 +16,7 @@ namespace ZT.Core
         }
     }
 
-    public class Result<T> where T: class
+    public class Result<T> 
     {
         public bool IsSuccess { get; set; }
         public T Payload { get; set; }
@@ -26,7 +26,7 @@ namespace ZT.Core
         {
             IsSuccess = isSuccess;
             Message = message;
-            Payload = null;
+            Payload = default;
         }
 
         public Result(T payload)
@@ -41,7 +41,7 @@ namespace ZT.Core
             {
                 IsSuccess = false;
                 Message = "Empty payload";
-                Payload = null;
+                Payload = default;
             }
         }
     }

@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { Route, withRouter } from 'react-router';
 import { Layout } from './pages/Layout/Layout';
-import { Home, Donate, Account, Reports, Admin} from './pages/Pages';
+import { Home, Donate, Account, Admin, Cart} from './pages/Pages';
 import * as _loginCalls from './API/LoginCalls';
 import * as _accountCalls from './API/AccountCalls';
 import { toast } from 'react-smart-toaster';
+import { MetroSpinner } from "react-spinners-kit";
+
 import Cookies from 'universal-cookie';
 
 const cookieUserKey = "UserAccessToken";
@@ -16,15 +18,18 @@ const defaultState = {
   account: {
     userID: 0, 
     firstName: "", 
+    cartItems: 0,
     language: "English", 
     currency: {
       code: "USD",
       currencySymbol: "$",
-      symbolBefore: true
+      symbolBefore: true,
+      roundDigits: 2,
     }, 
     isAdmin: false
   },
   loadingUser: false,
+  forceLogin: false
 };
 
 class App extends Component {
@@ -44,6 +49,10 @@ class App extends Component {
     this.updateFirstName = this.updateFirstName.bind(this);
     this.languageChanged = this.languageChanged.bind(this);
     this.loadTranslations = this.loadTranslations.bind(this);
+    this.cartUpdated = this.cartUpdated.bind(this);
+    this.clearCart = this.clearCart.bind(this);
+    this.forceLogin = this.forceLogin.bind(this);
+    this.loginShown = this.loginShown.bind(this);
   }
 
   componentDidMount() {
@@ -54,6 +63,7 @@ class App extends Component {
         account: {
           userID: loggedInUser.userID,
           firstName: loggedInUser.firstName,
+          cartItems: loggedInUser.cartItems,
           language: loggedInUser.language,
           currency: loggedInUser.currency,
           isAdmin: loggedInUser.isAdmin
@@ -74,6 +84,7 @@ class App extends Component {
           let newAccount = {
             userID: user.userID,
             firstName: user.firstName,
+            cartItems: response.payload.cartItems,
             language: response.payload.languageName,
             currency: response.payload.currencyCode,
             isAdmin: user.isAdmin
@@ -135,6 +146,7 @@ class App extends Component {
           let newAccount = {
             userID: user.userID,
             firstName: user.firstName,
+            cartItems: response.payload.cartItems,
             language: response.payload.languageName,
             currency: response.payload.currencyCode,
             isAdmin: user.isAdmin
@@ -166,17 +178,19 @@ class App extends Component {
       .then((response) => {
         if(response.isSuccess) {
           let user = response.payload;
+          let account = {
+            userID: user.userID,
+            firstName: user.firstName,
+            cartItems: 0,
+            language: defaultState.account.language,
+            currency: defaultState.account.currency,
+            isAdmin: user.isAdmin
+          };
           this.setState({
             isLoggedIn: true,
-            account: {
-              userID: user.userID,
-              firstName: user.firstName,
-              language: "English",
-              currency: "USD",
-              isAdmin: user.isAdmin
-            }
+            account 
           });
-          sessionStorage.setItem(sessionUserKey, JSON.stringify({ userID: user.userID, firstName: user.firstName, isAdmin: user.isAdmin }));
+          sessionStorage.setItem(sessionUserKey, JSON.stringify({ account }));
         }
         resolve(response);
       });
@@ -223,15 +237,65 @@ class App extends Component {
     }
   }
 
+  cartUpdated(amount, added) {
+    let account = this.state.account;
+    if(added) {
+      account.cartItems += amount;
+    }
+    else {
+      account.cartItems -= amount;
+    }
+    this.setState({
+      account
+    });
+    sessionStorage.setItem(sessionUserKey, JSON.stringify(account));
+  }
+
+  clearCart() {
+    let account = this.state.account;
+    account.cartItems = 0;
+    this.setState({
+      account
+    });
+    sessionStorage.setItem(sessionUserKey, JSON.stringify(account));
+  }
+
+  forceLogin(){
+    this.setState({ forceLogin: true });
+  }
+
+  loginShown() {
+    this.setState({ forceLogin: false });
+  }
+
   render() {
+    let body;
+    if(!this.state.loadingUser) {
+      body = 
+        <Layout forceLogin={this.state.forceLogin} loginShown={this.loginShown} isLoggedIn={this.state.isLoggedIn} loadingUser={this.state.loadingUser} account={this.state.account} handleLogin={this.handleLogin} handleRegister={this.handleRegister} logOut={this.logOut} languageChanged={this.languageChanged}>
+          <Route exact path='/' render={(props) => <Home {...props} showLogin={this.forceLogin} language={this.state.account.language} isLoggedIn={this.state.isLoggedIn}/>}/>
+          <Route path='/donate' render={(props) => <Donate {...props} isLoggedIn={this.state.isLoggedIn} userID={this.state.account.userID} language={this.state.account.language} currency={this.state.account.currency} cartUpdated={this.cartUpdated}/>}/>
+          <Route path='/cart' render={(props) => <Cart {...props} isLoggedIn={this.state.isLoggedIn} userID={this.state.account.userID} language={this.state.account.language} currency={this.state.account.currency} cartUpdated={this.cartUpdated} clearCart={this.clearCart}/>}/>
+          <Route path='/account' render={(props) => <Account {...props} isLoggedIn={this.state.isLoggedIn} userID={this.state.account.userID} language={this.state.account.language} updateFirstName={this.updateFirstName} logOut={this.passwordChanged}/>} />
+          <Route path='/admin' render={(props) => <Admin {...props} isLoggedIn={this.state.isLoggedIn} isAdmin={this.state.account.isAdmin} />}/>
+        </Layout>
+      ;
+    }
+    else {
+      body = 
+        <Layout isLoggedIn={this.state.isLoggedIn} loadingUser={this.state.loadingUser} account={this.state.account} handleLogin={this.handleLogin} handleRegister={this.handleRegister} logOut={this.logOut} languageChanged={this.languageChanged}>
+          <div className="spinner-container">
+            <MetroSpinner 
+              size={150}
+              color="#BF2E1B"
+              loading={true}
+            />
+          </div>
+        </Layout>
+      ;
+    }
     return (
-      <Layout isLoggedIn={this.state.isLoggedIn} loadingUser={this.state.loadingUser} account={this.state.account} handleLogin={this.handleLogin} handleRegister={this.handleRegister} logOut={this.logOut} languageChanged={this.languageChanged}>
-        <Route exact path='/' render={(props) => <Home {...props} language={this.state.account.language}/>}/>
-        <Route path='/donate' render={(props) => <Donate {...props} userID={this.state.account.userID} language={this.state.account.language} currency={this.state.account.currency}/>} />
-        <Route path='/reports' component={Reports} />
-        <Route path='/account' render={(props) => <Account {...props} userID={this.state.account.userID} language={this.state.account.language} updateFirstName={this.updateFirstName} logOut={this.passwordChanged}/>} />
-        <Route path='/admin' component={Admin} />
-      </Layout>
+      body
     );
   }
 }

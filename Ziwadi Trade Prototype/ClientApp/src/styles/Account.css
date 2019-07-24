@@ -1,6 +1,7 @@
 body {
   height: 100%;
   width: 100%;
+  font-family: Arial;
 }
 
 .body {
@@ -34,9 +35,13 @@ body {
 }
 
 .donation-table {
-  padding-top: 2%;
   float: left;
   width: 73%;
+  height: 98%;
+}
+
+.account-content .ReactTable {
+  height: 100%;
 }
 
 .table-btn {
@@ -100,12 +105,14 @@ body {
     padding: 0px;
     flex-grow: 0;
   }
+
   .change-account {
     width: 100%;
     border: 2px solid #01573E;
     border-radius: 4px;
     padding-bottom: 5%;
   }
+
   .donation-table {
     width: 100%;
   }

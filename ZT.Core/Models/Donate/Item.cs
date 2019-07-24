@@ -12,7 +12,6 @@ namespace ZT.Core.Models.Donate
         public decimal Price { get; set; }
         public string Description { get; set; }
         public decimal Need { get; set; }
-        public string ImagePath { get; set; }
         public int? ActualAmount { get; set; }
         public int? GoalAmount { get; set; }
     }

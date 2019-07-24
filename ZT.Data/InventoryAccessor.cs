@@ -12,6 +12,7 @@ namespace ZT.Data
         Result AddInventoryItem(InventoryItem item);
         Result RemoveInventoryItem(int itemID);
         Result UpdateInventoryItem(InventoryItem item);
+        Result<InventoryItem> GetItem(int itemID);
         Result<List<InventoryItem>> GetActiveInventoryItems();
         Result UpdateInventoryItemRange(List<InventoryItem> items);
         Result<List<InventoryItem>> GetInventoryItemRange(IEnumerable<int> items);
@@ -59,6 +60,12 @@ namespace ZT.Data
             return new Result<List<InventoryItem>>(list);
         }
 
+        public Result<InventoryItem> GetItem(int itemID)
+        {
+            var item = (from x in _dbContext.InventoryItem where x.ItemID == itemID select x).FirstOrDefault();
+            return new Result<InventoryItem>(item);
+        }
+
         public Result RemoveInventoryItem(int itemID)
         {
             try
@@ -78,7 +85,7 @@ namespace ZT.Data
         {
             try
             {
-                _dbContext.InventoryItem.Add(item);
+                _dbContext.InventoryItem.Update(item);
                 _dbContext.SaveChanges();
                 return new Result(true);
             }

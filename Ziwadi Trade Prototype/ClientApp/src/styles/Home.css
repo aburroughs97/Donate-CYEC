@@ -1,3 +1,10 @@
+.spinner-container {
+    height: 100%;
+    width: 100%;
+    padding-left: 45%;
+    padding-top: 15%;
+}
+
 .search-btn:hover,
 .search-btn:focus {
     background-color: #BF2E1B;
@@ -7,6 +14,39 @@
 
 .content {
     text-align: center;
+}
+
+.content hr {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.content .title {
+    font-size: 65px;
+    color: black;
+}
+
+.content .info {
+    padding-left: 20%;
+    padding-right: 20%;
+    font-size: 18px;
+}
+
+.content .logo {
+    width: 12%;
+    position: absolute;
+    left: 5px;
+    top: 20px;
+    z-index: 1;
+}
+
+.content .carousel-indicators li{
+    border: none;
+    background-color: white !important;
+}
+
+.content .welcome {
+    font-size: 50px;
 }
 
 .col-33 {

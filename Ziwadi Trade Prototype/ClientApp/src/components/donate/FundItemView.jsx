@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { ProgressBar, Modal, } from 'react-bootstrap';
+import { ProgressBar, Modal, Button} from 'react-bootstrap';
 import Img from '../Img';
 import NumericInput from 'react-numeric-input';
-
-const itemImages = require.context('../../media/Item Images', true);
 
 const translations = {
   "description": {
@@ -35,9 +33,19 @@ const translations = {
     "English": "CRITICAL",
     "Swahili": "MUHIMU"
   },
+  "addTo": {
+    "English": "Add to Cart",
+    "Swahili": "Ongeza kwa Kikapu"
+  },
+  "donateNow": {
+    "English": "Donate Now",
+    "Swahili": "Saidia Sasa"
+  }
 }
 
-export default class DirectItemView extends Component {
+const imageAPI = "/api/Donate/GetImage?itemID=";
+
+export default class FundItemView extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -55,6 +63,7 @@ export default class DirectItemView extends Component {
     this.amountToDonateUpdated = this.amountToDonateUpdated.bind(this);
     this.onHide = this.onHide.bind(this);
     this.getCurrentValue = this.getCurrentValue.bind(this);
+    this.onDonateClicked = this.onDonateClicked.bind(this);
   }
 
   formatPrice(price) {
@@ -115,18 +124,29 @@ export default class DirectItemView extends Component {
     return  this.formatPrice(this.getCurrentValue(this.state.amountToDonate)) + " / " + this.formatPrice(this.props.item.price);
   }
 
+  onDonateClicked(donateNow) {
+    this.props.onDonate(this.props.item.itemID, this.state.amountToDonate, donateNow);
+    this.onHide();
+  }
+
   render() {
     if(this.props.item === null) {
       return null;
     }
 
     let need = this.getCurrentValue(this.state.amountToDonate) / this.props.item.price;
+    if(need > 1) {
+      need = 1;
+    }
+    let itemNeed = this.getCurrentValue(0) / this.props.item.price;
     let needColor = this.props.item.itemType === "fund" ? "info" : "default";
     let needLabel = this.getFundLabel();
     let needBarLabel = (need * 100).toFixed(0) + "%";
-    let needDescription = "This is a description of the above fund and how it works."
+    // let needDescription = "This is a description of the above fund and how it works."
 
     let formattedPrice = this.formatPrice(this.props.item.price);
+
+    need -= itemNeed;
 
     return (
       <Modal
@@ -142,26 +162,36 @@ export default class DirectItemView extends Component {
       </Modal.Header>
       <Modal.Body>
         <div className="item-info">
-          <Img src={itemImages("./" + this.props.item.imagePath)} height={200} width={200} alt={this.props.item.title}/>
+          <Img src={imageAPI + this.props.item.itemID} height={200} width={200} alt={this.props.item.title}/>
            <p><b>{translations["description"][this.props.language]}:</b></p>
            <hr />
            <p className="description">{this.props.item.description}</p>
          </div>
          <div className="need-data">
           <h4 className={"need-" + needColor}><b>{needLabel}</b></h4>
-          {needColor !== "default" && <ProgressBar striped={this.state.amountToDonate > 0} className="need-bar" bsStyle={needColor} now={need * 100} label={needBarLabel}/>}
-          {needColor === "default" && <ProgressBar striped={this.state.amountToDonate > 0} className="need-bar" now={need * 100} label={needBarLabel}/>}
+          {needColor !== "default" && 
+            <ProgressBar className="need-bar" label={needBarLabel}>
+              <ProgressBar bsStyle={needColor} now={itemNeed * 100} />
+              <ProgressBar active bsStyle={needColor} now={need * 100}/>
+            </ProgressBar>}
+          {needColor === "default" && 
+            <ProgressBar className="need-bar" label={needBarLabel}>
+              <ProgressBar now={itemNeed * 100} />
+              <ProgressBar active now={need * 100}/>
+            </ProgressBar>
+          }
          </div>
-         <p className="need-description">{needDescription}</p>
-         <hr />
-         <p className="equation-top">Amount To Donate: <NumericInput min={0} max={this.calcMaxInputValue()} precision={2} value={this.state.amountToDonate} step={this.calcInputIncrement()} onChange={this.amountToDonateUpdated}/></p>
-
+         {/* <p className="need-description">{needDescription}</p> */}
+          <hr />
+          <p className="equation-top">Amount To Donate: <NumericInput min={0} max={this.calcMaxInputValue()} precision={2} value={this.state.amountToDonate} step={this.calcInputIncrement()} onChange={this.amountToDonateUpdated}/></p>
+          <Button className="donate-now btn" disabled={this.state.amountToDonate === 0} onClick={() => this.onDonateClicked(true)}><b>{translations["donateNow"][this.props.language]}</b></Button>      
+          <Button className="add-to btn" disabled={this.state.amountToDonate === 0} onClick={() => this.onDonateClicked(false)}><b>{translations["addTo"][this.props.language]}</b></Button>
       </Modal.Body>
     </Modal>
     );}
 }
 
-DirectItemView.propTypes = {
+FundItemView.propTypes = {
   item: PropTypes.shape({
     itemID: PropTypes.number,
     itemType: PropTypes.oneOf(["direct", "fund", "sponsor"]),
@@ -177,8 +207,9 @@ DirectItemView.propTypes = {
     symbolBefore: PropTypes.bool,
     roundDigits: PropTypes.number
   }),
-  backClicked: PropTypes.func,
   show: PropTypes.bool,
   hide: PropTypes.func,
-  language: PropTypes.string
+  language: PropTypes.string,
+  onDonate: PropTypes.func,
+  showDonateButtons: PropTypes.bool
 }

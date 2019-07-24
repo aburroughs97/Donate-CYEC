@@ -19,7 +19,7 @@ const renderSuggestion = suggestion => (
   </div>
 );
  
-export class AutoSuggestInput extends Component {
+export default class AutoSuggestInput extends Component {
   constructor() {
     super();
 

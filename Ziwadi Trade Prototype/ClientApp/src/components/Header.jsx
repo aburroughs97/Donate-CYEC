@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { AutoSuggestInput } from '../components/AutoSuggest';
+import { AutoSuggestInput } from './Components';
 import logo from '../media/CYEC-horizontal.jpg';
 
 const translations = {

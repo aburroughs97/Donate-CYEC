@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Login } from '../../components/login/Login';
+import { Login } from '../../components/Components';
 import { NavMenu } from './NavMenu.jsx';
 import {SmartToaster, toast } from 'react-smart-toaster';
 import CookieConsent from 'react-cookie-consent';
@@ -33,6 +33,13 @@ export class Layout extends Component {
     this.setState({ showAlert: false })
   }
 
+  componentWillReceiveProps(props) {
+    if(props.forceLogin) {
+      this.setState({ showLogin: true });
+      this.props.loginShown();
+    }
+  }
+
   render() {
     return (
       <div className="body">
@@ -60,6 +67,8 @@ export class Layout extends Component {
 
 Layout.propTypes = {
   isLoggedIn: PropTypes.bool,
+  forceLogin: PropTypes.bool,
+  loginShown: PropTypes.func,
   loadingUser: PropTypes.bool,
   account: PropTypes.shape({
     userID: PropTypes.number, 

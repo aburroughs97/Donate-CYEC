@@ -6,7 +6,7 @@ import ForgotPassword from './ForgotPassword';
 import { Modal } from 'react-bootstrap';
 import '../../styles/Login.css';
 
-export class Login extends Component {
+export default class Login extends Component {
     displayName = Login.name
     constructor(props) {
       super(props);
@@ -35,6 +35,12 @@ export class Login extends Component {
 
     handleBackToLogin() {
       this.setState({ forgotPassword: false });
+    }
+
+    componentWillReceiveProps(props) {
+      if(!props.showLogin) {
+        this.setState({ isLogin: true });
+      }
     }
 
     render() {

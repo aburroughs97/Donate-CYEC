@@ -10,7 +10,6 @@ namespace ZT.Core.Models.Donate
         public string ItemType { get; set; }
         public decimal Price { get; set; }
         public decimal Need { get; set; }
-        public string ImagePath { get; set; }
         public bool IsDeleted { get; set; }
     }
 }

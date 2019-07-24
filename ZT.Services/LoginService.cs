@@ -25,16 +25,19 @@ namespace ZT.Services
         private readonly IEncryptionService _encryptionService;
         private readonly IAccountAccessor _accountAccessor;
         private readonly IEmailService _emailService;
+        private readonly IDonateService _donateService;
 
         public LoginService(IConfiguration configuration,
                                 IEncryptionService encryptionService,
                                 IAccountAccessor accountAccessor,
-                                IEmailService emailService)
+                                IEmailService emailService,
+                                IDonateService donateService)
         {
             _configuration = configuration;
             _encryptionService = encryptionService;
             _accountAccessor = accountAccessor;
             _emailService = emailService;
+            _donateService = donateService;
         }
 
         public Result<User> CreateAccount(RegisterRequest request)
@@ -74,7 +77,9 @@ namespace ZT.Services
 
             if (hashedPassword == password.Password)
             {
-                return _accountAccessor.CreateLogInResponse(userResult.Payload.UserID);
+                var result = _accountAccessor.CreateLogInResponse(userResult.Payload.UserID);
+                result.Payload.CartItems = _donateService.CheckCart(userResult.Payload.UserID);
+                return result;
             }
             else
             {
@@ -94,13 +99,12 @@ namespace ZT.Services
         public Result<LogInResponse> ValidateAccessToken(ValidateAccessTokenRequest request)
         {
             var newToken = _encryptionService.CreateHash(Encoding.UTF8.GetBytes(DateTime.Now.ToString() + request.UserID), _configuration["HashCode"]);
-
             var result = _accountAccessor.ValidateAccessToken(request.UserID, request.AccessToken, newToken);
             if (result.IsSuccess)
             {
                 //Create a new token with the same expiry date
                 var response = _accountAccessor.CreateLogInResponse(request.UserID, result.Payload).Payload;
-
+                response.CartItems = _donateService.CheckCart(request.UserID);
                 return new Result<LogInResponse>(response);
             }
             else return new Result<LogInResponse>(false);
@@ -108,6 +112,7 @@ namespace ZT.Services
 
         public void RemoveAccessToken(ValidateAccessTokenRequest request)
         {
+            if (request == null) return;
             _accountAccessor.RemoveAccessToken(request.UserID, request.AccessToken);
         }
 

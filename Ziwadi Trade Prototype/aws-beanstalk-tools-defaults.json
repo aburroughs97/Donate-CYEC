@@ -4,15 +4,16 @@
     "profile" : "default",
     "region"  : "us-east-2",
     "application" : "Donate-CYEC",
-    "environment" : "Donate-CYEC-dev",
+    "environment" : "Donate-CYEC-prod",
     "iis-website" : "Default Web Site",
     "app-path"    : "/",
     "enable-xray" : false,
-    "cname"       : "donate-cyec-dev",
-    "solution-stack" : "64bit Windows Server 2016 v2.0.4 running IIS 10.0",
+    "cname"       : "donate-cyec-prod",
+    "solution-stack" : "64bit Windows Server 2016 v2.1.0 running IIS 10.0",
     "environment-type" : "SingleInstance",
     "instance-profile" : "aws-elasticbeanstalk-ec2-role",
     "service-role"     : "aws-elasticbeanstalk-service-role",
     "instance-type"    : "t2.micro",
-    "key-pair"         : ""
+    "key-pair"         : "",
+    "health-check-url" : "/"
 }

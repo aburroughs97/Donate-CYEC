@@ -5,6 +5,7 @@ using System.Text;
 using ZT.Core;
 using ZT.Core.Models.Account;
 using ZT.Core.Models.Currency;
+using ZT.Core.Models.Donate;
 using ZT.Data;
 
 namespace ZT.Services

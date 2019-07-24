@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import '../styles/Placeholder.css';
 
-export class LinePlaceholder extends Component {
+export default class LinePlaceholder extends Component {
     render() {
         return (
             <div className="container">

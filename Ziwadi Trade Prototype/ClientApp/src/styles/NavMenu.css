@@ -116,3 +116,7 @@
     }
   }
 
+  .notification-badge {
+      z-index: 1;
+      float: right;
+  }

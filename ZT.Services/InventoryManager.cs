@@ -11,9 +11,6 @@ namespace ZT.Services
 {
     public interface IInventoryManager
     {
-        Result AddInventoryItem(InventoryItem item);
-        Result RemoveInventoryItem(int itemID);
-        Result UpdateInventoryItem(InventoryItem item);
         Result DecrementInventory();
 
     }
@@ -27,21 +24,6 @@ namespace ZT.Services
         {
             _inventoryAccessor = inventoryAccessor;
             _donateAccessor = donateAccessor;
-        }
-
-        public Result AddInventoryItem(InventoryItem item)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Result RemoveInventoryItem(int itemID)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Result UpdateInventoryItem(InventoryItem item)
-        {
-            throw new NotImplementedException();
         }
 
         public Result DecrementInventory()

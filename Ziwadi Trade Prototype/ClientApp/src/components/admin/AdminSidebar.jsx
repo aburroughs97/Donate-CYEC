@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 
-export class AdminSidebar extends Component {
+export default class AdminSidebar extends Component {
   render() {
     return (
       <div className="admin-sidebar">

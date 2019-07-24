@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Glyphicon, Nav, Navbar, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import { isMobile } from 'react-device-detect';
-import { PropagateLoader } from 'react-spinners';
+import NotificationBadge, {Effect} from 'react-notification-badge';
 import * as _accountCalls from '../../API/AccountCalls';
 import '../../styles/NavMenu.css';
 
@@ -14,31 +14,27 @@ const translations= {
   },
   "home": {
     "English": "Home",
-    "Swahili": "Nyumba"
+    "Swahili": "Nyumbani"
   },
   "donate": {
     "English": "Donate Now",
-    "Swahili": "Patia Sasa"
-  },
-  "reports": {
-    "English": "View Reports",
-    "Swahili": "Tazama Ripoti"
+    "Swahili": "Saidia Sasa"
   },
   "account": {
     "English": "Manage Account",
     "Swahili": "Thibiti Akaunti"
   },
-  "admin": {
-    "English": "Admin",
-    "Swahili": "Msimamizi"
+  "cart": {
+    "English": "Donation Cart",
+    "Swahili": "Kikapu cha Mchango"
   },
   "login": {
     "English": "Log In/Create Account",
-    "Swahili": "Ingia/Tengeneze Akaunti"
+    "Swahili": "Fungua Akaunti/Tengeneza Akaunti"
   },
   "logout": {
     "English": "Log out",
-    "Swahili": "Loka nje"
+    "Swahili": "Funga Akaunti"
   }
 }
 
@@ -79,7 +75,7 @@ export class NavMenu extends Component {
           languages: response.payload
         });
       }
-    })
+    });
   }
 
   render() {
@@ -108,35 +104,39 @@ export class NavMenu extends Component {
                     <Glyphicon glyph='home'/> {isMobile ? translations["home"][this.props.account.language] : ""}
                   </NavItem>
                 </LinkContainer>
-                <LinkContainer to={'/donate'} exact>
+                <LinkContainer to={'/donate'} exact disabled={!this.props.isLoggedIn}>
                   <NavItem  title={translations["donate"][this.props.account.language]} className = 'hover'>
                     <Glyphicon glyph='usd'/> {isMobile ? translations["donate"][this.props.account.language] : ""}
                   </NavItem>
                 </LinkContainer>
-                <LinkContainer to={'/reports'}>
-                  <NavItem title={translations["reports"][this.props.account.language]} className = 'hover'>
-                    <Glyphicon glyph='list-alt' /> {isMobile ? translations["reports"][this.props.account.language] : ""}
+                <LinkContainer to={'/cart'} exact disabled={!this.props.isLoggedIn}>
+                  <NavItem title={translations["cart"][this.props.account.language]} className = 'hover'>
+                    <NotificationBadge 
+                      className="notification-badge" 
+                      count={this.props.account.cartItems} 
+                      effect={Effect.SCALE}
+                      style={{top: '-11px', left: '', bottom: '', right: '-5px'}}
+                      />
+                    <Glyphicon glyph='shopping-cart'/> {isMobile ? translations["cart"][this.props.account.language] : ""}
                   </NavItem>
                 </LinkContainer>
-                <LinkContainer to={'/account'} exact>
+                <LinkContainer to={'/account'} exact disabled={!this.props.isLoggedIn}>
                   <NavItem  title={translations["account"][this.props.account.language]} className = 'hover'>
                     <Glyphicon glyph='user'/> {isMobile ? translations["account"][this.props.account.language] : ""}
                   </NavItem>
                 </LinkContainer>
-                {this.props.account.isAdmin && <LinkContainer to={'/admin'} exact>
-                  <NavItem  title={translations["admin"][this.props.account.language]} className = 'hover'>
-                    <Glyphicon glyph='cog'/> {isMobile ? translations["admin"][this.props.account.language] : ""}
+                {/* <LinkContainer to={'/reports'}>
+                  <NavItem title={translations["reports"][this.props.account.language]} className = 'hover'>
+                    <Glyphicon glyph='list-alt' /> {isMobile ? translations["reports"][this.props.account.language] : ""}
                   </NavItem>
-                </LinkContainer>}
+                </LinkContainer> */}
               </Nav>
               </Navbar.Collapse>
 
-            {this.props.isLoading && <div className="spinner">
-              <PropagateLoader
-                color={"lightgray"}
-                size={10}
-              />
-            </div>
+            {this.props.isLoading && 
+              <Navbar.Text className="log-in">
+                  Logging you in...
+              </Navbar.Text>
             }
 
             {!this.props.isLoading && !this.props.isLoggedIn &&            
@@ -162,6 +162,7 @@ NavMenu.propTypes = {
   account: PropTypes.shape({
     userID: PropTypes.number, 
     firstName: PropTypes.string, 
+    cartItems: PropTypes.number,
     isAdmin: PropTypes.bool
   }),
   showLogin: PropTypes.func,

@@ -79,6 +79,8 @@ namespace Ziwadi_Trade_Prototype
                 x => x.UpdateCurrencyRates(), Cron.Daily);
             RecurringJob.AddOrUpdate<IInventoryManager>(
                 x => x.DecrementInventory(), Cron.Daily);
+            RecurringJob.AddOrUpdate<IDonateService>(
+                x => x.UpdateDeliveredItems(), Cron.Daily);
 
             app.UseMvc(routes =>
             {

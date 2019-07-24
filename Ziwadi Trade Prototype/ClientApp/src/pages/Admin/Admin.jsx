@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { withRouter } from 'react-router';
 import { Button, Glyphicon } from 'react-bootstrap';
 import ReactTable from 'react-table';
-import { AdminSidebar } from '../../components/admin/AdminSidebar';
+import { AdminSidebar } from '../../components/Components';
 import * as _adminCalls from '../../API/AdminCalls';
 import '../../styles/Admin.css';
 import { toast } from 'react-smart-toaster';
 
 //const options = ["products", "users", "information"];
 
-export class Admin extends Component {
+class Admin extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -110,6 +112,18 @@ export class Admin extends Component {
   }
 
   render() {
+    let { isLoggedIn, isAdmin } = this.props;
+    if(!isLoggedIn) {
+      toast.error("You must be logged in to access this page.");
+      this.props.history.push("/");
+      return null;
+    }
+    if(!isAdmin) {
+      toast.error("You do not have permission to access this page.");
+      this.props.history.push("/");
+      return null;
+    }
+
     let body;
     switch(this.state.selectedOptionsIndex){
       case 0:
@@ -132,4 +146,11 @@ export class Admin extends Component {
       </div>
     );
   }
-}
+};
+
+Admin.propTypes = {
+  isLoggedIn: PropTypes.bool,
+  isAdmin: PropTypes.bool
+};
+
+export default withRouter(Admin)

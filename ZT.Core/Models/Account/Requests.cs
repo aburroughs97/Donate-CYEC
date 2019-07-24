@@ -29,6 +29,7 @@ namespace ZT.Core.Models.Account
     {
         public User User { get; set; }
         public UserSession UserSession { get; set; }
+        public int CartItems { get; set; }
         public string LanguageName { get; set; }
         public Currency.Currency CurrencyCode { get; set; }
     }
