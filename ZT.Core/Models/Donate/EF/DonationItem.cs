@@ -11,5 +11,6 @@ namespace ZT.Core.Models.Donate
         public int ItemID { get; set; }
         public decimal TotalAmount { get; set; }
         public int? NumberOfItems { get; set; }
+        public int CurrencyID { get; set; }
     }
 }

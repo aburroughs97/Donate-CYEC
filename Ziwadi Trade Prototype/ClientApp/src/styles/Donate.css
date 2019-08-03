@@ -1,6 +1,19 @@
+.donate-items::-webkit-scrollbar-track {
+  border: none;
+}
+
+.donate-items::-webkit-scrollbar {
+  width: 12px;
+}
+
+.donate-items::-webkit-scrollbar-thumb {
+  background: #BF2E1B;
+  border-radius: 10px;
+}
+
 .header {
   width: 100%;
-  height: 15%;
+  height: 100px;
   float: top;
   overflow: none;
   display: flex;
@@ -16,10 +29,11 @@
 
 .donate-items {
   overflow: auto;
-  width: 85%;
-  float: left;
+  width: 80%;
   height: 85%;
-  padding: 1%; 
+  padding: 1%;
+  margin-left: 10%;
+  margin-right: 10%;
 }
 
 .donate-items .empty-items {
@@ -32,25 +46,97 @@
 }
 
 .donate-sidebar {
-  width: 15%;
-  height: 85%;
-  border-right: 2px solid #BF2E1B;
-  float: left;
+  transition: all .2s ease-in-out;
+  width: 200px;
+  border: 2px solid #BF2E1B;
+  background-color: white;
+  border-top: none;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  position: absolute;
+  left: 10px;
   text-align: center;
+  overflow: hidden;
+  z-index: 1;
+
+  overflow-y: hidden;
+  max-height: 0px;
+  border-bottom: none;
+  padding: 0px;
 }
 
-.donate-sidebar .filter-dropdown {
+.donate-sidebar.show {
+  max-height: 350px;
+  border-bottom: 2px solid #BF2E1B;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.donate-sidebar-btn {
+  position: absolute;
+  left: 40px;
+  width: 140px;
+  height: 40px;
+  background-color: #BF2E1B;
+  color: white;
+  text-align: center;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  transition: all .2s ease-in-out 0s;
+  cursor: pointer;
+  z-index: 2;
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 40px;
+}
+
+.donate-sidebar-btn:hover {
+  transform: scale(1.1);
+}
+
+.donate-sidebar-btn .filter-icon {
+  color: white;
+  text-align: center;
+  margin-left: 5px;
+}
+
+.donate-sidebar-btn .text {
+  margin-bottom: 10px;
+  height: 20px;
+}
+
+.donate-sidebar-btn.expanded {
+  margin-top: 350px;
+}
+
+.donate-sidebar .filter-dropdown {  
   width: 100%;
 }
 
 .donate-sidebar .dropdown {
-  width: 60%;
-  margin-bottom: 5%;
+  margin-left: 40px;
+  margin-right: 40px;
+  width: 120px;
+  margin-bottom: 5px;
 }
 
 .donate-sidebar .filter-label {
+  margin-left: 20px;
+  margin-right: 20px;
+  width: 160px;
   margin-bottom: 0;
   font-weight: bold;
+}
+
+.donate-sidebar .clear-btn {
+  margin-left: 50px;
+  margin-right: 50px;
+  width: 100px;
+}
+
+.donate-sidebar .dropdown-menu {
+  left: -20px;
+  text-align: center;
 }
 
 .header .logo {
@@ -76,25 +162,42 @@
   border-color: #BF2E1B;
 }
  
-.col-15 {
+.item-preview .img-container {
   height: 100%;
-  width: 25%;
+  width: 145px;
   float: left;
   padding-right: 1%;
 }
 
-.col-85 {
+.item-preview .info-container {
   height: 100%;
-  width: 75%;
+  width: calc(100% - 145px);
+  padding-left: 10px;
   float: left;
 }
 
 .item-preview {
   width: 50%;
   height: 220px;
-  float: right;
   padding: 1%;
   float: left;
+  border-radius: 5px;
+  overflow-y: hidden;
+  position: relative;
+}
+
+.item-preview:after {
+  content:"";
+  position:absolute;
+  bottom: 0px;
+  left:0;
+  height:50px;
+  width:100%;
+  background: linear-gradient(transparent 20px, white);
+}
+
+.item-preview:hover:after {
+  background: linear-gradient(transparent 20px, lightgray);
 }
 
 .item-preview .progress {
@@ -103,27 +206,27 @@
   height: 20px;
 }
 
-.item-preview .need-warning {
+.need-warning {
   color: darkgoldenrod;
   margin-top: 1%;
 }
 
-.item-preview .need-danger {
+.need-danger {
   color: darkred;
   margin-top: 1%;
 }
 
-.item-preview .need-success {
+.need-success {
   color: darkgreen;
   margin-top: 1%;
 }
 
-.item-preview .need-info {
+.need-info {
   color: #5bc0de;
   margin-top: 1%;
 }
 
-.item-preview .need-default {
+.need-default {
   color: #337ab7;
   margin-top: 1%;
 }
@@ -137,7 +240,7 @@
 }
 
 .item-preview img {
-  border: 2px solid lightgray;
+  /* border: 2px solid lightgray; */
   background-color: lightgray;
 }
 
@@ -148,10 +251,6 @@
 
 .item-preview p {
   margin: 0px;
-}
-
-.item-preview {
-  border-radius: 5px;
 }
 
 .item-preview:hover {
@@ -279,15 +378,22 @@
   float: left;
 }
 
-.item-view .equation-top {
+.item-view .equation {
   width: 100%;
   text-align: right;
 }
 
 .item-view .equation-bottom {
+  width: 200px;
+  float: right;
+  border-bottom: 2px solid black;
+}
+
+.item-view .equation-result {
   width: 100%;
-  text-align: right;
-  border-bottom: 1px solid black;
+  font-weight: bold;
+  float: right;
+  margin-bottom: 0px;
 }
 
 .item-view .btn {
@@ -318,7 +424,9 @@
 }
 
 .donate-tutorial {
-  width: 65%;
+  width: 50%;
+  opacity: .9;
+  margin-top: calc(9%);
 }
 
 .donate-tutorial .logo {
@@ -334,7 +442,7 @@
 }
 
 .donate-tutorial .carousel-inner {
-  height: 500px;
+  height: 400px;
 }
 
 .donate-tutorial .carousel-inner .item {
@@ -364,17 +472,19 @@
 }
 
 .donate-tutorial .next-btn {
-  font-size: 100px;
+  font-size: 75px;
   color: lightgray;
   cursor: pointer;
-  float: right;
   margin-right: 2%;
+  margin-top: 13px;
+  float: right;
 }
 
 .donate-tutorial .prev-btn {
-  font-size: 100px;
+  font-size: 75px;
   color: lightgray;
   cursor: pointer;
+  margin-top: 13px;
   float: left;
   margin-left: 2%;
 }
@@ -389,45 +499,187 @@
 
 .donate-tutorial .title {
   font-size: 45px;
+  font-weight: bold;
+  margin-top: 0px;
+}
+
+.donate-tutorial .info {
+  margin-top: 35px;
+  text-align: left;
+  font-size: 20px;
 }
 
 .donate-tutorial .list {
-  text-align: left;
-  font-size: 25px;
+  font-size: 20px;
+  margin-left: 0px;
 }
 
-.donate-tutorial .list li {
-  margin-bottom: 10px;
+.donate-tutorial .nomargin {
+  margin: 0px;
+}
+
+.donate-tutorial .list-head {
+  text-align: left;
+  margin-left: 10%;
+  font-weight: bold;
+}
+
+.donate-tutorial .list-footer {
+  font-weight: bold;
+}
+
+.donate-tutorial ul {
+  text-align: left;
+  margin-left: 12%;
 }
 
 .donate-tutorial .skip-btn {
   width: auto;
   position: absolute;
-  bottom: 30px;
+  bottom: 40px;
   left: 50%;
   transform: translateX(-50%);
 }
 
+.donate-tutorial .sublist {
+  margin-left: 0px;
+}
 .donate-tutorial .sublist li{
   margin-bottom: 0px;
 }
 
+.donate-tutorial .sample-container {
+  width: 100%;
+  height: 100px;
+}
+
+.donate-tutorial .need-input {
+  margin-top: 50px;
+  transform: translateY(-50%);
+  margin-left: 10%;
+  width: 90%;
+}
+
+.donate-tutorial .progress-bar-sample {
+  width: 50%;
+  float: left;
+}
+
+.donate-tutorial .close-btn {
+  width: auto;
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.donate-tutorial .progress {
+  height: 20px;
+  margin-bottom: 12px !important;
+}
+
+.donate-tutorial .progress.first {
+  margin-top: 2px;
+}
+
+.donate-tutorial .need-danger {
+  margin-top: 0px;
+  margin-bottom: 4px;
+}
+
+.donate-tutorial .need-warning {
+  margin-top: 0px;
+  margin-bottom: 4px;
+}
+
+.donate-tutorial .need-success {
+  margin-top: 0px;
+  margin-bottom: 4px;
+}
+
+.donate-tutorial .get-started {
+  width: 60%;
+  margin-left: 20%;
+  margin-right: 20%;
+  margin-top: 40px;
+  height: 100px;
+  background-image: none;
+  color: transparent;
+  background-color: #BF2E1B;
+  border-color: #BF2E1B;
+  font-size: 35px;
+}
+
+.donate-tutorial ul{
+  list-style: none;
+}
+
+.donate-tutorial .info ul li {
+  margin-left: 20px;  
+}
+
+/* Prevent nested li's from getting messed up */
+.donate-tutorial .info ul li::before {
+  content: "-";
+  margin-left: -15px;
+  margin-right: 5px;
+}
+
+.progress-bar-sample {
+  list-style: none;
+}
+
+.progress-bar-sample li {
+  margin-left: 20px;
+}
+
+.progress-bar-sample li::before {
+  content: "-";
+  margin-left: -15px;
+  margin-right: 5px;
+  font-weight: bold;
+}
+
+.donate-tutorial .get-started:hover {
+  color: #BF2E1B;
+  background-color: white;
+}
+
 @media screen and (max-width: 760px) {
-  .col-85 {
+  .item-preview .info-container {
     width: 100%;
   }
   
-  .col-15 {
+  .item-preview .img-container {
     width: 100%;
+    text-align: center;
+    height: 200px;
+  }
+
+  .item-preview {
+    height: 400px;
+    width: 48%;
+    margin-right: 1%;
+    margin-left: 1%;
   }
 
   .donate-items {
     width: 100%;
   }
 
-  /* REMOVE THIS AT SOME POINT */
-  .donate-sidebar {
-    display: none;
+  .header .search {
+    width: 80%;
+    margin-left: 10%;
+  }
+
+  .header .search .search-group{
+    width: 80%;
+  }
+
+  .header .logo {
+    max-width: 35%;
+    height: auto;
+    float: left;
   }
 }
 

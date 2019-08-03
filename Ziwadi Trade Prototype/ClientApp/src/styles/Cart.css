@@ -12,7 +12,7 @@
 }
 
 .cart-content .cart-items .items-container {
-  height: 55%; 
+  height: 340px; 
   width: 110%;
   padding-left: 5%;
   padding-right: 5%;
@@ -122,16 +122,12 @@
   height: 120px;
   z-index: 0;
   transition: all .2s ease-in-out;
-}
 
-/* Animate preview body here*/
-#fade-in {
   overflow-y: hidden;
   max-height: 0px;
-  opacity: 0px;
 }
 
-#fade-in.show {
+.cart-content .cart-item-preview .preview-body.show {
   max-height: 120px;
 }
 
@@ -374,3 +370,95 @@
   color: #BF2E1B;
   font-weight: bold;
 }
+
+.checkout .title-centered{
+  margin-top: 100px;
+}
+
+.checkout .input-group {
+  width: 250px;
+  margin-left: calc(50% - 125px);
+}
+
+.checkout .phone-number-addon {
+  font-size: 25px;
+  margin: 0px;
+  font-weight: bold;
+  color: #01573E;
+}
+
+.checkout .phone-number-input {
+  height: 50.4px;
+  font-size: 25px;
+  text-align: left;
+  font-weight: bold;
+}
+
+.checkout .next-btn {
+  color: #BF2E1B;
+  background-color: white;
+  background-image: none;
+  margin-top: 10px;
+  width: 15%;
+  font-size: 25px;
+}
+
+.checkout .next-btn:hover {
+  background-color: #BF2E1B;
+  color: transparent;
+}
+
+.checkout .mpesa-logo {
+  position: absolute;
+  left: 50%;
+  top: -160px;
+  width: 400px;
+  transform: translateX(-50%);
+}
+
+.checkout .payment-status {
+  width: 80%;
+  height: 70%;
+  margin-left: 10%;
+  margin-right: 10%;
+  border: 2px solid #01573E;
+}
+
+.checkout .spinner-container.payment {
+  padding-top: 50px;
+}
+
+.checkout .payment-status.rejected {
+  padding-top: 30px;
+}
+
+.checkout .payment-status h4{
+  font-size: 25px;
+  color: #01573E;
+  font-weight: bold;
+}
+
+.checkout .payment-status.rejected .verify-text {
+  color: #01573E;
+  margin-bottom: 120px;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.checkout .payment .mpesa-logo {
+  top: 80px;
+  width: 50%;
+  opacity: .2;
+  z-index: -1;
+}
+
+.checkout .payment-status .next-btn {
+  width: 200px;
+  color: #01573E;
+}
+
+.checkout .payment-status .next-btn:hover {
+  background-color: #01573E;
+  color: transparent;
+}
+

@@ -59,40 +59,42 @@ export default class ItemPreview extends Component {
   }
 
   render() {
-    let need = this.props.item.need;
+    let { item, language, currency } = this.props;
+    let need = item.need;
+    let needValue = need;
 
     let needLabel;
     let needColor;
-    if(this.props.item.itemType === "direct") {
+    if(item.itemType === "direct") {
       if(need <= .3) {
-        needLabel = need <= .15 ? translations["critical"][this.props.language] : translations["high"][this.props.language];
+        needLabel = need <= .15 ? translations["critical"][language] : translations["high"][language];
         needColor= "danger";
       }
       else if (need <= .6) {
-        needLabel = translations["medium"][this.props.language];
+        needLabel = translations["medium"][language];
         needColor = "warning";
       }
       else {
-        needLabel = need <= .9 ? translations["low"][this.props.language] : translations["verylow"][this.props.language];
+        needLabel = need <= .9 ? translations["low"][language] : translations["verylow"][language];
         needColor = "success";
       }  
-      needLabel = translations["need"][this.props.language] + ": " + needLabel;
+      needLabel = translations["need"][language] + ": " + needLabel;
     }
     else {
-      need = (need - .5) * 2;
-      needColor = this.props.item.itemType === "fund" ? "info" : "default";
-      needLabel = this.getFundLabel();
+      needColor = item.itemType === "fund" ? "info" : "default";
+      needValue = item.actualAmount / item.goalAmount;
+      needLabel = this.formatPrice(item.actualAmount) + " / " + this.formatPrice(item.goalAmount);
     }
 
     return (
       <div className="item-preview" onClick={() => this.props.itemClicked(this.props.item)}>
-        <div className="col-15">
+        <div className="img-container">
           <Img src={imageAPI + this.props.item.itemID} height={145} width={145} alt={this.props.item.title}/>
           <p className={"need-" + needColor}><b>{needLabel}</b></p>
-          {needColor !== "default" && <ProgressBar bsStyle={needColor} now={need * 100}/>}
-          {needColor === "default" && <ProgressBar now={need * 100}/>}
+          {needColor !== "default" && <ProgressBar bsStyle={needColor} now={needValue * 100}/>}
+          {needColor === "default" && <ProgressBar now={needValue * 100}/>}
         </div>
-        <div className = "col-85">
+        <div className = "info-container">
           <h4 className={!this.props.languageChanged ? "title" : "title-hidden"}> {this.props.item.title} </h4>
           <hr />
           <h4 className={!this.props.currencyChanged ? "price" : "price-hidden"}>{this.formatPrice(this.props.item.price)}</h4>

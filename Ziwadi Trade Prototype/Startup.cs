@@ -29,8 +29,11 @@ namespace Ziwadi_Trade_Prototype
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
+            var connectionString = Configuration.GetConnectionString("LocalHost");
+
             services.AddDbContext<DBContext>(options =>
-               options.UseMySql(Configuration.GetConnectionString("AWSDefault")));
+                    options.UseMySql(connectionString));
+
 
             services.AddServices();
             services.AddData();
@@ -39,7 +42,7 @@ namespace Ziwadi_Trade_Prototype
             services.AddHangfire(configuration => {
                 configuration.UseStorage(
                     new MySqlStorage(
-                        Configuration.GetConnectionString("AWSDefault"),
+                        connectionString,
                         new MySqlStorageOptions
                         {
                             TablePrefix = "Hangfire"
@@ -80,7 +83,9 @@ namespace Ziwadi_Trade_Prototype
             RecurringJob.AddOrUpdate<IInventoryManager>(
                 x => x.DecrementInventory(), Cron.Daily);
             RecurringJob.AddOrUpdate<IDonateService>(
-                x => x.UpdateDeliveredItems(), Cron.Daily);
+                x => x.UpdateReadyItems(), Cron.Daily);
+            RecurringJob.AddOrUpdate<IAdminService>(
+                x => x.RemoveUndeliveredDropOffs(), Cron.Daily);
 
             app.UseMvc(routes =>
             {

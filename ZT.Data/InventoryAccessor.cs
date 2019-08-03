@@ -11,6 +11,7 @@ namespace ZT.Data
     {
         Result AddInventoryItem(InventoryItem item);
         Result RemoveInventoryItem(int itemID);
+        Result UpdateInventoryItem(int itemID, decimal actualAmount, decimal goalAmount, bool autoDecrement, decimal decrementPerDay);
         Result UpdateInventoryItem(InventoryItem item);
         Result<InventoryItem> GetItem(int itemID);
         Result<List<InventoryItem>> GetActiveInventoryItems();
@@ -81,10 +82,29 @@ namespace ZT.Data
             }
         }
 
-        public Result UpdateInventoryItem(InventoryItem item)
+        public Result UpdateInventoryItem(int itemID, decimal actualAmount, decimal goalAmount, bool autoDecrement, decimal decrementPerDay)
         {
             try
             {
+                var item = (from x in _dbContext.InventoryItem where x.ItemID == itemID select x).First();
+                item.ActualAmount = actualAmount;
+                item.GoalAmount = (int)goalAmount;
+                item.AutoDecrement = autoDecrement;
+                item.DecrementPerDay = decrementPerDay;
+                _dbContext.InventoryItem.Update(item);
+                _dbContext.SaveChanges();
+                return new Result(true);
+            }
+            catch (Exception ex)
+            {
+                return new Result(false, ex.Message);
+            }
+        }
+
+        public Result UpdateInventoryItem(InventoryItem item)
+        {
+            try
+            { 
                 _dbContext.InventoryItem.Update(item);
                 _dbContext.SaveChanges();
                 return new Result(true);

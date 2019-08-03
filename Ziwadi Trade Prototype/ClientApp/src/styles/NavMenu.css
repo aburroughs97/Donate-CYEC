@@ -1,6 +1,10 @@
-﻿.navbar .currency-dropdown
-{
+﻿.navbar .currency-dropdown {
     float: left;
+}
+
+.navbar .language-dropdown {
+    float: left;
+    margin-right: 2px;
 }
 
 .navbar .nav-links {
@@ -83,8 +87,10 @@
 
     .navbar-collapse {
         float: left;
-        width: 80%;
-        margin-top: 10%;
+        width: 100%;
+        padding-left: 10%;
+        padding-right: 10%;
+        margin-top: 0px;
     }
   }
 
@@ -111,8 +117,10 @@
 
     .navbar-collapse {
         float: left;
-        width: 80%;
-        margin-top: 12%;
+        width: 100%;
+        padding-left: 10%;
+        padding-right: 10%;
+        margin-top: 0px;
     }
   }
 

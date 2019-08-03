@@ -26,8 +26,8 @@ export function CheckCart(userID) {
   return apiGet(url + `CheckCart?userID=${userID}`);
 }
 
-export function AddToCart(userID, itemID, totalAmount, numItems) {
-  return apiGet(url + `AddToCart?userID=${userID}&itemID=${itemID}&totalAmount=${totalAmount}&numItems=${numItems}`);
+export function AddToCart(userID, itemID, totalAmount, numItems, currency) {
+  return apiGet(url + `AddToCart?userID=${userID}&itemID=${itemID}&totalAmount=${totalAmount}&numItems=${numItems}&currencyCode=${currency}`);
 }
 
 export function UpdateCartItem(item) {
@@ -38,10 +38,10 @@ export function RemoveCartItem(userID, itemID) {
   return apiGet(url + `RemoveCartItem?userID=${userID}&itemID=${itemID}`)
 }
 
-export function MakeDropOffDonation(userID, date) {
-  return apiGet(url + `MakeDropOffDonation?userID=${userID}&deliveryDate=${date.toISOString()}`);
+export function MakeDropOffDonation(userID, date, currency) {
+  return apiGet(url + `MakeDropOffDonation?userID=${userID}&deliveryDate=${date.toISOString()}&currencyCode=${currency}`);
 }
 
-export function FixItems() {
-  return apiGet(url + "FixItems");
+export function CheckDonationStatus(donationID) {
+  return apiGet(url + `CheckDonationStatus?donationID=${donationID}`);
 }

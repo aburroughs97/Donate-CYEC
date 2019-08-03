@@ -13,10 +13,6 @@ const translations = {
   "donate": {
     "English": "Donate Now",
     "Swahili": "Saidia Sasa"
-  },
-  "logindonate": {
-    "English": "Log In and Donate",
-    "Swahili": "Ingia na Saidia"
   }
 }
 
@@ -54,39 +50,75 @@ export class Home extends Component {
   render() {
     return (
         <div className="content">
-          <img
-            alt="CYEC-Logo"
-            src={logo}
-            className="logo"
-          />
-          <Carousel controls indicators slide interval={3000} className="pic-carousel">
-            <CarouselItem animtateIn animateOut>
-              <img src={images('./1.JPG')} className="carousel-image"/>
+          <Carousel controls indicators slide interval={3500} className="pic-carousel">
+            <CarouselItem animateIn animateOut>
+              <img
+                alt="CYEC-Logo"
+                src={logo}
+                className="logo"
+              />
+              <img src={images('./1.JPG')} alt="" className="carousel-image"/>
             </CarouselItem>
-            <CarouselItem animtateIn animateOut>
-              <img src={images('./3.JPG')} className="carousel-image"/>
+            <CarouselItem animateIn animateOut>
+              <img
+                alt="CYEC-Logo"
+                src={logo}
+                className="logo"
+              />
+              <img src={images('./3.JPG')} alt="" className="carousel-image"/>
             </CarouselItem>
-            <CarouselItem animtateIn animateOut>
-              <img src={images('./4.JPG')} className="carousel-image"/>
+            <CarouselItem animateIn animateOut>
+              <img
+                alt="CYEC-Logo"
+                src={logo}
+                className="logo"
+              />
+              <img src={images('./4.JPG')} alt="" className="carousel-image"/>
             </CarouselItem>
-            <CarouselItem animtateIn animateOut>
-              <img src={images('./5.JPG')} className="carousel-image"/>
+            <CarouselItem animateIn animateOut>
+              <img
+                alt="CYEC-Logo"
+                src={logo}
+                className="logo"
+              />
+              <img src={images('./5.JPG')} alt="" className="carousel-image"/>
             </CarouselItem>
-            <CarouselItem animtateIn animateOut>
-              <img src={images('./6.JPG')} className="carousel-image"/>
+            <CarouselItem animateIn animateOut>
+              <img
+                alt="CYEC-Logo"
+                src={logo}
+                className="logo"
+              />
+              <img src={images('./6.JPG')} alt="" className="carousel-image"/>
             </CarouselItem>
           </Carousel>
-          <h1 className="title">Welcome to the CYEC Donation Center</h1>
-          <hr />
+          <div className="col-50">
+            <h1 className="title">Welcome to the CYEC's Donation Center!</h1>
+
+          </div>
+          <div className="col-50 last">
           <p className="info">
             Thank you for your interest in supporting the Children and Youth Empowerment Centre!
-             We created this website to help communicate the needs of the CYEC and allow you to donate 
-             directly to meet those needs. Our goal is to help you better understand the impact your 
+             Here, you will find the current needs of the CYEC and have the opportunity to donate directly to those needs.
+              Our goal is to help you better understand the impact your 
              donation can have at the CYEC. For more information about our vision, current projects, and future goals
              check out <a href="http://www.cyec.net" rel="noopener noreferrer" target="_blank" className="modal-link">cyec.net</a>.
           </p>
-          {this.props.isLoggedIn && <Button className="donate-now-btn" onClick={this.donateNowClick}>{translations["donate"][this.props.language]}</Button>}
-          {!this.props.isLoggedIn && <Button className="donate-now-btn" onClick={this.loginDonateClick}>{translations["logindonate"][this.props.language]}</Button>}
+          </div>
+
+          {/* <div className="col-33">
+            <h1>Our Story</h1>
+            <hr />
+          </div>
+          <div className="col-33">
+            <h1>Our Future</h1>
+            <hr />
+          </div>
+          <div className="col-33 last-col">
+            <h1>How You Can Help</h1>
+            <hr />
+          </div> */}
+          <Button className="donate-now-btn" onClick={this.donateNowClick}>{translations["donate"][this.props.language]}</Button>
         </div>
     );
   }

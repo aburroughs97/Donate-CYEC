@@ -74,7 +74,6 @@ export default class CartFundItemView extends Component {
     this.formatPrice = this.formatPrice.bind(this);
     this.amountToDonateUpdated = this.amountToDonateUpdated.bind(this);
     this.onHide = this.onHide.bind(this);
-    this.getCurrentValue = this.getCurrentValue.bind(this);
     this.onUpdateClicked = this.onUpdateClicked.bind(this);
   }
 
@@ -103,12 +102,13 @@ export default class CartFundItemView extends Component {
   }
 
   amountToDonateUpdated(amountToDonate) {
-    let roundDigits = this.props.currency.roundDigits > 0 ? this.props.currency.roundDigits : 0;
+    let { currency, item } = this.props;
+    let roundDigits = currency.roundDigits > 0 ? currency.roundDigits : 0;
 
     if(amountToDonate < 0) return;
-    else if(this.getCurrentValue(amountToDonate) > this.props.item.price) {
+    else if((amountToDonate + item.actualAmount) > item.goalAmount) {
       this.setState({
-        amountToDonate: Number.parseFloat((this.props.item.price - this.getCurrentValue(0)).toFixed(roundDigits))
+        amountToDonate: Number.parseFloat((item.goalAmount - item.actualAmount).toFixed(roundDigits))
       });
     }
     else {
@@ -118,9 +118,11 @@ export default class CartFundItemView extends Component {
     }
   }
 
+
   calcMaxInputValue() {
-    let roundDigits = this.props.currency.roundDigits > 0 ? this.props.currency.roundDigits : 0;
-    return Number.parseFloat((this.props.item.price - this.getCurrentValue(0)).toFixed(roundDigits));
+    let { currency, item } = this.props;
+    let roundDigits = currency.roundDigits > 0 ? currency.roundDigits : 0;
+    return Number.parseFloat((item.goalAmount - item.actualAmount).toFixed(roundDigits));
   }
 
   calcInputIncrement() {
@@ -140,15 +142,6 @@ export default class CartFundItemView extends Component {
     this.props.hide();
   }
 
-  getCurrentValue(amount) {
-    let ratio = (this.props.item.need - .5) * 2;
-    return (ratio * this.props.item.price) + amount;
-  }
-
-  getFundLabel() {
-    return this.formatPrice(this.getCurrentValue(this.state.amountToDonate)) + " / " + this.formatPrice(this.props.item.price);
-  }
-
   render() {
     let { item, cartItem, language } = this.props;
     let { amountToDonate } = this.state;
@@ -156,14 +149,11 @@ export default class CartFundItemView extends Component {
       return null;
     }
 
-    let need = this.getCurrentValue(amountToDonate) / item.price;
-    if(need > 1) {
-      need = 1;
-    }
-    let itemNeed = this.getCurrentValue(0) / item.price;
+    let need = (item.actualAmount + amountToDonate) / item.goalAmount;
+    let itemNeed = item.actualAmount / item.goalAmount;
     let needColor = item.itemType === "fund" ? "info" : "default";
-    let needLabel = this.getFundLabel();
-    let needBarLabel = (need * 100).toFixed(0) + "%";
+    let needLabel = this.formatPrice((amountToDonate + item.actualAmount)) + " / " + this.formatPrice(item.goalAmount);
+    let needBarLabel = "";
     // let needDescription = "This is a description of the above fund and how it works."
 
     let formattedPrice = this.formatPrice(item.price);

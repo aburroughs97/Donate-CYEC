@@ -62,7 +62,6 @@ export default class FundItemView extends Component {
     this.formatPrice = this.formatPrice.bind(this);
     this.amountToDonateUpdated = this.amountToDonateUpdated.bind(this);
     this.onHide = this.onHide.bind(this);
-    this.getCurrentValue = this.getCurrentValue.bind(this);
     this.onDonateClicked = this.onDonateClicked.bind(this);
   }
 
@@ -78,12 +77,13 @@ export default class FundItemView extends Component {
   }
 
   amountToDonateUpdated(amountToDonate) {
-    let roundDigits = this.props.currency.roundDigits > 0 ? this.props.currency.roundDigits : 0;
+    let { currency, item } = this.props;
+    let roundDigits = currency.roundDigits > 0 ? currency.roundDigits : 0;
 
     if(amountToDonate < 0) return;
-    else if(this.getCurrentValue(amountToDonate) > this.props.item.price) {
+    else if((amountToDonate + item.actualAmount) > item.goalAmount) {
       this.setState({
-        amountToDonate: Number.parseFloat((this.props.item.price - this.getCurrentValue(0)).toFixed(roundDigits))
+        amountToDonate: Number.parseFloat((item.goalAmount - item.actualAmount).toFixed(roundDigits))
       });
     }
     else {
@@ -94,8 +94,9 @@ export default class FundItemView extends Component {
   }
 
   calcMaxInputValue() {
-    let roundDigits = this.props.currency.roundDigits > 0 ? this.props.currency.roundDigits : 0;
-    return Number.parseFloat((this.props.item.price - this.getCurrentValue(0)).toFixed(roundDigits));
+    let { currency, item } = this.props;
+    let roundDigits = currency.roundDigits > 0 ? currency.roundDigits : 0;
+    return Number.parseFloat((item.goalAmount - item.actualAmount).toFixed(roundDigits));
   }
 
   calcInputIncrement() {
@@ -115,32 +116,22 @@ export default class FundItemView extends Component {
     this.props.hide();
   }
 
-  getCurrentValue(amount) {
-    let ratio = (this.props.item.need - .5) * 2;
-    return (ratio * this.props.item.price) + amount;
-  }
-
-  getFundLabel() {
-    return  this.formatPrice(this.getCurrentValue(this.state.amountToDonate)) + " / " + this.formatPrice(this.props.item.price);
-  }
-
   onDonateClicked(donateNow) {
     this.props.onDonate(this.props.item.itemID, this.state.amountToDonate, donateNow);
     this.onHide();
   }
 
   render() {
-    if(this.props.item === null) {
+    let { item, language } = this.props;
+    let { amountToDonate } = this.state;
+    if(item === null || item.itemType === "direct") {
       return null;
     }
 
-    let need = this.getCurrentValue(this.state.amountToDonate) / this.props.item.price;
-    if(need > 1) {
-      need = 1;
-    }
-    let itemNeed = this.getCurrentValue(0) / this.props.item.price;
-    let needColor = this.props.item.itemType === "fund" ? "info" : "default";
-    let needLabel = this.getFundLabel();
+    let need = (item.actualAmount + amountToDonate) / item.goalAmount;
+    let itemNeed = item.actualAmount / item.goalAmount;
+    let needColor = item.itemType === "fund" ? "info" : "default";
+    let needLabel = this.formatPrice((amountToDonate + item.actualAmount)) + " / " + this.formatPrice(item.goalAmount);
     let needBarLabel = (need * 100).toFixed(0) + "%";
     // let needDescription = "This is a description of the above fund and how it works."
 
@@ -157,15 +148,15 @@ export default class FundItemView extends Component {
       >
       <Modal.Header closeButton className="modal-header">
         <Modal.Title>
-          <b>{this.props.item.title + " (" + formattedPrice + ")"}</b>
+          <b>{item.title + " (" + formattedPrice + ")"}</b>
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <div className="item-info">
-          <Img src={imageAPI + this.props.item.itemID} height={200} width={200} alt={this.props.item.title}/>
-           <p><b>{translations["description"][this.props.language]}:</b></p>
+          <Img src={imageAPI + item.itemID} height={200} width={200} alt={item.title}/>
+           <p><b>{translations["description"][language]}:</b></p>
            <hr />
-           <p className="description">{this.props.item.description}</p>
+           <p className="description">{item.description}</p>
          </div>
          <div className="need-data">
           <h4 className={"need-" + needColor}><b>{needLabel}</b></h4>
@@ -182,10 +173,20 @@ export default class FundItemView extends Component {
           }
          </div>
          {/* <p className="need-description">{needDescription}</p> */}
-          <hr />
-          <p className="equation-top">Amount To Donate: <NumericInput min={0} max={this.calcMaxInputValue()} precision={2} value={this.state.amountToDonate} step={this.calcInputIncrement()} onChange={this.amountToDonateUpdated}/></p>
-          <Button className="donate-now btn" disabled={this.state.amountToDonate === 0} onClick={() => this.onDonateClicked(true)}><b>{translations["donateNow"][this.props.language]}</b></Button>      
-          <Button className="add-to btn" disabled={this.state.amountToDonate === 0} onClick={() => this.onDonateClicked(false)}><b>{translations["addTo"][this.props.language]}</b></Button>
+         {this.props.isLoggedIn && 
+          <div>
+            <hr />
+            <p className="equation-top">Amount To Donate: <NumericInput min={0} max={this.calcMaxInputValue()} precision={2} value={amountToDonate} step={this.calcInputIncrement()} onChange={this.amountToDonateUpdated}/></p>
+            <Button className="donate-now btn" disabled={amountToDonate === 0} onClick={() => this.onDonateClicked(true)}><b>{translations["donateNow"][language]}</b></Button>      
+            <Button className="add-to btn" disabled={amountToDonate === 0} onClick={() => this.onDonateClicked(false)}><b>{translations["addTo"][language]}</b></Button>
+          </div>
+        }
+        {!this.props.isLoggedIn &&
+          <div>
+            <hr />
+            <p>You must be logged in to donate. <span className="modal-link" onClick={this.props.forceLogin}>Log in now.</span></p>
+          </div>
+        }
       </Modal.Body>
     </Modal>
     );}
@@ -199,7 +200,8 @@ FundItemView.propTypes = {
     price: PropTypes.number,
     description: PropTypes.string,
     need: PropTypes.number,
-    imagePath: PropTypes.string,
+    goalAmount: PropTypes.number,
+    actualAmount: PropTypes.number,
   }),
   currency: PropTypes.shape({
     code: PropTypes.string,
@@ -211,5 +213,6 @@ FundItemView.propTypes = {
   hide: PropTypes.func,
   language: PropTypes.string,
   onDonate: PropTypes.func,
-  showDonateButtons: PropTypes.bool
+  isLoggedIn: PropTypes.bool,
+  forceLogin: PropTypes.func,
 }

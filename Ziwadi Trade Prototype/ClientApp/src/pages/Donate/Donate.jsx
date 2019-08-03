@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 // import ReactPaginate from 'react-paginate';
 import { Header, ItemPreview, DirectItemView, FundItemView, DonateTutorial } from '../../components/Components';
-import { DropdownButton, MenuItem, Button } from 'react-bootstrap';
+import { DropdownButton, MenuItem, Button, Glyphicon } from 'react-bootstrap';
 import { toast } from 'react-smart-toaster';
 import { MetroSpinner } from 'react-spinners-kit';
 import * as _donateCalls from '../../API/DonateCalls'
@@ -76,6 +76,8 @@ const translations= {
   }
 }
 
+const hideTutorialKey = "HideTutorial";
+
 class Donate extends Component {
   constructor(props) {
     super(props);
@@ -92,7 +94,8 @@ class Donate extends Component {
       loadingItems: true,
       languageChanged: false,
       currencyChanged: false,
-      showTutorial: false
+      showTutorial: false,
+      showSidebar: false,
     };
 
     this.onSearch = this.onSearch.bind(this);
@@ -103,6 +106,8 @@ class Donate extends Component {
     this.clearFilters = this.clearFilters.bind(this);
     this.onDirectDonation = this.onDirectDonation.bind(this);
     this.onFundDonation = this.onFundDonation.bind(this);
+    this.toggleSidebar = this.toggleSidebar.bind(this);
+    this.hideTutorial = this.hideTutorial.bind(this);
   }
 
   updateItems(language, currency) {
@@ -121,7 +126,12 @@ class Donate extends Component {
 
   componentDidMount() {
     this.updateItems(this.props.language, this.props.currency);
-    //Check cookies for tutorial
+    let hide = this.props.cookies.get(hideTutorialKey);
+    if(!hide) {
+      this.setState({
+        showTutorial: true
+      });
+    }
   }
 
   onSearch(searchValue) {
@@ -161,7 +171,7 @@ class Donate extends Component {
   }
 
   onDirectDonation(itemID, name, price, numItems, donateNow) {      
-    _donateCalls.AddToCart(this.props.userID, itemID, numItems * price, numItems)
+    _donateCalls.AddToCart(this.props.userID, itemID, numItems * price, numItems, this.props.currency.code)
     .then((response) => {
       if(response.isSuccess) {
         this.props.cartUpdated(response.payload, true);
@@ -176,7 +186,7 @@ class Donate extends Component {
   }
 
   onFundDonation(itemID, amount, donateNow) {
-      _donateCalls.AddToCart(this.props.userID, itemID, amount, null)
+      _donateCalls.AddToCart(this.props.userID, itemID, amount, null, this.props.currency.code)
       .then((response) => {
         if(response.isSuccess) {
           this.props.cartUpdated(response.payload, true);
@@ -188,6 +198,11 @@ class Donate extends Component {
           toast.error("Error adding donation of " + amount + " to cart: " + response.message);
         }
       });
+  }
+
+  toggleSidebar() {
+    let { showSidebar } = this.state;
+    this.setState({ showSidebar: !showSidebar });
   }
 
   updateFilter(key, filterType) {
@@ -255,21 +270,22 @@ class Donate extends Component {
     });
   }
 
-  render() {
-    if(!this.props.isLoggedIn) {
-      toast.error("You must log in first.");
-      this.props.history.push("/");
-      return null;
-    }
+  hideTutorial() {
+    this.props.cookies.set(hideTutorialKey, true);
+    this.setState({
+      showTutorial: false,
+    });
+  }
 
+  render() {
     let filteredItems = this.filterItems();
     return (
       <div className="donate-content">
         <Header onSearch={this.onSearch} searchSuggestions={this.state.items.map(x => x.title)} language={this.props.language}/>
-        <div className="donate-sidebar">
-          <h2>{translations["filter"][this.props.language]}:</h2>
-          <hr />
-
+        <div className={"donate-sidebar-btn " + (this.state.showSidebar ? "expanded" : "")} onClick={this.toggleSidebar}>
+          <p className="text">Filters <Glyphicon glyph={this.state.showSidebar ? "chevron-up" : "chevron-down"} className="filter-icon" /> </p> 
+        </div>
+        <div id="sidebar" className={"donate-sidebar " + (this.state.showSidebar ? "show" : "")}>
           <p className="filter-label">{translations["donationtype"][this.props.language]}:</p>
           <DropdownButton 
             id="type-dropdown" 
@@ -312,6 +328,7 @@ class Donate extends Component {
             id="name-dropdown" 
             title={translations[this.state.filters["need"]][this.props.language]} 
             onSelect={(key) => this.updateFilter(key, "need")}
+            disabled
             className="filter-dropdown"
           >
             <MenuItem eventKey="ltoh" disabled={this.state.filters["need"] === "ltoh"}>{translations["ltoh"][this.props.language]}</MenuItem>
@@ -319,7 +336,7 @@ class Donate extends Component {
           </DropdownButton>
 
           <hr />
-          <Button onClick={this.clearFilters}>
+          <Button onClick={this.clearFilters} className="clear-btn">
             {translations["clear"][this.props.language]}
           </Button>
         </div>
@@ -366,10 +383,30 @@ class Donate extends Component {
                 nextLabel={translations["next"][this.props.language]}
               />
             </div> */}
-          <DirectItemView item={this.state.selectedItem} currency={this.props.currency} backClicked={this.backClicked} show={this.state.selectedItem !== null && this.state.selectedItem.itemType === "direct"} hide={this.backClicked} language={this.props.language} onDonate={this.onDirectDonation} showDonateButtons/>
-          <FundItemView item={this.state.selectedItem} currency={this.props.currency} backClicked={this.backClicked} show={this.state.selectedItem !== null && this.state.selectedItem.itemType !== "direct"} hide={this.backClicked} language={this.props.language} onDonate={this.onFundDonation} showDonateButtons/>
+          <DirectItemView 
+            item={this.state.selectedItem} 
+            currency={this.props.currency} 
+            backClicked={this.backClicked} 
+            show={this.state.selectedItem !== null && this.state.selectedItem.itemType === "direct"} 
+            hide={this.backClicked} 
+            language={this.props.language} 
+            onDonate={this.onDirectDonation} 
+            isLoggedIn={this.props.isLoggedIn} 
+            forceLogin={this.props.forceLogin}
+          />
+          <FundItemView 
+            item={this.state.selectedItem} 
+            currency={this.props.currency} 
+            backClicked={this.backClicked} 
+            show={this.state.selectedItem !== null && this.state.selectedItem.itemType !== "direct"} 
+            hide={this.backClicked} 
+            language={this.props.language} 
+            onDonate={this.onFundDonation} 
+            isLoggedIn={this.props.isLoggedIn} 
+            forceLogin={this.props.forceLogin}
+          />
           
-          <DonateTutorial show={this.state.showTutorial} language={this.props.language} currency={this.props.currency} onHide={() => this.setState({ showTutorial: false })} />
+          <DonateTutorial show={this.state.showTutorial} language={this.props.language} currency={this.props.currency} onHide={this.hideTutorial} />
         </div>
       </div>
     );
@@ -378,6 +415,7 @@ class Donate extends Component {
 
 Donate.propTypes = {
   isLoggedIn: PropTypes.bool,
+  cookies: PropTypes.object,
   userID: PropTypes.number,
   language: PropTypes.string,
   currency: PropTypes.shape({
@@ -385,7 +423,8 @@ Donate.propTypes = {
     symbol: PropTypes.string,
     symbolBefore: PropTypes.bool
   }),
-  cartUpdated: PropTypes.func
+  cartUpdated: PropTypes.func,
+  forceLogin: PropTypes.func,
 }
 
 export default withRouter(Donate);

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -11,6 +12,7 @@ namespace ZT.Services
         string CreateSaltKey(int size);
         string CreatePasswordHash(string password, string saltkey);
         string CreateHash(byte[] data, string hashAlgorithm);
+        string GenerateMPESAPassword(string shortCode, string passKey, string timestamp);
     }
 
     public class EncryptionService : IEncryptionService
@@ -64,6 +66,12 @@ namespace ZT.Services
 
             var hashByteArray = algorithm.ComputeHash(data);
             return BitConverter.ToString(hashByteArray).Replace("-", string.Empty);
+        }
+
+        public string GenerateMPESAPassword(string shortCode, string passKey, string timestamp)
+        {
+            var pass = (shortCode + passKey + timestamp).Select(x => (byte)x).ToArray();
+            return Convert.ToBase64String(pass);
         }
     }
 }

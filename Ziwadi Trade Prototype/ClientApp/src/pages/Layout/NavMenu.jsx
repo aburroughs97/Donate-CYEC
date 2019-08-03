@@ -28,6 +28,10 @@ const translations= {
     "English": "Donation Cart",
     "Swahili": "Kikapu cha Mchango"
   },
+  "admin": {
+    "English": "Admin",
+    "Swahili": "Admin"
+  },
   "login": {
     "English": "Log In/Create Account",
     "Swahili": "Fungua Akaunti/Tengeneza Akaunti"
@@ -104,7 +108,7 @@ export class NavMenu extends Component {
                     <Glyphicon glyph='home'/> {isMobile ? translations["home"][this.props.account.language] : ""}
                   </NavItem>
                 </LinkContainer>
-                <LinkContainer to={'/donate'} exact disabled={!this.props.isLoggedIn}>
+                <LinkContainer to={'/donate'} exact>
                   <NavItem  title={translations["donate"][this.props.account.language]} className = 'hover'>
                     <Glyphicon glyph='usd'/> {isMobile ? translations["donate"][this.props.account.language] : ""}
                   </NavItem>
@@ -125,11 +129,11 @@ export class NavMenu extends Component {
                     <Glyphicon glyph='user'/> {isMobile ? translations["account"][this.props.account.language] : ""}
                   </NavItem>
                 </LinkContainer>
-                {/* <LinkContainer to={'/reports'}>
-                  <NavItem title={translations["reports"][this.props.account.language]} className = 'hover'>
-                    <Glyphicon glyph='list-alt' /> {isMobile ? translations["reports"][this.props.account.language] : ""}
+                {this.props.account.isAdmin && <LinkContainer to={'/admin'}>
+                  <NavItem title={translations["admin"][this.props.account.language]} className = 'hover'>
+                    <Glyphicon glyph='cog' /> {isMobile ? translations["admin"][this.props.account.language] : ""}
                   </NavItem>
-                </LinkContainer> */}
+                </LinkContainer>}
               </Nav>
               </Navbar.Collapse>
 

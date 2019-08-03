@@ -7,6 +7,7 @@ body {
 .body {
   height: 100%;
   width: 100%;
+  overflow: auto;
 }
 
 .layout-content{
@@ -19,6 +20,7 @@ body {
   padding-right: 2%;
   width: 100%;
   flex-grow: 1;
+  overflow: hidden;
 }
 
 .change-account {
@@ -38,6 +40,7 @@ body {
   float: left;
   width: 73%;
   height: 98%;
+  text-align: center;
 }
 
 .account-content .ReactTable {
@@ -53,7 +56,7 @@ body {
 .table-btn:hover {
   background-color: #BF2E1B;
   background-image: none;
-  color: white;
+  color: transparent;
 }
 
 .sidebar-header {
@@ -94,6 +97,24 @@ body {
 
 .invisible {
   color: white;
+}
+
+.account-content .table-cell .success {
+  color: #01573E;
+}
+
+.account-content .table-cell .warning {
+  color: goldenrod;
+}
+
+.account-content .table-cell .error {
+  color: darkred;
+}
+
+.account-content .table-cell {
+  height: 50px;
+  line-height: 50px;
+  padding: 0 !important;
 }
 
 @media screen and (max-width: 760px) {

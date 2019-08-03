@@ -7,6 +7,7 @@ using ZT.Core.Models.Currency;
 using ZT.Core.Models.Donate;
 using ZT.Core.Models.Inventory;
 using ZT.Core.Models.Language;
+using ZT.Core.Models.Payment;
 
 namespace ZT.Data
 {
@@ -33,6 +34,8 @@ namespace ZT.Data
         public virtual DbSet<DonationItem> DonationItem { get; set; }
         public virtual DbSet<DonationStatus> DonationStatus { get; set; }
         public virtual DbSet<DropOffDonation> DropOffDonation { get; set; }
+        public virtual DbSet<CampaignItem> CampaignItem { get; set; }
+        public virtual DbSet<MPESAPayment> MPESAPayment { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -96,7 +99,7 @@ namespace ZT.Data
                 entity.Property(e => e.ItemType).HasColumnType("varchar(10)");
                 entity.Property(e => e.Price).HasColumnType("decimal");
                 entity.Property(e => e.Need).HasColumnType("decimal");
-                entity.Property(e => e.IsDeleted).HasColumnType("bit");
+                entity.Property(e => e.CurrencyID).HasColumnType("int(11)");
                 entity.HasKey(e => e.ItemID);
             });
 
@@ -156,6 +159,7 @@ namespace ZT.Data
                 entity.Property(e => e.Date).HasColumnType("datetime");
                 entity.Property(e => e.DonationType).HasColumnType("varchar(10)");
                 entity.Property(e => e.StatusID).HasColumnType("int(11)");
+                entity.Property(e => e.CurrencyID).HasColumnType("int(11)");
                 entity.HasKey(e => e.DonationID);
             });
 
@@ -166,6 +170,7 @@ namespace ZT.Data
                 entity.Property(e => e.ItemID).HasColumnType("int(11)");
                 entity.Property(e => e.TotalAmount).HasColumnType("decimal(10,2)");
                 entity.Property(e => e.NumberOfItems).HasColumnType("int(11)");
+                entity.Property(e => e.CurrencyID).HasColumnType("int(11)");
                 entity.HasKey(e => e.DonationItemID);
             });
 
@@ -183,6 +188,28 @@ namespace ZT.Data
                 entity.Property(e => e.DonationID).HasColumnType("int(11)");
                 entity.Property(e => e.DeliveryDate).HasColumnType("datetime");
                 entity.HasKey(e => e.DropOffDonationID);
+            });
+
+            modelBuilder.Entity<CampaignItem>(entity =>
+            {
+                entity.Property(e => e.CampaignItemID).HasColumnType("int(11)");
+                entity.Property(e => e.ItemID).HasColumnType("int(11)");
+                entity.Property(e => e.GoalAmount).HasColumnType("int(11)");
+                entity.Property(e => e.ActualAmount).HasColumnType("decimal(10,2)");
+                entity.Property(e => e.CurrencyID).HasColumnType("int(11)");
+                entity.HasKey(e => e.CampaignItemID);
+            });
+
+            modelBuilder.Entity<MPESAPayment>(entity =>
+            {
+                entity.Property(e => e.MPESAPaymentID).HasColumnType("int(11)");
+                entity.Property(e => e.DonationID).HasColumnType("int(11)");
+                entity.Property(e => e.PhoneNumber).HasColumnType("varchar(12)");
+                entity.Property(e => e.MerchantRequestID).HasColumnType("varchar(50)");
+                entity.Property(e => e.CheckoutRequestID).HasColumnType("varchar(100)");
+                entity.Property(e => e.AccountReference).HasColumnType("varchar(12)");
+                entity.Property(e => e.PaymentStatus).HasColumnType("varchar(15)");
+                entity.HasKey(e => e.MPESAPaymentID);
             });
         }
     }

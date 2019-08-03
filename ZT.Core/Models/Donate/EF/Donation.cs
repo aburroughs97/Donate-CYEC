@@ -12,5 +12,6 @@ namespace ZT.Core.Models.Donate
         public DateTime Date { get; set; }
         public string DonationType { get; set; }
         public int StatusID { get; set; }
+        public int CurrencyID { get; set; }
     }
 }

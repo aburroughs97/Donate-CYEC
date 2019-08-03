@@ -51,7 +51,7 @@ class Cart extends Component {
       if(response.isSuccess) {
         this.setState({
           items: response.payload,
-          total: response.payload.reduce((x, y) => x + y.totalAmount, 0),
+          total: response.payload.reduce((x, y) => x + ((y.numItems === null) ? (y.totalAmount) : (y.numItems * y.price)), 0),
           loadingItems: false,
           languageChanged: false,
           currencyChanged: false

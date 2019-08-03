@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ZT.Core;
 using ZT.Core.Models.Currency;
+using ZT.Core.Models.Language;
 
 namespace ZT.Data
 {
@@ -12,6 +13,8 @@ namespace ZT.Data
         Result UpdateCurrencyRates(List<Tuple<string, decimal>> list);
         Result<List<string>> GetLanguages();
         Result<List<Currency>> GetCurrencies();
+        Result<Currency> GetCurrencyByCode(string code);
+        Result<Language> GetLanguageByCode(string code);
     }
 
     public class LanguageAndCurrencyAccessor: ILanguageAndCurrencyAccessor
@@ -66,6 +69,32 @@ namespace ZT.Data
             catch (Exception ex)
             {
                 return new Result<List<Currency>>(false, ex.Message);
+            }
+        }
+
+        public Result<Currency> GetCurrencyByCode(string code)
+        {
+            try
+            {
+                var currency = (from x in _dBContext.Currency where x.Code == code select x).First();
+                return new Result<Currency>(currency);
+            }
+            catch(Exception ex)
+            {
+                return new Result<Currency>(false, ex.Message);
+            }
+        }
+
+        public Result<Language> GetLanguageByCode(string code)
+        {
+            try
+            {
+                var lang = (from x in _dBContext.Language where x.LanguageCode == code select x).First();
+                return new Result<Language>(lang);
+            }
+            catch (Exception ex)
+            {
+                return new Result<Language>(false, ex.Message);
             }
         }
     }

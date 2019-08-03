@@ -17,36 +17,32 @@ namespace ZT.Services
     {
         Result<List<Item>> GetAllItems(string languageName, string currencyCode);
         Result<Item> GetItem(int itemID, string languageName, string currencyCode);
-        Result AddItem();
         Result<DonateItemImage> GetImage(int itemID);
         void AddImages();
         Result<List<CartItem>> LoadCart(int userID, string languageName, string currencyCode);
         int CheckCart(int userID);
-        Result<int> AddToCart(int userID, int itemID, decimal totalAmount, int? numItems);
+        Result<int> AddToCart(int userID, int itemID, decimal totalAmount, int? numItems, string currencyCode);
         Result UpdateCartItem(CartItem item);
         Result RemoveCartItem(int userID, int itemID);
-        Result MakeDropOffDonation(int userID, DateTime date);
+        Result MakeDropOffDonation(int userID, DateTime date, string currencyCode);
         void FixItems();
         Result<List<DonationPreview>> GetRecentDonations(int userID, string languageName, string currencyCode);
-        Result UpdateDeliveredItems();
+        Result UpdateReadyItems();
     }
 
     public class DonateService : IDonateService
     {
         private readonly IDonateAccessor _donateAccessor;
-        private readonly IConfiguration _configuration;
         private readonly IInventoryAccessor _inventoryAccessor;
         private readonly IEmailService _emailService;
         private readonly IAccountAccessor _accountAccessor;
 
         public DonateService(IDonateAccessor donateAccessor,
-                                IConfiguration configuration,
                                 IInventoryAccessor inventoryAccessor,
                                 IEmailService emailService,
                                 IAccountAccessor accountAccessor)
         {
             _donateAccessor = donateAccessor;
-            _configuration = configuration;
             _inventoryAccessor = inventoryAccessor;
             _emailService = emailService;
             _accountAccessor = accountAccessor;
@@ -73,74 +69,24 @@ namespace ZT.Services
                     ActualAmount = (int)Math.Ceiling(y.ActualAmount)
                 };
             });
-            return new Result<List<Item>>(newList.Concat(list.Where(x => x.ItemType != "direct")).OrderBy(x => x.Need).ToList());
-        }
 
-        public Result AddItem()
-        {
-            var names = new string[] { "Test Fund"};
-            foreach(var name in names)
+            var campaignList = _donateAccessor.GetCampaignItemRange(list.Where(x => x.ItemType != "direct").Select(x => x.ItemID).ToList(), currencyCode);
+            var newList2 = list.Join(campaignList, x => x.ItemID, y => y.ItemID, (x, y) =>
             {
-                var rand = new Random();
-
-                var item = new DonateItem
+                return new Item
                 {
-                    ItemType = "sponsor",
-                    Price = 1500M,
-                    Need = .45M,
-                    IsDeleted = false
+                    ItemID = x.ItemID,
+                    ItemType = x.ItemType,
+                    Title = x.Title,
+                    Price = x.Price,
+                    Description = x.Description,
+                    Need = x.Need,
+                    GoalAmount = y.GoalAmount,
+                    ActualAmount = y.ActualAmount
                 };
-                var itemResult = _donateAccessor.AddItem(item);
-                if (!itemResult.IsSuccess) return new Result(false, itemResult.Message);
-                item = itemResult.Payload;
+            });
 
-
-                var itemTitle = new DonateItemTitle
-                {
-                    ItemID = item.ItemID,
-                    LanguageID = 1,
-                    Title = "Help Alex Pay For School"
-                };
-                var itemTitle2 = new DonateItemTitle
-                {
-                    ItemID = item.ItemID,
-                    LanguageID = 2,
-                    Title = "S-Help Alex Pay For School"
-                };
-                _donateAccessor.AddItemTitle(itemTitle);
-                _donateAccessor.AddItemTitle(itemTitle2);
-
-                var itemDescription = new DonateItemDescription
-                {
-                    ItemID = item.ItemID,
-                    LanguageID = 1,
-                    Description = "Alex is an aspiring computer scientist studying at Kansas State University. He has always been passionate about international service" +
-                                    " and is currently spending his summer in Kenya. By giving, you can help Alex achieve his dream of completing his study at K-State.",
-                };
-                var itemDescription2 = new DonateItemDescription
-                {
-                    ItemID = item.ItemID,
-                    LanguageID = 2,
-                    Description = "This is a Swahili description."
-                };
-                _donateAccessor.AddItemDescription(itemDescription);
-                _donateAccessor.AddItemDescription(itemDescription2);
-
-                var imageBase = "";
-                var m = new ImageFormatManager();
-                var dir = Directory.GetParent(Environment.CurrentDirectory) + "\\Ziwadi Trade Prototype\\ClientApp\\src\\media\\Samples\\";
-                using (Image<Rgba32> image = Image.Load(dir + "Alex.jpg"))
-                {
-                    var width = Math.Min(image.Width, image.Height);
-                    image.Mutate(x => x.Crop(width, width));
-                    imageBase = image.ToBase64String(Image.DetectFormat(dir + "Alex.jpg"));
-                }
-
-                //Add to filesystem
-            }
-
-
-            return new Result(true);
+            return new Result<List<Item>>(newList.Concat(newList2).OrderBy(x => x.Need).ToList());
         }
 
         public Result<DonateItemImage> GetImage(int itemID)
@@ -186,7 +132,7 @@ namespace ZT.Services
             return _donateAccessor.CheckCart(userID);
         }
 
-        public Result<int> AddToCart(int userID, int itemID, decimal totalAmount, int? numItems)
+        public Result<int> AddToCart(int userID, int itemID, decimal totalAmount, int? numItems, string currencyCode)
         {
             var item = new DonateCartItem
             {
@@ -195,7 +141,7 @@ namespace ZT.Services
                 TotalAmount = totalAmount,
                 NumItems = numItems
             };
-            return _donateAccessor.AddToCart(item);
+            return _donateAccessor.AddToCart(item, currencyCode);
         }
 
         public Result<Item> GetItem(int itemID, string languageName, string currencyCode)
@@ -213,6 +159,15 @@ namespace ZT.Services
                 item.GoalAmount = invItem.GoalAmount;
                 item.ActualAmount = (int)Math.Ceiling(invItem.ActualAmount);
             }
+            else
+            {
+                var campaignItemResult = _donateAccessor.GetCampaignItem(itemID);
+                if (!campaignItemResult.IsSuccess) return new Result<Item>(false, campaignItemResult.Message);
+                var campaignItem = campaignItemResult.Payload;
+
+                item.GoalAmount = campaignItem.GoalAmount;
+                item.ActualAmount = campaignItem.ActualAmount;
+            }
 
             return new Result<Item>(item);
         }
@@ -227,13 +182,13 @@ namespace ZT.Services
             return _donateAccessor.RemoveCartItem(userID, itemID);
         }
 
-        public Result MakeDropOffDonation(int userID, DateTime date)
+        public Result MakeDropOffDonation(int userID, DateTime date, string currencyCode)
         {
-            var cartItems = _donateAccessor.GetCartItems(userID).Payload;
+            var cartItems = _donateAccessor.GetCartItems(userID, currencyCode).Payload;
 
             var total = cartItems.Sum(x => x.TotalAmount);
 
-            var donationResult = _donateAccessor.MakeDonation(userID, total, "dropoff");
+            var donationResult = _donateAccessor.MakeDonation(userID, total, "dropoff", currencyCode);
             if (!donationResult.IsSuccess) return new Result(false, donationResult.Message);
 
             var donation = donationResult.Payload;
@@ -251,7 +206,8 @@ namespace ZT.Services
                 DonationID = donation.DonationID,
                 ItemID = x.ItemID,
                 TotalAmount = x.TotalAmount,
-                NumberOfItems = x.NumItems
+                NumberOfItems = x.NumItems,
+                CurrencyID = x.CurrencyID
             }).ToList();
 
             var itemsResult = _donateAccessor.AddDonationItems(items);
@@ -281,20 +237,21 @@ namespace ZT.Services
             return _donateAccessor.GetRecentDonations(userID, languageName, currencyCode);
         }
 
-        public Result UpdateDeliveredItems()
+        public Result UpdateReadyItems()
         {
             try
             {
                 var list = _donateAccessor.GetDonationsByStatus("Delivered");
+                list = list.Concat(_donateAccessor.GetDonationsByStatus("Purchased")).ToList();
                 var donateItems = _donateAccessor.GetDonateItems().Payload;
                 foreach (var donationItem in list)
                 {
                     var donateItem = donateItems.First(x => x.ItemID == donationItem.ItemID);
                     if (donationItem.NumberOfItems == null)
                     {
-                        var amount = ((donateItem.Need - .5M) * 2) * donateItem.Price;
-                        amount += donationItem.TotalAmount;
-                        donateItem.Need = ((amount / donateItem.Price) / 2) + .5M;
+                        var campaignItem = _donateAccessor.GetCampaignItem(donateItem.ItemID).Payload;
+                        campaignItem.ActualAmount += donationItem.TotalAmount;
+                        _donateAccessor.UpdateCampaignItem(donateItem.ItemID, campaignItem.GoalAmount, campaignItem.ActualAmount, campaignItem.CurrencyID);
                     }
                     else
                     {

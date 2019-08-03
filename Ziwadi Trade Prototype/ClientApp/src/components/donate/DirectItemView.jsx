@@ -173,13 +173,22 @@ export default class DirectItemView extends Component {
           </ProgressBar>       
         </div>
          {/* <p className="need-description">{needDescription}</p> */}
-         {this.props.showDonateButtons && 
+         {this.props.isLoggedIn && 
           <div>
             <hr />
-            <p className="equation-top">Number of Items: <NumericInput min={0} value={this.state.numItems} step={this.calcInputIncrement()} onChange={this.numItemsUpdated}/></p>
-            <p className="equation-bottom">x {formattedPrice}</p>
+            <div className="equation">
+              <p className="equation-top">Number of Items: <NumericInput min={0} value={this.state.numItems} step={this.calcInputIncrement()} onChange={this.numItemsUpdated}/></p>
+              <p className="equation-bottom">x {formattedPrice}</p>
+              <p className="equation-result">{this.formatPrice(this.state.numItems * this.props.item.price)}</p>
+            </div>
             <Button className="donate-now btn" disabled={this.state.numItems === 0} onClick={() => this.onDonateClicked(true)}><b>{translations["donateNow"][this.props.language]}</b></Button>      
             <Button className="add-to btn" disabled={this.state.numItems ===0} onClick={() => this.onDonateClicked(false)}><b>{translations["addTo"][this.props.language]}</b></Button>    
+          </div>
+         }
+         {!this.props.isLoggedIn &&
+          <div>
+            <hr />
+            <p>You must be logged in to donate. <span className="modal-link" onClick={this.props.forceLogin}>Log in now.</span></p>
           </div>
          }
         </Modal.Body>
@@ -209,5 +218,6 @@ DirectItemView.propTypes = {
   hide: PropTypes.func,
   language: PropTypes.string,
   onDonate: PropTypes.func,
-  showDonateButtons: PropTypes.bool
+  isLoggedIn: PropTypes.bool,
+  forceLogin: PropTypes.func
 }

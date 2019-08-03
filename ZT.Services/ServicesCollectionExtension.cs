@@ -17,6 +17,7 @@ namespace ZT.Services
             services.AddTransient<ILanguageAndCurrencyService, LanguageAndCurrencyService>();
             services.AddTransient<IEmailService, EmailService>();
             services.AddTransient<IInventoryManager, InventoryManager>();
+            services.AddTransient<IPaymentService, PaymentService>();
             return services;
         }
     }

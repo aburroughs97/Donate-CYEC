@@ -33,13 +33,6 @@ namespace ZT.Controllers
             return Json(result);
         }
 
-        [HttpPost("AddItem")]
-        public IActionResult AddItem()
-        {
-            var result = _donateService.AddItem();
-            return Json(result);
-        }
-
         [HttpPost("AddImage")]
         public IActionResult AddImage()
         {
@@ -73,9 +66,9 @@ namespace ZT.Controllers
         }
 
         [HttpGet("AddToCart")]
-        public IActionResult AddToCart(int userID, int itemID, decimal totalAmount, int? numItems)
+        public IActionResult AddToCart(int userID, int itemID, decimal totalAmount, int? numItems, string currencyCode)
         {
-            var result = _donateService.AddToCart(userID, itemID, totalAmount, numItems);
+            var result = _donateService.AddToCart(userID, itemID, totalAmount, numItems, currencyCode);
             return Json(result);
         }
 
@@ -94,9 +87,9 @@ namespace ZT.Controllers
         }
 
         [HttpGet("MakeDropOffDonation")]
-        public IActionResult MakeDropOffDonation(int userID, DateTime deliveryDate)
+        public IActionResult MakeDropOffDonation(int userID, DateTime deliveryDate, string currencyCode)
         {
-            var result = _donateService.MakeDropOffDonation(userID, deliveryDate);
+            var result = _donateService.MakeDropOffDonation(userID, deliveryDate, currencyCode);
             return Json(result);
         }
 

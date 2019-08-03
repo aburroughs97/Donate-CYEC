@@ -269,21 +269,22 @@ class App extends Component {
   }
 
   render() {
+    let { forceLogin, isLoggedIn, account, loadingUser } = this.state;
     let body;
-    if(!this.state.loadingUser) {
+    if(!loadingUser) {
       body = 
-        <Layout forceLogin={this.state.forceLogin} loginShown={this.loginShown} isLoggedIn={this.state.isLoggedIn} loadingUser={this.state.loadingUser} account={this.state.account} handleLogin={this.handleLogin} handleRegister={this.handleRegister} logOut={this.logOut} languageChanged={this.languageChanged}>
-          <Route exact path='/' render={(props) => <Home {...props} showLogin={this.forceLogin} language={this.state.account.language} isLoggedIn={this.state.isLoggedIn}/>}/>
-          <Route path='/donate' render={(props) => <Donate {...props} isLoggedIn={this.state.isLoggedIn} userID={this.state.account.userID} language={this.state.account.language} currency={this.state.account.currency} cartUpdated={this.cartUpdated}/>}/>
-          <Route path='/cart' render={(props) => <Cart {...props} isLoggedIn={this.state.isLoggedIn} userID={this.state.account.userID} language={this.state.account.language} currency={this.state.account.currency} cartUpdated={this.cartUpdated} clearCart={this.clearCart}/>}/>
-          <Route path='/account' render={(props) => <Account {...props} isLoggedIn={this.state.isLoggedIn} userID={this.state.account.userID} language={this.state.account.language} updateFirstName={this.updateFirstName} logOut={this.passwordChanged}/>} />
-          <Route path='/admin' render={(props) => <Admin {...props} isLoggedIn={this.state.isLoggedIn} isAdmin={this.state.account.isAdmin} />}/>
+        <Layout forceLogin={forceLogin} loginShown={this.loginShown} isLoggedIn={isLoggedIn} loadingUser={loadingUser} account={account} handleLogin={this.handleLogin} handleRegister={this.handleRegister} logOut={this.logOut} languageChanged={this.languageChanged}>
+          <Route exact path='/' render={(props) => <Home {...props} showLogin={this.forceLogin} language={account.language} isLoggedIn={isLoggedIn}/>}/>
+          <Route path='/donate' render={(props) => <Donate {...props} cookies={cookies} isLoggedIn={isLoggedIn} userID={account.userID} language={account.language} currency={account.currency} cartUpdated={this.cartUpdated} forceLogin={this.forceLogin}/>}/>
+          <Route path='/cart' render={(props) => <Cart {...props} isLoggedIn={isLoggedIn} userID={account.userID} language={account.language} currency={account.currency} cartUpdated={this.cartUpdated} clearCart={this.clearCart}/>}/>
+          <Route path='/account' render={(props) => <Account {...props} isLoggedIn={isLoggedIn} userID={account.userID} language={account.language} currency={account.currency} updateFirstName={this.updateFirstName} logOut={this.passwordChanged}/>} />
+          <Route path='/admin' render={(props) => <Admin {...props} isLoggedIn={isLoggedIn} isAdmin={account.isAdmin} language={account.language} currency={account.currency} />}/>
         </Layout>
       ;
     }
     else {
       body = 
-        <Layout isLoggedIn={this.state.isLoggedIn} loadingUser={this.state.loadingUser} account={this.state.account} handleLogin={this.handleLogin} handleRegister={this.handleRegister} logOut={this.logOut} languageChanged={this.languageChanged}>
+        <Layout isLoggedIn={isLoggedIn} loadingUser={loadingUser} account={account} handleLogin={this.handleLogin} handleRegister={this.handleRegister} logOut={this.logOut} languageChanged={this.languageChanged}>
           <div className="spinner-container">
             <MetroSpinner 
               size={150}
