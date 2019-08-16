@@ -281,7 +281,7 @@ class Donate extends Component {
     let filteredItems = this.filterItems();
     return (
       <div className="donate-content">
-        <Header onSearch={this.onSearch} searchSuggestions={this.state.items.map(x => x.title)} language={this.props.language}/>
+        <Header onSearch={this.onSearch} searchSuggestions={this.state.items.map(x => x.title)} language={this.props.language} showSearch/>
         <div className={"donate-sidebar-btn " + (this.state.showSidebar ? "expanded" : "")} onClick={this.toggleSidebar}>
           <p className="text">Filters <Glyphicon glyph={this.state.showSidebar ? "chevron-up" : "chevron-down"} className="filter-icon" /> </p> 
         </div>

@@ -111,11 +111,6 @@ export default class DonateTutorial extends Component {
       dialogClassName="donate-tutorial"
     >
     <Modal.Body>
-      {/* <img
-        alt="CYEC-Logo"
-        src={logo}
-        className="logo"
-      /> */}
       <Carousel defaultActiveIndex={0} controls={false} indicators slide interval={null} activeIndex={index}>
 
         <CarouselItem animateIn animateOut>
@@ -166,11 +161,11 @@ export default class DonateTutorial extends Component {
               </p>
                 <div className="sample-container">
                 <div className="progress-bar-sample">
-                  <li className="need-danger"><b>{translations["need"][language] + ": " + translations["critical"][language]}</b></li>
-                  <li className="need-danger"><b>{translations["need"][language] + ": " + translations["high"][language]}</b></li>
-                  <li className="need-warning"><b>{translations["need"][language] + ": " + translations["medium"][language]}</b></li>
-                  <li className="need-success"><b>{translations["need"][language] + ": " + translations["low"][language]}</b></li>
-                  <li className="need-success"><b>{translations["need"][language] + ": " + translations["none"][language]}</b></li>
+                  <li className="need-danger"><b>{translations["critical"][language]}</b></li>
+                  <li className="need-danger"><b>{translations["high"][language]}</b></li>
+                  <li className="need-warning"><b>{translations["medium"][language]}</b></li>
+                  <li className="need-success"><b>{translations["low"][language]}</b></li>
+                  <li className="need-success"><b>{translations["none"][language]}</b></li>
                 </div>
                 <div className="progress-bar-sample">
                   <ProgressBar className="first" now={10} bsStyle="danger" />

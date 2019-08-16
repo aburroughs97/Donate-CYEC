@@ -172,17 +172,18 @@ export default class DirectItemView extends Component {
             <ProgressBar active bsStyle={needColor} now={need * 100}/>
           </ProgressBar>       
         </div>
-         {/* <p className="need-description">{needDescription}</p> */}
+        <hr />
          {this.props.isLoggedIn && 
-          <div>
-            <hr />
+          <div className="donate-container">
             <div className="equation">
-              <p className="equation-top">Number of Items: <NumericInput min={0} value={this.state.numItems} step={this.calcInputIncrement()} onChange={this.numItemsUpdated}/></p>
+              <p className="equation-top"><NumericInput min={0} value={this.state.numItems} step={this.calcInputIncrement()} onChange={this.numItemsUpdated}/></p>
               <p className="equation-bottom">x {formattedPrice}</p>
               <p className="equation-result">{this.formatPrice(this.state.numItems * this.props.item.price)}</p>
             </div>
-            <Button className="donate-now btn" disabled={this.state.numItems === 0} onClick={() => this.onDonateClicked(true)}><b>{translations["donateNow"][this.props.language]}</b></Button>      
-            <Button className="add-to btn" disabled={this.state.numItems ===0} onClick={() => this.onDonateClicked(false)}><b>{translations["addTo"][this.props.language]}</b></Button>    
+            <div className="btn-container">
+              <Button className="add-to btn" disabled={this.state.numItems ===0} onClick={() => this.onDonateClicked(false)}><b>{translations["addTo"][this.props.language]}</b></Button>    
+              <Button className="donate-now btn" disabled={this.state.numItems === 0} onClick={() => this.onDonateClicked(true)}><b>{translations["donateNow"][this.props.language]}</b></Button>      
+            </div>
           </div>
          }
          {!this.props.isLoggedIn &&

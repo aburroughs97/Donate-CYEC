@@ -25,20 +25,20 @@ export default class Header extends Component {
 
   render() {
     return (
-      <div className="header">
+      <div className={"header " + (this.props.showSearch ? "" : "centered")}>
         <img
           alt="CYEC-Logo"
           src={logo}
           className="logo"
         />
 
-        <div className="search">
+        {this.props.showSearch && <div className="search">
           <AutoSuggestInput 
             suggestions={this.props.searchSuggestions}
             placeholder={translations["search"][this.props.language]}
             search={this.searchClicked}
           /> 
-        </div>
+        </div>}
       </div>
     );}
 }
@@ -46,7 +46,8 @@ export default class Header extends Component {
 Header.propTypes = {
   onSearch: PropTypes.func,
   searchSuggestions: PropTypes.array,
-  language: PropTypes.string
+  language: PropTypes.string,
+  showSearch: PropTypes.bool
 }
 
 

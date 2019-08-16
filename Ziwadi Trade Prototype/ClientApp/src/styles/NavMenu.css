@@ -1,130 +1,150 @@
 ﻿.navbar .currency-dropdown {
-    float: left;
+  float: left;
 }
 
 .navbar .language-dropdown {
-    float: left;
-    margin-right: 2px;
+  float: left;
+  margin-right: 2px;
 }
 
 .navbar .nav-links {
-    float: right;
+  float: right;
 }
 
 .navbar .log-in {
-    float: right;
+  float: right;
 }
 
 .navbar li .glyphicon {
-    margin-left: 10px;
-    margin-right: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
 /* Highlighting rules for nav menu items */
 .navbar .nav-links .hover a:hover {
-    background-image: none;
-    background-color: #BF2E1B;
-    color: white;
+  background-image: none;
+  background-color: #bf2e1b;
+  color: white;
 }
 
 .navbar .log-in .hover a:hover {
-    background-image: none;
-    background-color: #BF2E1B;
-    color: white;
+  background-image: none;
+  background-color: #bf2e1b;
+  color: white;
 }
 
 .navbar .nav-links .no-hover {
-    cursor: text;
+  cursor: text;
 }
 
-.navbar .navbar-brand
-{
-    display: inline-block;
-    vertical-align: middle;
+.navbar .navbar-brand {
+  display: inline-block;
+  vertical-align: middle;
 }
 
-.brand-logo
-{
-    margin: 0;
-    padding: 0;
+.brand-logo {
+  margin: 0;
+  padding: 0;
 }
 
 .show-on-mobile {
-    display: none;
+  display: none;
 }
 
 .navbar-collapse {
-    width: auto;
-    float: right;
+  width: auto;
+  float: right;
 }
 
 .navbar .spinner {
-    float: right;
-    margin-right: 4%;
-    margin-top: 1%;
+  float: right;
+  margin-right: 4%;
+  margin-top: 1%;
+}
+
+.notification-badge {
+  z-index: 1;
+  float: right;
 }
 
 @media screen and (max-width: 760px) {
-    .navbar .nav-links {
-        float: none;
-    }
-
-    .navbar .log-in {
-        position: fixed;
-        right: 20%;
-    }
-
-    .navbar .spinner {
-        top: 2%;
-        position: fixed;
-        right: 20%;    
-    }
-    
-    .navbar .nav-links a{
-        margin-left: 5%;
-        margin-right: 5%;
-    }
-
-    .navbar-collapse {
-        float: left;
-        width: 100%;
-        padding-left: 10%;
-        padding-right: 10%;
-        margin-top: 0px;
-    }
+  .navbar .nav-links {
+    float: none;
   }
 
-  @media screen and (max-width: 600px) {
-    .navbar .nav-links {
-        float: none;
-    }
-
-    .navbar .log-in {
-        position: fixed;
-        right: 25%;
-    }
-
-    .navbar .spinner {
-        top: 2%;
-        position: fixed;
-        right: 30%;    
-    }
-    
-    .navbar .nav-links a{
-        margin-left: 5%;
-        margin-right: 5%;
-    }
-
-    .navbar-collapse {
-        float: left;
-        width: 100%;
-        padding-left: 10%;
-        padding-right: 10%;
-        margin-top: 0px;
-    }
+  .navbar .log-in {
+    position: fixed;
+    right: 20%;
   }
 
-  .notification-badge {
-      z-index: 1;
-      float: right;
+  .navbar .spinner {
+    top: 2%;
+    position: fixed;
+    right: 20%;
   }
+
+  .navbar .nav-links a {
+    margin-left: 5%;
+    margin-right: 5%;
+  }
+
+  .navbar-collapse {
+    float: left;
+    width: 100%;
+    padding-left: 10%;
+    padding-right: 10%;
+    margin-top: 0px;
+  }
+
+  .navbar .language-dropdown {
+    width: 100px;
+  }
+
+  .navbar .currency-dropdown {
+    width: 75px;
+  }
+
+  .navbar .language-dropdown {
+    float: left;
+    margin-right: 2px;
+  }
+
+  .navbar .navbar-toggle {
+    margin-right: 0px;
+  }
+
+  .navbar .navbar-collapse {
+    width: 100%;
+    padding-right: 5%;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .navbar .nav-links {
+    float: none;
+  }
+
+  .navbar .log-in {
+    position: fixed;
+    right: 25%;
+  }
+
+  .navbar .spinner {
+    top: 2%;
+    position: fixed;
+    right: 30%;
+  }
+
+  .navbar .nav-links a {
+    margin-left: 5%;
+    margin-right: 5%;
+  }
+
+  .navbar-collapse {
+    float: left;
+    width: 100%;
+    padding-left: 10%;
+    padding-right: 10%;
+    margin-top: 0px;
+  }
+}

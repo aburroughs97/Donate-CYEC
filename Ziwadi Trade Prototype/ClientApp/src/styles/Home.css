@@ -1,178 +1,156 @@
 .spinner-container {
-    height: 100%;
-    width: 100%;
-    padding-left: calc(50% - 75px);
-    padding-top: 15%;
+  height: 100%;
+  width: 100%;
+  padding-left: calc(50% - 75px);
+  padding-top: 15%;
 }
 
 .search-btn:hover,
 .search-btn:focus {
-    background-color: #BF2E1B;
-    background-image: none;
-    color: white;
+  background-color: #bf2e1b;
+  background-image: none;
+  color: white;
 }
 
 .content {
-    text-align: center;
+  text-align: center;
 }
 
 .content hr {
-    margin-top: 5px;
-    margin-bottom: 5px;
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
 
 .content .title-wrapper {
-    width: 100%;
-    height: 80px;
-    background-color: white;
-    color: white;
-    padding-top: 10px;
+  width: 100%;
+  height: 80px;
+  background-color: white;
+  color: white;
+  padding-top: 10px;
 }
 
 .content .title {
-    /* position: absolute;
-    top: 200px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 1; */
-    margin: 0px;
-    font-size: 60px;
-    color: #BF2E1B;
-}
-
-.content .pic-carousel {
-    /* border-top: 2px solid #BF2E1B;
-    border-bottom: 2px solid #BF2E1B; */
+  margin: 0px;
+  font-size: 60px;
+  color: #bf2e1b;
 }
 
 .content .info {
-    padding-left: 5%;
-    padding-right: 5%;
-    font-size: 18px;
+  padding-left: 5%;
+  padding-right: 5%;
+  font-size: 18px;
 }
 
 .content hr {
-    border-width: 2px;
-    border-color: #01573E;
+  border-width: 2px;
+  border-color: #01573e;
 }
 
 .content .logo {
-    width: 12%;
-    position: absolute;
-    left: 5px;
-    top: -30px;
-    z-index: 1;
+  width: 12%;
+  position: absolute;
+  left: 5px;
+  top: -30px;
+  z-index: 1;
 }
 
-.content .carousel-indicators li{
-    border: none;
-    background-color: white !important;
+.content .carousel-indicators li {
+  border: none;
+  background-color: white !important;
 }
 
 .content .welcome {
-    font-size: 50px;
+  font-size: 50px;
 }
 
 .col-33 {
-    float: left;
-    width: 33.33%;
-    height: 500px;
-    overflow-y: hidden;
-    padding: 10px;
-    text-align: center;
-    margin-top: 1%;
-    border-right: 2px solid #BF2E1B;
+  float: left;
+  width: 33.33%;
+  height: 500px;
+  overflow-y: hidden;
+  padding: 10px;
+  text-align: center;
+  margin-top: 1%;
+  border-right: 2px solid #bf2e1b;
 }
 
 .col-50 {
-    float: left;
-    width: 50%;
-    padding: 10px;
-    text-align: center;
-    margin-top: 8px;
-    padding-top: 20px;
-    border-right: 2px solid #BF2E1B;
-    height: 170px;
-    overflow: hidden;
+  float: left;
+  width: 50%;
+  padding: 10px;
+  text-align: center;
+  margin-top: 8px;
+  padding-top: 20px;
+  border-right: 2px solid #bf2e1b;
+  height: 170px;
+  overflow: hidden;
 }
 
 .col-50.last {
-    border: none;
+  border: none;
 }
 
 .last-col {
-    border-right: none;
+  border-right: none;
 }
 
 .donate-now-btn {
-    width: 25%;
-    height: 50px;
-    font-size: 25px;
-    color: #BF2E1B;
-    background-image: none;
-    background-color: white;
-    z-index: 1;
-    position: absolute;
-    right: 25%;
-    transform: translateX(50%);
-    top: 450px;
-    font-weight: bold;
+  width: 25%;
+  height: 50px;
+  font-size: 25px;
+  color: #bf2e1b;
+  background-image: none;
+  background-color: white;
+  z-index: 1;
+  position: absolute;
+  right: 25%;
+  transform: translateX(50%);
+  top: 450px;
+  font-weight: bold;
 }
 
 .donate-now-btn:hover {
-    background-color: #BF2E1B;
-    background-image: none;
-    color: transparent;
-    border: none;
+  background-color: #bf2e1b;
+  background-image: none;
+  color: transparent;
+  border: none;
 }
 
 .cookieConsent button:hover {
-    background-color: lightgray !important;
-    color: white !important;
+  background-color: lightgray !important;
+  color: white !important;
 }
 
 @media screen and (max-width: 760px) {
-    .col-33 {
-      width: 100%;
-      border-right: none;
-      border-bottom: 1px solid lightgray;
-    }
-    .header .search {
-        float: right;
-        width: 30%;
-        margin-left: 20%;
-        margin-top: 1%;
-    }
-
-    .header .logo {
-        max-width: 30%;
-        margin-top: 5%;
-        margin-bottom: 5%;
-        margin-left: 5%;
-        height: auto;
-        float: left;
-    }
-
-    .cookieConsent {
-        padding-left: 0 !important;
-        padding-right: 0 !important;
-    }
-    
+  .col-50 {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid lightgray;
+    height: auto;
+    margin-top: 0px;
   }
+
+  .cookieConsent {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  .content .title {
+    font-size: 35px;
+  }
+
+  .donate-now-btn {
+    position: static;
+    width: 60%;
+    transform: none;
+    margin-bottom: 20px;
+  }
+}
 
 @media screen and (max-width: 600px) {
-    .col-33 {
-      width: 100%;
-      border-right: none;
-      border-bottom: 1px solid lightgray;
-    }
-    .header .search {
-        float: right;
-        width: 40%;
-        margin-left: 10%;
-        margin-top: 2%;
-    }
-    .donate-now-btn {
-        width: 30%;
-    }
+  .col-50 {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid lightgray;
   }
+}

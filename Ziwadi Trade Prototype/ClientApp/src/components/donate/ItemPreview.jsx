@@ -33,15 +33,6 @@ const translations = {
 const imageAPI = "/api/Donate/GetImage?itemID="
 
 export default class ItemPreview extends Component {
-  
-  trimDescription(){
-    let desc = this.props.item.description;
-    if(desc.length > 800){
-      return desc.substring(0, 800) + "...";
-    }
-    else return desc;
-  }
-
   formatPrice(price) {
     let roundDigits = this.props.currency.roundDigits > 0 ? this.props.currency.roundDigits : 0;
     price = price.toFixed(roundDigits);
@@ -99,7 +90,7 @@ export default class ItemPreview extends Component {
           <hr />
           <h4 className={!this.props.currencyChanged ? "price" : "price-hidden"}>{this.formatPrice(this.props.item.price)}</h4>
           <hr />
-          <p className={!this.props.languageChanged ? "description" : "description-hidden"}> {this.trimDescription()}</p>
+          <p className={!this.props.languageChanged ? "description" : "description-hidden"}> {item.description}</p>
         </div>
       </div>
     );}

@@ -174,11 +174,14 @@ export default class FundItemView extends Component {
          </div>
          {/* <p className="need-description">{needDescription}</p> */}
          {this.props.isLoggedIn && 
-          <div>
-            <hr />
-            <p className="equation-top">Amount To Donate: <NumericInput min={0} max={this.calcMaxInputValue()} precision={2} value={amountToDonate} step={this.calcInputIncrement()} onChange={this.amountToDonateUpdated}/></p>
-            <Button className="donate-now btn" disabled={amountToDonate === 0} onClick={() => this.onDonateClicked(true)}><b>{translations["donateNow"][language]}</b></Button>      
+          <div className="donate-container">
+            <div className="equation">
+              <p className="equation-top">Amount To Donate: <NumericInput min={0} max={this.calcMaxInputValue()} precision={2} value={amountToDonate} step={this.calcInputIncrement()} onChange={this.amountToDonateUpdated}/></p>
+            </div>
+            <div className="btn-container">
             <Button className="add-to btn" disabled={amountToDonate === 0} onClick={() => this.onDonateClicked(false)}><b>{translations["addTo"][language]}</b></Button>
+            <Button className="donate-now btn" disabled={amountToDonate === 0} onClick={() => this.onDonateClicked(true)}><b>{translations["donateNow"][language]}</b></Button>      
+            </div>
           </div>
         }
         {!this.props.isLoggedIn &&

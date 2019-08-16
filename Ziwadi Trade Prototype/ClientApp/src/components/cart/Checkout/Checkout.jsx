@@ -6,6 +6,8 @@ import { Map, CheckoutTable } from '../../Components';
 import { toast } from 'react-smart-toaster';
 import Calendar from 'react-calendar';
 import Observer from "react-intersection-observer";
+import ReactPhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/dist/style.css';
 import mpesaLogo from '../../../media/Lipa Na MPESA.png';
 import * as _donateCalls from '../../../API/DonateCalls';
 import * as _paymentCalls from '../../../API/PaymentCalls';
@@ -154,7 +156,6 @@ export default class Checkout extends Component {
       mpesaPaymentClicked: true
     });
     let { phoneNumber } = this.state;
-    phoneNumber = "254" + phoneNumber;
     _paymentCalls.MakeMPESADonation(this.props.userID, this.props.total, phoneNumber, this.props.currency.code === "KES")
     .then((response) => {
       if(response.isSuccess) {
@@ -181,7 +182,6 @@ export default class Checkout extends Component {
       mpesaPaymentStatus: "Pending"
     });
     let { phoneNumber, mpesaPaymentID } = this.state;
-    phoneNumber = "254" + phoneNumber;
     _paymentCalls.ResendMPESADonation(this.props.userID, mpesaPaymentID, this.props.total, phoneNumber, this.props.currency.code === "KES")
     .then((response) => {
       if(response.isSuccess) {
@@ -271,19 +271,15 @@ export default class Checkout extends Component {
           alt="Lipa Na MPESA" 
         />
         <h2 className="title-centered">Enter your Safaricom Phone Number: </h2>
-          <InputGroup className="input-group">
-            <InputGroup.Addon className="phone-number-addon">
-              +254
-            </InputGroup.Addon>
-            <FormControl 
-              name="phoneNumber"
-              className="phone-number-input"
-              onChange={(e) => this.setState({ phoneNumber: e.target.value })}
-              maxLength={9}
-              value={phoneNumber}
-              placeholder="XXXXXXXX"
-            />
-          </InputGroup>
+          <ReactPhoneInput 
+            onlyCountries={["ke"]} 
+            defaultCountry="ke"
+            disableDropdown
+            countryCodeEditable={false}
+            value={phoneNumber}
+            masks={{'ke': '+... ... ......'}}
+            onChange={(value) => this.setState({phoneNumber: value})} 
+          />
           <Button className="next-btn" disabled={!this.validatePhoneNumber()} onClick={this.nextPage}>Continue</Button>
       </div>,
       <div className="carousel-item">
@@ -318,19 +314,15 @@ export default class Checkout extends Component {
           <div className="payment-status rejected">
             <h4>It looks like there were issues with your payment.</h4>
             <p className="verify-text">Would you like to verify your phone number and try again?</p>
-            <InputGroup className="input-group">
-              <InputGroup.Addon className="phone-number-addon">
-                +254
-              </InputGroup.Addon>
-              <FormControl 
-                name="phoneNumber"
-                className="phone-number-input"
-                onChange={(e) => this.setState({ phoneNumber: e.target.value })}
-                maxLength={9}
-                value={phoneNumber}
-                placeholder="XXXXXXXX"
-              />
-            </InputGroup>
+            <ReactPhoneInput 
+              onlyCountries={["ke"]} 
+              defaultCountry="ke"
+              disableDropdown
+              countryCodeEditable={false}
+              value={phoneNumber}
+              masks={{'ke': '+... ... ......'}}
+              onChange={(value) => this.setState({phoneNumber: value})} 
+            />
             <Button className="next-btn" onClick={this.retryMPESADonation}>Retry Payment</Button>
           </div>
         } 
@@ -366,7 +358,7 @@ export default class Checkout extends Component {
 
   validatePhoneNumber() {
     let { phoneNumber } = this.state;
-    return phoneNumber.length === 9
+    return phoneNumber.length === 15
   }
 
   render() {

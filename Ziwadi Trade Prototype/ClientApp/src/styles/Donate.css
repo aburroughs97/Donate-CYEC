@@ -11,15 +11,23 @@
   border-radius: 10px;
 }
 
+.form-control:focus {
+  border-color: #BF2E1B;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(191, 46, 27, 0.6);
+}
+
 .header {
   width: 100%;
   height: 100px;
   float: top;
   overflow: none;
-  display: flex;
-  align-items: center; 
   margin: 0px;
   border-bottom: 2px solid #BF2E1B;
+}
+
+.header.centered {
+  display: block;
+  text-align: center;
 }
 
 .donate-content {
@@ -88,10 +96,12 @@
   font-size: 20px;
   font-weight: bold;
   line-height: 40px;
+  opacity: .5;
 }
 
 .donate-sidebar-btn:hover {
   transform: scale(1.1);
+  opacity: 1;
 }
 
 .donate-sidebar-btn .filter-icon {
@@ -107,6 +117,7 @@
 
 .donate-sidebar-btn.expanded {
   margin-top: 350px;
+  opacity: 1;
 }
 
 .donate-sidebar .filter-dropdown {  
@@ -140,21 +151,26 @@
 }
 
 .header .logo {
-  max-width: 20%;
-  margin-top: 1%;
-  margin-bottom: 1%;
+  max-height: 80px;
+  margin-top: 5px;
   margin-left: 5%;
   height: auto;
   float: left;
 }
 
+.header.centered .logo{
+  margin-left: 0px;
+  float: none;
+}
+
 .header .search {
   float: right;
   width: 50%;
-  margin-left: 45%;
+  margin-top: 30px;
 }
 
 .header .search .search-group {
+  margin-left: 25%;
   width: 50%;
 }
 
@@ -193,11 +209,17 @@
   left:0;
   height:50px;
   width:100%;
-  background: linear-gradient(transparent 20px, white);
+  background: -webkit-gradient(linear, bottom, color-stop(20px, rgba(255, 255, 255, 0)), color-stop(100%, white)); /* Chrome, Safari4+ */
+  background: -webkit-linear-gradient(bottom, rgba(255, 255, 255, 0) 20px, white 100%); /* Chrome10+, Safari5.1+ */
+  background: -moz-linear-gradient(bottom, rgba(255, 255, 255, 0) 20px, white 100%);    /* FF3.6+ */
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 20px,  white 100%);  
 }
 
 .item-preview:hover:after {
-  background: linear-gradient(transparent 20px, lightgray);
+  background: -webkit-gradient(linear, bottom, color-stop(20px, transparent), color-stop(100%, white)); /* Chrome, Safari4+ */
+  background: -webkit-linear-gradient(bottom, rgba(255, 255, 255, 0) 20px,lightgray 100%); /* Chrome10+, Safari5.1+ */
+  background: -moz-linear-gradient(bottom, rgba(255, 255, 255, 0) 20px,lightgray 100%);    /* FF3.6+ */
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 20px, lightgray 100%);  
 }
 
 .item-preview .progress {
@@ -329,11 +351,11 @@
   width: 100%;
   float: left;
   margin-top: 2%;
-  margin-bottom: 2%;
+  margin-bottom: 20px;
 }
 
 .item-view .progress {
-  width: 60%;
+  width: calc(100% - 210px);
   float: right;
   margin: 0px;
 }
@@ -341,7 +363,7 @@
 .item-view .need-warning {
   color: darkgoldenrod;
   margin-top: 1%;
-  width: 40%;
+  width: 200px;
   margin: 0px;
   float: left;
 }
@@ -349,7 +371,7 @@
 .item-view .need-danger {
   color: darkred;
   margin-top: 1%;
-  width: 40%;
+  width: 200px;
   margin: 0px;
   float: left;
 }
@@ -357,7 +379,7 @@
 .item-view .need-success {
   color: darkgreen;
   margin-top: 1%;
-  width: 40%;
+  width: 200px;
   margin: 0px;
   float: left;
 }
@@ -365,7 +387,7 @@
 .item-view .need-info {
   color: #5bc0de;
   margin-top: 1%;
-  width: 40%;
+  width: 200px;
   margin: 0px;
   float: left;
 }
@@ -373,18 +395,35 @@
 .item-view .need-default {
   color: #337ab7;
   margin-top: 1%;
-  width: 40%;
+  width: 200px;
   margin: 0px;
   float: left;
 }
 
-.item-view .equation {
+.item-view .donate-container {
+  margin-top: 20px;
   width: 100%;
+  overflow: auto;
+}
+
+.item-view .equation {
+  width: 200px;
   text-align: right;
+  float: left;
+  overflow: auto;
+  margin-bottom: 10px;
+}
+
+.item-view .react-numeric-input {
+  width: 100%;
+}
+
+.item-view .react-numeric-input input {
+  width: 100%;
 }
 
 .item-view .equation-bottom {
-  width: 200px;
+  width: 100%;
   float: right;
   border-bottom: 2px solid black;
 }
@@ -394,10 +433,18 @@
   font-weight: bold;
   float: right;
   margin-bottom: 0px;
+  font-size: 25px;
+}
+
+.item-view .btn-container {
+  float: right;
+  width: 60%;
+  padding-left: 10%;
+  padding-right: 10%;
 }
 
 .item-view .btn {
-  width: 25%;
+  width: 100%;
   color: #BF2E1B;
   background-image: none;
   background-color: white;
@@ -411,11 +458,7 @@
 }
 
 .item-view .add-to {
-  margin-left: 5%;
-}
-
-.item-view .donate-now {
-  margin-left: 45%;
+  margin-bottom: 25px;
 }
 
 .item-view .num-items {
@@ -426,7 +469,6 @@
 .donate-tutorial {
   width: 50%;
   opacity: .9;
-  margin-top: calc(9%);
 }
 
 .donate-tutorial .logo {
@@ -447,7 +489,7 @@
 
 .donate-tutorial .carousel-inner .item {
   height: 100%;
-} 
+}
 
 .donate-tutorial .content-container {
   text-align: center;
@@ -656,11 +698,16 @@
     height: 200px;
   }
 
+  .item-preview .img-container img {
+    border: 2px solid lightgray;
+  }
+
   .item-preview {
     height: 400px;
     width: 48%;
     margin-right: 1%;
     margin-left: 1%;
+    margin-bottom: 5px;
   }
 
   .donate-items {
@@ -668,18 +715,115 @@
   }
 
   .header .search {
-    width: 80%;
-    margin-left: 10%;
+    width: 50%;
+    padding-left: 5%;
   }
 
   .header .search .search-group{
     width: 80%;
+    margin-left: 10%;
   }
 
   .header .logo {
-    max-width: 35%;
-    height: auto;
+    max-height: 50px;
+    max-width: 45%;
+    margin-top: 20px;
     float: left;
+  }
+
+  .donate-tutorial {
+    width: 95%;
+    margin-left: 2.5%;
+    margin-right: 2.5%;
+  }
+
+  .donate-tutorial .carousel-inner {
+    height: 380px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    margin-bottom: 70px;
+  }
+
+  .donate-tutorial .carousel-indicators {
+    bottom: -70px;
+  }
+
+  .donate-tutorial .info {
+    font-size: 18px;
+    text-align: center;
+  }
+
+  .donate-tutorial .get-started {
+    width: 70%;
+    margin-left: 15%;
+    margin-right: 15%;
+  }
+
+  .donate-tutorial .progress-bar-sample {
+    text-align: left;
+    font-size: 20px;
+  }
+
+  .donate-content {
+    max-height: 100%;
+    overflow: hidden;
+  }
+
+  .donate-content .donate-items {
+    margin-left: 2%;
+    margin-right: 2%;
+    width: 96%;
+    height: calc(100% - 100px);
+  }
+
+  .item-view {
+    margin-top: 25%;
+  }
+
+  .item-view .equation {
+    padding-right: 5%;
+    padding-left: 5%;
+  }
+
+  .item-view .btn-container {
+    width: calc(100% - 200px);
+    padding-left: 5%;
+    padding-right: 5%;
+  }
+
+  .item-view .need-warning {
+    width: 200px
+  }
+
+  .item-view .description {
+    width: calc(100% - 210px);
+    overflow-y: scroll;
+    height: 160px;
+    float: right;
+  }
+
+  .item-view .add-to {
+    margin-bottom: 20px;
+  }
+
+  .item-view .need-data {
+    margin-bottom: 20px;
+  }
+
+  .donate-sidebar-btn {
+    left: 35px;
+  }
+
+  .donate-sidebar {
+    left: 5px;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .donate-tutorial .get-started {
+    width: 90%;
+    margin-left: 5%;
+    margin-right: 5%;
   }
 }
 

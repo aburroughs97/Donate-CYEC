@@ -119,7 +119,7 @@ export class NavMenu extends Component {
                       className="notification-badge" 
                       count={this.props.account.cartItems} 
                       effect={Effect.SCALE}
-                      style={{top: '-11px', left: '', bottom: '', right: '-5px'}}
+                      style={{top: '-11px', left: isMobile ? '15px' : '', bottom: '', right: isMobile ? '' : '-5px'}}
                       />
                     <Glyphicon glyph='shopping-cart'/> {isMobile ? translations["cart"][this.props.account.language] : ""}
                   </NavItem>

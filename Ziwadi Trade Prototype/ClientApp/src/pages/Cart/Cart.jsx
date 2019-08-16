@@ -6,6 +6,7 @@ import { Button } from 'react-bootstrap';
 import { CartItemPreview, CartItemView, Header, Checkout, CartFundItemView } from '../../components/Components';
 import { toast } from 'react-smart-toaster';
 import { MetroSpinner } from 'react-spinners-kit';
+import { isMobile } from 'react-device-detect';
 import * as _donateCalls from '../../API/DonateCalls'
 import '../../styles/Cart.css';
 
@@ -206,7 +207,7 @@ class Cart extends Component {
                   currencyChanged={currencyChanged} 
                   itemClicked={this.itemClicked}
                   removeCartItem={this.removeCartItem}
-                  startOpen={items.length < 5}
+                  startOpen={(items.length < 5 && !isMobile) || (isMobile && items.length < 3)}
                 />
               })
             }

@@ -119,16 +119,23 @@ export class Account extends Component {
   getMobileColumns(){
     return [
       {
-        Header: translations["id"][this.props.language],
-        accessor: "donationID",
-        className: "table-cell",
-        minWidth: 40,
-        maxWidth: 100
-      },
-      {
         Header: translations["name"][this.props.language],
         accessor: "name",
         className: "table-cell",
+      },
+      {
+        Header: translations["total"][this.props.language],
+        accessor: "totalAmount",
+        className: "table-cell",
+        minWidth: 40,
+        maxWidth: 100,
+        Cell: props => <span>{!this.state.currencyChanged ? this.formatPrice(props.value) : ""}</span>
+      },
+      {
+        Header: translations["date"][this.props.language],
+        accessor: "date",
+        className: "table-cell",
+        Cell: props => <span>{new Date(props.value).toLocaleString()}</span>
       },
       // {
       //   Header: "",

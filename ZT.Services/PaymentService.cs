@@ -68,6 +68,8 @@ namespace ZT.Services
         {
             var timestamp = DateTime.Now.ToString("yyyyMMddhhmmss");
 
+            phoneNumber = phoneNumber.Replace("+", "").Replace(" ", "");
+
             var mpesa = _configuration.GetSection("MPESA");
             int amount;
             decimal donationAmount;
@@ -161,8 +163,6 @@ namespace ZT.Services
 
                 var mpesaPayment = _paymentAccessor.GetAndUpdatePayment(paymentID).Payload;
 
-                SendPaymentConfirmationEmail(userID, mpesaPayment.MPESAPaymentID);
-
                 return new Result<MPESAPayment>(mpesaPayment);
             }
             catch (Exception ex)
@@ -174,6 +174,8 @@ namespace ZT.Services
         public Result<MPESAPayment> MakeMPESAPayment(int userID, decimal total, string phoneNumber, bool isKES)
         {
             var timestamp = DateTime.Now.ToString("yyyyMMddhhmmss");
+
+            phoneNumber = phoneNumber.Replace("+", "").Replace(" ", "");
 
             var mpesa = _configuration.GetSection("MPESA");
             int amount;
@@ -286,8 +288,6 @@ namespace ZT.Services
                 }).ToList();
 
                 _donateAccessor.AddDonationItems(items);
-
-                SendPaymentConfirmationEmail(userID, mpesaPayment.MPESAPaymentID);
 
                 return new Result<MPESAPayment>(mpesaPayment);
             }

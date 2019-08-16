@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {Button} from 'react-bootstrap'
 import { withRouter } from 'react-router';
 import { Carousel, CarouselItem } from 'react-bootstrap';
+import { isMobile } from 'react-device-detect';
 import logo from '../../media/CYEC-horizontal.png';
 import '../../styles/Home.css';
 
@@ -94,7 +95,6 @@ export class Home extends Component {
           </Carousel>
           <div className="col-50">
             <h1 className="title">Welcome to the CYEC's Donation Center!</h1>
-
           </div>
           <div className="col-50 last">
           <p className="info">
@@ -105,19 +105,6 @@ export class Home extends Component {
              check out <a href="http://www.cyec.net" rel="noopener noreferrer" target="_blank" className="modal-link">cyec.net</a>.
           </p>
           </div>
-
-          {/* <div className="col-33">
-            <h1>Our Story</h1>
-            <hr />
-          </div>
-          <div className="col-33">
-            <h1>Our Future</h1>
-            <hr />
-          </div>
-          <div className="col-33 last-col">
-            <h1>How You Can Help</h1>
-            <hr />
-          </div> */}
           <Button className="donate-now-btn" onClick={this.donateNowClick}>{translations["donate"][this.props.language]}</Button>
         </div>
     );

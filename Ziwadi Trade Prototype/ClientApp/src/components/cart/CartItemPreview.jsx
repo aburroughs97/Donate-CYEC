@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Glyphicon } from 'react-bootstrap';
+import { isMobile } from 'react-device-detect';
 import Img from '../Img';
 
 // const translations = {
@@ -71,11 +72,11 @@ export default class CartItemPreview extends Component {
                   <b>{isDirect ? "Price: " : "Goal: "}</b>
                   <span className={currencyChanged ? "text-hidden" : ""}>{this.formatPrice(item.price)}</span>
                   </p>
-                {isDirect && <p className="numItems"><b>Number of Items: </b>{item.numItems}</p>}
+                {isDirect && <p className="numItems"><b>Items: </b>{item.numItems}</p>}
               </div>
               <div className="btn-container">
-                <Button className="btn" onClick={() => this.props.itemClicked(item)}>Edit</Button>
-                <Button className="btn" onClick={this.removeCartItem}>Remove</Button>
+                <Button className="btn" onClick={() => this.props.itemClicked(item)}>{isMobile ? <Glyphicon glyph="edit"/> : "Edit"}</Button>
+                <Button className="btn" onClick={this.removeCartItem}>{isMobile ? <Glyphicon glyph="remove-sign" /> : "Edit"}</Button>
               </div>
             </div>
         </div>

@@ -84,7 +84,7 @@ export default class PaymentDonationTable extends Component {
       Cell: (props) => {
         let row = props.original;
         if(row.status === "Verified") {
-          return <Button className="table-btn" onClick={() => this.markAsPurchased(row)}>Mark as Paid</Button> 
+          return <Button className="table-btn" onClick={() => this.markAsPurchased(row)}>Mark as Purchased</Button> 
         }
         else {
           let status = row.status;
