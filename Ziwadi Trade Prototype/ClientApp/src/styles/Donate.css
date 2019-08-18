@@ -177,6 +177,10 @@
 .header .search:focus {
   border-color: #BF2E1B;
 }
+
+.header .search-btn {
+  border-radius: 0px;
+}
  
 .item-preview .img-container {
   height: 100%;

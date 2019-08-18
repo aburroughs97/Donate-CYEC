@@ -50,7 +50,7 @@ export default class ItemPreview extends Component {
   }
 
   render() {
-    let { item, language, currency } = this.props;
+    let { item, language } = this.props;
     let need = item.need;
     let needValue = need;
 

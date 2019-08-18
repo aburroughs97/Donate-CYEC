@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, Glyphicon, Carousel, CarouselItem, ProgressBar, FormControl } from 'react-bootstrap';
+import { Button, Modal, Glyphicon, Carousel, CarouselItem, ProgressBar } from 'react-bootstrap';
 import { DirectItemView } from '../Components';
 import { toast } from 'react-smart-toaster';
 import * as _donateCalls from '../../API/DonateCalls';

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {  Modal, Button, Glyphicon, Carousel, CarouselItem, InputGroup, FormControl } from 'react-bootstrap';
+import {  Modal, Button, Glyphicon, Carousel, CarouselItem } from 'react-bootstrap';
 import { MetroSpinner } from "react-spinners-kit";
 import { Map, CheckoutTable } from '../../Components';
 import { toast } from 'react-smart-toaster';

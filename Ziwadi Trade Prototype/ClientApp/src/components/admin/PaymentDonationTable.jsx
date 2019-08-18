@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Glyphicon } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import ReactTable from 'react-table';
 import { toast } from 'react-smart-toaster';
 import * as _adminCalls from '../../API/AdminCalls';

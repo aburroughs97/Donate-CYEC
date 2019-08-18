@@ -32,6 +32,7 @@ export default class AutoSuggestInput extends Component {
     this.onChange = this.onChange.bind(this);
     this.onKeyPress = this.onKeyPress.bind(this);
     this.triggerSearch = this.triggerSearch.bind(this);
+    this.clearSearch = this.clearSearch.bind(this);
     this.onSuggestionSelected = this.onSuggestionSelected.bind(this);
     this.renderInputComponent = this.renderInputComponent.bind(this);
   }
@@ -76,6 +77,13 @@ export default class AutoSuggestInput extends Component {
     this.props.search(this.state.value);
   }
 
+  clearSearch() {
+    this.setState({
+      value: ""
+    });
+    this.props.search("");
+  }
+
   onSuggestionSelected(event, { suggestionValue }) {
     this.props.search(suggestionValue);
   }
@@ -83,9 +91,12 @@ export default class AutoSuggestInput extends Component {
   renderInputComponent(inputProps) { 
     return (<FormGroup className="search-group">
       <InputGroup>
-          <FormControl {...inputProps} />
+          <FormControl {...inputProps}/>
           <InputGroup.Button>
             <Button className="search-btn" onClick={this.triggerSearch}><Glyphicon glyph='search'/></Button> 
+          </InputGroup.Button>
+          <InputGroup.Button>
+            <Button className="remove-btn" onClick={this.clearSearch}><Glyphicon glyph='remove'/></Button> 
           </InputGroup.Button>
         </InputGroup>
       </FormGroup> 
@@ -113,6 +124,7 @@ export default class AutoSuggestInput extends Component {
         getSuggestionValue={getSuggestionValue}
         renderSuggestion={renderSuggestion}
         inputProps={inputProps}
+        focusInputOnSuggestionClick={false}
       />
     );
   }

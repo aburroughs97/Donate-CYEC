@@ -1,4 +1,4 @@
-import { apiGet, apiPost } from './Api';
+import { apiGet } from './Api';
 
 const url = "api/Payments/";
 

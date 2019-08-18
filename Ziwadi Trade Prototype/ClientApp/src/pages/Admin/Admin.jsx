@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import { AdminSidebar, AddItem, UserTable, ItemTable, DropOffDonationTable, PaymentDonationTable } from '../../components/Components';
-import * as _adminCalls from '../../API/AdminCalls';
 import '../../styles/Admin.css';
 import { toast } from 'react-smart-toaster';
 

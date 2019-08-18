@@ -5,15 +5,49 @@
   padding-top: 15%;
 }
 
-.search-btn:hover,
-.search-btn:focus {
-  background-color: #bf2e1b;
+.search-btn {
+  margin-right: 1px;
+}
+
+.search-btn,
+.remove-btn {
+  color: #bf2e1b;
+  background-color: white;
   background-image: none;
-  color: white;
+}
+
+.search-btn:hover,
+.search-btn:focus,
+.remove-btn:hover,
+.remove-btn:focus {
+  background-color: lightgray;
+  color: #bf2e1b;
+  outline: none;
 }
 
 .content {
   text-align: center;
+  display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6 */
+  display: -moz-box; /* OLD - Firefox 19- (buggy but mostly works) */
+  display: -ms-flexbox; /* TWEENER - IE 10 */
+  display: -webkit-flex; /* NEW - Chrome */
+  display: flex; /* NEW, Spec - Opera 12.1, Firefox 20+ */
+  -ms-flex-direction: column;
+  -moz-flex-direction: column;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.content .info-container {
+  -webkit-box-flex: 1; /* OLD - iOS 6-, Safari 3.1-6 */
+  -moz-box-flex: 1; /* OLD - Firefox 19- */
+  -webkit-flex: 1; /* Chrome */
+  -ms-flex: 1; /* IE 10 */
+  flex: 1; /* NEW, */
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
 .content hr {
@@ -21,24 +55,25 @@
   margin-bottom: 5px;
 }
 
-.content .title-wrapper {
-  width: 100%;
-  height: 80px;
-  background-color: white;
-  color: white;
-  padding-top: 10px;
-}
-
 .content .title {
-  margin: 0px;
   font-size: 60px;
   color: #bf2e1b;
+  margin: 0px;
+  position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .content .info {
   padding-left: 5%;
   padding-right: 5%;
   font-size: 18px;
+  margin: 0px;
+  position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .content hr {
@@ -63,26 +98,14 @@
   font-size: 50px;
 }
 
-.col-33 {
-  float: left;
-  width: 33.33%;
-  height: 500px;
-  overflow-y: hidden;
-  padding: 10px;
-  text-align: center;
-  margin-top: 1%;
-  border-right: 2px solid #bf2e1b;
-}
-
 .col-50 {
   float: left;
   width: 50%;
   padding: 10px;
   text-align: center;
-  margin-top: 8px;
   padding-top: 20px;
   border-right: 2px solid #bf2e1b;
-  height: 170px;
+  height: 100%;
   overflow: hidden;
 }
 
@@ -92,6 +115,10 @@
 
 .last-col {
   border-right: none;
+}
+
+.carousel-container {
+  position: relative;
 }
 
 .donate-now-btn {
@@ -105,7 +132,7 @@
   position: absolute;
   right: 25%;
   transform: translateX(50%);
-  top: 450px;
+  bottom: 10%;
   font-weight: bold;
 }
 
@@ -122,6 +149,10 @@
 }
 
 @media screen and (max-width: 760px) {
+  .content {
+    display: block;
+  }
+
   .col-50 {
     width: 100%;
     border-right: none;
@@ -137,6 +168,14 @@
 
   .content .title {
     font-size: 35px;
+    position: static;
+    transform: none;
+  }
+
+  .content .info {
+    position: static;
+    transform: none;
+    margin-bottom: 10px;
   }
 
   .donate-now-btn {

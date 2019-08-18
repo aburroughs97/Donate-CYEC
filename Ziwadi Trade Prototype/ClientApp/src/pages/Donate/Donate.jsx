@@ -283,7 +283,7 @@ class Donate extends Component {
       <div className="donate-content">
         <Header onSearch={this.onSearch} searchSuggestions={this.state.items.map(x => x.title)} language={this.props.language} showSearch/>
         <div className={"donate-sidebar-btn " + (this.state.showSidebar ? "expanded" : "")} onClick={this.toggleSidebar}>
-          <p className="text">Filters <Glyphicon glyph={this.state.showSidebar ? "chevron-up" : "chevron-down"} className="filter-icon" /> </p> 
+          <p className="text">{translations["filter"][this.props.language]} <Glyphicon glyph={this.state.showSidebar ? "chevron-up" : "chevron-down"} className="filter-icon" /> </p> 
         </div>
         <div id="sidebar" className={"donate-sidebar " + (this.state.showSidebar ? "show" : "")}>
           <p className="filter-label">{translations["donationtype"][this.props.language]}:</p>
