@@ -31,6 +31,12 @@
     <ProjectReference Include="..\ZT.Services\ZT.Services.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include=".ebextensions\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
     <!-- Ensure Node.js is installed -->
     <Exec Command="node --version" ContinueOnError="true">

@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
+using System.IO;
 using ZT.Data;
 using ZT.Services;
 
@@ -29,7 +31,7 @@ namespace Ziwadi_Trade_Prototype
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-            var connectionString = Configuration.GetConnectionString("LocalHost");
+            var connectionString = Configuration.GetConnectionString("AWSDefault");
 
             services.AddDbContext<DBContext>(options =>
                     options.UseMySql(connectionString));

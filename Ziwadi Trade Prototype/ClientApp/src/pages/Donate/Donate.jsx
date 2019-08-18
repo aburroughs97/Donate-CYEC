@@ -59,8 +59,8 @@ const translations= {
     "Swahili": "Msaidizi"
   },
   "none": {
-    "English": "None",
-    "Swahili": "Hakuna"
+    "English": "Default",
+    "Swahili": "Default"
   },
   "previous": {
     "English": "Prev",

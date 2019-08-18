@@ -9,7 +9,8 @@ export default class DropOffDonationTable extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      donations : []
+      donations : [],
+      loadingDonations: true
     };
 
     this.loadDropOffDonationColumns = this.loadDropOffDonationColumns.bind(this);
@@ -101,7 +102,8 @@ componentDidMount() {
     .then((response) => {
       if(response.isSuccess) {
         this.setState({
-          donations: response.payload
+          donations: response.payload,
+          loadingDonations: false
         });
       }
       else {
@@ -118,6 +120,7 @@ componentDidMount() {
             defaultPageSize={15}
             data={this.state.donations}
             columns={this.loadDropOffDonationColumns()}
+            loading={this.state.loadingDonations}
             showPaginationTop
             showPaginationBottom={false}
             showPageSizeOptions={false}
