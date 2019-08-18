@@ -10,16 +10,32 @@ import { isMobile } from 'react-device-detect';
 import * as _donateCalls from '../../API/DonateCalls'
 import '../../styles/Cart.css';
 
-// const translations= {
-//   "price": {
-//     "English": "Price",
-//     "Swahili": "Bei"
-//   },
-//   "name": {
-//     "English": "Name",
-//     "Swahili": "Jina"
-//   }
-// }
+const translations= {
+  "price": {
+    "English": "Price",
+    "Swahili": "Bei"
+  },
+  "name": {
+    "English": "Name",
+    "Swahili": "Jina"
+  },
+  "emptyTitle": {
+    "English": "Your donation cart is currently empty.",
+    "Swahili": "Gari yako ya uchangiaji kwa sasa haina tupu."
+  },
+  "emptyDesc1": {
+    "English": "Head over to the",
+    "Swahili": "Nenda kwenye ukurasa wa",
+  },
+  "emptyDesc2": {
+    "English": "page to see what you can do to help!",
+    "Swahili": "ili uone kile unachoweza kufanya kusaidia!"
+  },
+  "donate": {
+    "English": "Donate",
+    "Swahili": "Mchango"
+  }
+}
 
 class Cart extends Component {
   constructor(props) {
@@ -216,8 +232,8 @@ class Cart extends Component {
 
           {!loadingItems && items.length === 0 && 
             <div className="empty-cart"> 
-              <h2>Your donation cart is currently empty.</h2>
-              <p>Head over to the <span className="modal-link" onClick={this.navigateToDonate}>Donate</span> page to see what you can do to help!</p>
+              <h2>{translations["emptyTitle"][language]}</h2>
+              <p>{translations["emptyDesc1"][language]} <span className="modal-link" onClick={this.navigateToDonate}>{translations["donate"][language]}</span> {translations["emptyDesc2"][language]}</p>
             </div>
           }
 
