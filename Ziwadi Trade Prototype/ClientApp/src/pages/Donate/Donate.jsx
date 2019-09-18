@@ -2,10 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 // import ReactPaginate from 'react-paginate';
-import { Header, ItemPreview, DirectItemView, FundItemView, DonateTutorial } from '../../components/Components';
+import { Header, ItemPreview, DirectItemView, FundItemView, DonateTutorial, Spinner } from '../../components/Components';
 import { DropdownButton, MenuItem, Button, Glyphicon } from 'react-bootstrap';
 import { toast } from 'react-smart-toaster';
-import { MetroSpinner } from 'react-spinners-kit';
 import * as _donateCalls from '../../API/DonateCalls'
 import '../../styles/Donate.css';
 
@@ -356,11 +355,7 @@ class Donate extends Component {
           {this.state.loadingItems && 
             <div> 
               <div className="spinner-container">
-                <MetroSpinner 
-                  size={100}
-                  color="#BF2E1B"
-                  loading={true}
-                />
+                <Spinner />
               </div>
             </div>}
           {filteredItems.length === 0 && !this.state.loadingItems &&  

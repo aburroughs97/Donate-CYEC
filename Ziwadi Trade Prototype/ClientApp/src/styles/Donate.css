@@ -482,7 +482,7 @@
   top: 0;
 }
 
-.donate-tutorial .modal-body {
+.donate-tutorial .modal-content  {
   border: 5px solid #BF2E1B;
   border-radius: 5px;
 }

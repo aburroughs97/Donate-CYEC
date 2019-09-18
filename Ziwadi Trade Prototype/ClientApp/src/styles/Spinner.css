@@ -1,0 +1,143 @@
+.default-spinner-container {
+  width: 300px;
+  height: 300px;
+  position: relative;
+  animation: rotate-container 4s ease-in 0s infinite;
+ }
+ 
+ .hex {
+   position: absolute;
+   transform: rotate(90deg);
+   font-size: 60px;
+   transform: translate(-50%, -50%) rotate(90deg) ;
+   text-align: center;
+ }
+ 
+ .hex.bottom {
+   top: calc(50% + 80px); 
+   left: 50%;
+ }
+
+ 
+ .hex.mid {
+   top: 50%;
+   left: 50%;
+ }
+ 
+ .hex.top {
+   top: calc(50% - 80px); 
+   left: 50%;
+ }
+ 
+ .hex.left {
+   top: 50%;
+   left: 25%;
+   animation: appear 2s steps(1, end) -.5s infinite;
+
+ }
+ 
+ .hex.right {
+   top: 50%;
+   left: 75%;
+   animation: appear 2s steps(1, end) -.5s infinite;
+
+ }
+ 
+ .hex.left-top {
+   top: calc(50% - 40px);
+   left: 25%;
+   animation: appear 2s steps(1, end) -.667s infinite;
+
+ }
+ 
+ .hex.left-bottom {
+   top: calc(50% + 40px); 
+   left: 25%;
+   animation: appear 2s steps(1, end) -.333s infinite;
+
+ }
+ 
+ .hex.right-top {
+   top: calc(50% - 40px); 
+   left: 75%;
+   animation: appear 2s steps(1, end) -.333s infinite;
+
+ }
+ 
+ .hex.right-bottom {
+   top: calc(50% + 40px); 
+   left: 75%;
+   animation: appear 2s steps(1, end) -.667s infinite;
+ }
+ 
+ .hex.top-left {
+   top: calc(50% - 60px); 
+   left: calc(25% + 37px);
+   animation: appear 2s steps(1, end) -.833s infinite;
+
+ }
+ 
+ .hex.top-right {
+   top: calc(50% - 60px); 
+   left: calc(75% - 37px);
+   animation: appear 2s steps(1, end) -.167s infinite;
+
+ }
+ 
+ .hex.bottom-left {
+   top: calc(50% + 60px); 
+   left: calc(25% + 37px);
+   animation: appear 2s steps(1, end) -.167s infinite;
+
+ }
+ 
+ .hex.bottom-right {
+   top: calc(50% + 60px); 
+   left: calc(75% - 37px);
+   animation: appear 2s steps(1, end) -.833s infinite;
+ }
+ 
+ .hex.top-move {
+   animation: rotate 2s linear -1s infinite;
+ }
+ 
+ .hex.bottom-move {
+   animation: rotate 2s linear -0s infinite;
+ }
+ 
+ @keyframes rotate {
+   0% { top: calc(50% + 80px); left: 50%;}
+   8.33% {  top: calc(50% + 60px); left: calc(75% - 37px); }
+   16.66% { top: calc(50% + 40px); left: 75%; }
+   25% { top: 50%; left: 75% }
+   33.33% { top: calc(50% - 40px); left: 75% }
+   41.66% { top: calc(50% - 60px); left: calc(75% - 37px) }
+   50% { top: calc(50% - 80px); left: 50%; }
+   58.33% { top: calc(50% - 60px); left: calc(25% + 37px) }
+   66.66% { top: calc(50% - 40px); left: 25%; }
+   75% { top: 50%; left: 25% }
+   83.33% { top: calc(50% + 40px); left: 25%; }
+   91.66% { top: calc(50% + 60px); left: calc(25% + 37px) }
+   100% { top: calc(50% + 80px); left: 50%;}
+ }
+ 
+ @keyframes appear {
+   0% { opacity: 0 }
+   50% { opacity: 1 }
+   100% { opacity: 0}
+ }
+
+ 
+ @keyframes rotate-container {
+  0% { transform: rotate(0deg) }
+  40% { transform: rotate(0deg) }
+  50% { transform: rotate(-180deg) }
+  90% { transform: rotate(-180deg) }
+  100% { transform: rotate(-360deg) }
+}
+
+@media screen and (max-width: 760px) {
+  .hex {
+    font-size: 50px;
+  }
+}

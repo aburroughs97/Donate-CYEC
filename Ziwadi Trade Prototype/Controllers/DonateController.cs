@@ -23,6 +23,7 @@ namespace ZT.Controllers
         public IActionResult GetItems(string languageName, string currencyCode)
         {
             var result = _donateService.GetAllItems(languageName, currencyCode);
+            Thread.Sleep(5000);
             return Json(result);
         }
 

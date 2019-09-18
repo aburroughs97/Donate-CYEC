@@ -76,7 +76,7 @@ export default class CartItemPreview extends Component {
               </div>
               <div className="btn-container">
                 <Button className="btn" onClick={() => this.props.itemClicked(item)}>{isMobile ? <Glyphicon glyph="edit"/> : "Edit"}</Button>
-                <Button className="btn" onClick={this.removeCartItem}>{isMobile ? <Glyphicon glyph="remove-sign" /> : "Edit"}</Button>
+                <Button className="btn" onClick={this.removeCartItem}>{isMobile ? <Glyphicon glyph="remove-sign" /> : "Remove"}</Button>
               </div>
             </div>
         </div>

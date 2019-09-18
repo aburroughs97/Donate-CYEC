@@ -25,10 +25,11 @@ import ItemTable from './admin/ItemTable';
 import EditItem from './admin/EditItem';
 import DropOffDonationTable from './admin/DropOffDonationTable';
 import PaymentDonationTable from './admin/PaymentDonationTable';
+import Spinner from './Spinner';
 
 
 
 export { AccountSidebar, AdminSidebar, CartItemPreview, CartItemView, DirectItemView, FundItemView,
         ItemPreview, ForgotPassword, Login, LoginForm, RegisterForm, AutoSuggestInput, Header, Img,
         LinePlaceholder, Checkout, Map, CityPin, CheckoutTable, CartFundItemView, DonateTutorial,
-        AddItem, UserTable, ItemTable, EditItem, DropOffDonationTable, PaymentDonationTable }
+        AddItem, UserTable, ItemTable, EditItem, DropOffDonationTable, PaymentDonationTable, Spinner }

@@ -31,7 +31,7 @@ namespace Ziwadi_Trade_Prototype
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-            var connectionString = Configuration.GetConnectionString("AWSDefault");
+            var connectionString = Configuration.GetConnectionString("LocalHost");
 
             services.AddDbContext<DBContext>(options =>
                     options.UseMySql(connectionString));

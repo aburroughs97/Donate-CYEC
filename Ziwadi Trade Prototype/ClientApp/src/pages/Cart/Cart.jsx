@@ -3,9 +3,8 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 // import ReactPaginate from 'react-paginate';
 import { Button } from 'react-bootstrap';
-import { CartItemPreview, CartItemView, Header, Checkout, CartFundItemView } from '../../components/Components';
+import { CartItemPreview, CartItemView, Header, Checkout, CartFundItemView, Spinner } from '../../components/Components';
 import { toast } from 'react-smart-toaster';
-import { MetroSpinner } from 'react-spinners-kit';
 import { isMobile } from 'react-device-detect';
 import * as _donateCalls from '../../API/DonateCalls'
 import '../../styles/Cart.css';
@@ -239,11 +238,7 @@ class Cart extends Component {
 
           {loadingItems &&                 
             <div className="spinner-container">
-              <MetroSpinner 
-                size={100}
-                color="#BF2E1B"
-                loading={true}
-              />
+              <Spinner />
             </div>
           }
 

@@ -5,7 +5,7 @@ import { Home, Donate, Account, Admin, Cart} from './pages/Pages';
 import * as _loginCalls from './API/LoginCalls';
 import * as _accountCalls from './API/AccountCalls';
 import { toast } from 'react-smart-toaster';
-import { MetroSpinner } from "react-spinners-kit";
+import { Spinner } from './components/Components';
 
 import Cookies from 'universal-cookie';
 
@@ -271,6 +271,7 @@ class App extends Component {
   render() {
     let { forceLogin, isLoggedIn, account, loadingUser } = this.state;
     let body;
+    
     if(!loadingUser) {
       body = 
         <Layout forceLogin={forceLogin} loginShown={this.loginShown} isLoggedIn={isLoggedIn} loadingUser={loadingUser} account={account} handleLogin={this.handleLogin} handleRegister={this.handleRegister} logOut={this.logOut} languageChanged={this.languageChanged}>
@@ -286,11 +287,7 @@ class App extends Component {
       body = 
         <Layout isLoggedIn={isLoggedIn} loadingUser={loadingUser} account={account} handleLogin={this.handleLogin} handleRegister={this.handleRegister} logOut={this.logOut} languageChanged={this.languageChanged}>
           <div className="spinner-container">
-            <MetroSpinner 
-              size={150}
-              color="#BF2E1B"
-              loading={true}
-            />
+            <Spinner />
           </div>
         </Layout>
       ;

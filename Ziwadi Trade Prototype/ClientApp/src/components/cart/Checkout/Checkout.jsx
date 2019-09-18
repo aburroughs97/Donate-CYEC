@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {  Modal, Button, Glyphicon, Carousel, CarouselItem } from 'react-bootstrap';
-import { MetroSpinner } from "react-spinners-kit";
-import { Map, CheckoutTable } from '../../Components';
+import { Map, CheckoutTable, Spinner } from '../../Components';
 import { toast } from 'react-smart-toaster';
 import Calendar from 'react-calendar';
 import Observer from "react-intersection-observer";
@@ -17,16 +16,6 @@ import * as _paymentCalls from '../../../API/PaymentCalls';
 // }
 
 // const imageAPI = "/api/Donate/GetImage?itemID=";
-
-
-const spinner =           
-  <div className="spinner-container">
-    <MetroSpinner 
-      size={150}
-      color="#BF2E1B"
-      loading={true}
-    />
-  </div>;
 
 const defaultState = {
   index: 0,
@@ -302,11 +291,7 @@ export default class Checkout extends Component {
           <div className="payment-status">
             <h4>We're working to verify your payment...</h4>
             <div className="spinner-container payment">
-              <MetroSpinner 
-                size={150}
-                color="#01573E"
-                loading={true}
-              />
+              <Spinner />
             </div>
           </div>
         }
@@ -374,7 +359,7 @@ export default class Checkout extends Component {
         items = [];
         break;
       default: 
-        items = [spinner, spinner, spinner]
+        items = [<div className="spinner-container"><Spinner /></div>, <div className="spinner-container"><Spinner /></div>, <div className="spinner-container"><Spinner /></div>]
         break; 
     }
     return (
