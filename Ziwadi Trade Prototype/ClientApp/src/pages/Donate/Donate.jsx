@@ -124,13 +124,13 @@ class Donate extends Component {
   }
 
   componentDidMount() {
-    this.updateItems(this.props.language, this.props.currency);
-    let hide = this.props.cookies.get(hideTutorialKey);
-    if(!hide) {
-      this.setState({
-        showTutorial: true
-      });
-    }
+    // this.updateItems(this.props.language, this.props.currency);
+    // let hide = this.props.cookies.get(hideTutorialKey);
+    // if(!hide) {
+    //   this.setState({
+    //     showTutorial: true
+    //   });
+    // }
   }
 
   onSearch(searchValue) {
@@ -357,6 +357,7 @@ class Donate extends Component {
               <div className="spinner-container">
                 <Spinner />
               </div>
+              <p className="updated-message">This page is currently being updated. Thank you for your patience!</p>
             </div>}
           {filteredItems.length === 0 && !this.state.loadingItems &&  
             <div className="empty-items"> 

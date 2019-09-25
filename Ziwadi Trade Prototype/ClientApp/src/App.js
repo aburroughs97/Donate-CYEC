@@ -271,7 +271,6 @@ class App extends Component {
   render() {
     let { forceLogin, isLoggedIn, account, loadingUser } = this.state;
     let body;
-    
     if(!loadingUser) {
       body = 
         <Layout forceLogin={forceLogin} loginShown={this.loginShown} isLoggedIn={isLoggedIn} loadingUser={loadingUser} account={account} handleLogin={this.handleLogin} handleRegister={this.handleRegister} logOut={this.logOut} languageChanged={this.languageChanged}>
